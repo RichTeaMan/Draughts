@@ -128,7 +128,7 @@ namespace Draughts.Service.Tests
 
             var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
             var blockingGamePiece = new GamePiece(pieceColour, pieceRank, x + 1, y + 1);
-            var gameState =  GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece);
 
             var moves = gameState.CalculateAvailableMoves();
 
@@ -138,6 +138,28 @@ namespace Draughts.Service.Tests
 
             Assert.AreEqual(x - 1, piece1.Xcoord);
             Assert.AreEqual(y + 1, piece1.Ycoord);
+        }
+
+        [TestMethod]
+        public void SinglePieceWhiteTakeGameMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece = new GamePiece(PieceColour.Black, pieceRank, x + 1, y + 1);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var piece1 = moves[0].EndGamePiece;
+
+            Assert.AreEqual(1, moves.Count);
+
+            Assert.AreEqual(x + 2, piece1.Xcoord);
+            Assert.AreEqual(y + 2, piece1.Ycoord);
         }
     }
 }

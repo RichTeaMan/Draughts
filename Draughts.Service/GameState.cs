@@ -24,16 +24,18 @@ namespace Draughts.Service
         public IList<GameMove> CalculateAvailableMoves()
         {
             var gameMoves = new List<GameMove>();
-            foreach(var piece in GamePieceList)
+            foreach (var piece in GamePieceList)
             {
                 int yDelta = 0;
                 if (piece.PieceColour == PieceColour.White)
                 {
                     yDelta = 1;
-                } else if (piece.PieceColour == PieceColour.Black)
+                }
+                else if (piece.PieceColour == PieceColour.Black)
                 {
                     yDelta = -1;
-                } else
+                }
+                else
                 {
                     throw new ApplicationException("Unknown piece colour.");
                 }
@@ -61,9 +63,39 @@ namespace Draughts.Service
                         var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, newX, newY);
                         gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>()));
                     }
+                    else if (occupiedPiece.PieceColour != piece.PieceColour)
+                    {
+                        int jumpedX = ((newX - piece.Xcoord) * 2) + piece.Xcoord;
+                        int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
+                        if (jumpedX >= 0 && jumpedX < XLength && jumpedY >= 0 && jumpedY < YLength)
+                        {
+                            var jumpedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
+                            if (jumpedPiece == null)
+                            {
+                                var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, jumpedX, jumpedY);
+                                gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }));
+                            }
+                        }
+                    }
                 }
             }
-            return gameMoves;
+
+            var resultGameMoves = new List<GameMove>();
+
+            // pieces must be taken
+            var colourGroupList = gameMoves.GroupBy(m => m.StartGamePiece.PieceColour);
+            foreach(var colourGroup in colourGroupList)
+            {
+                if (colourGroup.Any(m => m.TakenGamePieces.Count > 0))
+                {
+                    resultGameMoves.AddRange(colourGroup.Where(m => m.TakenGamePieces.Count > 0));
+                } else
+                {
+                    resultGameMoves.AddRange(colourGroup);
+                }
+            }
+
+            return resultGameMoves;
         }
     }
 }
