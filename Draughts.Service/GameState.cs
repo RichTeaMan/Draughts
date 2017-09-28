@@ -21,59 +21,105 @@ namespace Draughts.Service
             YLength = yLength;
         }
 
+        private PieceRank CalculatePieceRank(int yPosition, PieceColour pieceColour, PieceRank pieceRank)
+        {
+            PieceRank resultPieceRank = PieceRank.Minion;
+            if (pieceRank == PieceRank.King)
+            {
+                resultPieceRank = PieceRank.King;
+            }
+            else
+            {
+                switch (pieceColour)
+                {
+                    case PieceColour.White:
+                        if (yPosition == YLength - 1)
+                        {
+                            resultPieceRank = PieceRank.King;
+                        }
+                        break;
+                    case PieceColour.Black:
+                        if (yPosition == 0)
+                        {
+                            resultPieceRank = PieceRank.King;
+                        }
+                        break;
+                }
+            }
+            return resultPieceRank;
+        }
+
         public IList<GameMove> CalculateAvailableMoves()
         {
             var gameMoves = new List<GameMove>();
             foreach (var piece in GamePieceList)
             {
-                int yDelta = 0;
-                if (piece.PieceColour == PieceColour.White)
+                var newYList = new List<int>();
+
+                if (piece.PieceRank == PieceRank.Minion)
                 {
-                    yDelta = 1;
+                    int yDelta = 0;
+                    if (piece.PieceColour == PieceColour.White)
+                    {
+                        yDelta = 1;
+                    }
+                    else if (piece.PieceColour == PieceColour.Black)
+                    {
+                        yDelta = -1;
+                    }
+                    else
+                    {
+                        throw new ApplicationException("Unknown piece colour.");
+                    }
+                    newYList.Add(piece.Ycoord + yDelta);
                 }
-                else if (piece.PieceColour == PieceColour.Black)
+                else if (piece.PieceRank == PieceRank.King)
                 {
-                    yDelta = -1;
+                    newYList.Add(piece.Ycoord + 1);
+                    newYList.Add(piece.Ycoord - 1);
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown piece colour.");
+                    throw new ApplicationException("Unknown piece rank.");
                 }
 
-                int newY = piece.Ycoord + yDelta;
-
-                var newXcoords = new List<int>();
-                int newXleft = piece.Xcoord - 1;
-                if (newXleft >= 0)
+                foreach (var newY in newYList)
                 {
-                    newXcoords.Add(newXleft);
-                }
-
-                int newXright = piece.Xcoord + 1;
-                if (newXright < XLength)
-                {
-                    newXcoords.Add(newXright);
-                }
-
-                foreach (var newX in newXcoords)
-                {
-                    var occupiedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
-                    if (occupiedPiece == null)
+                    var newXcoords = new List<int>();
+                    int newXleft = piece.Xcoord - 1;
+                    if (newXleft >= 0)
                     {
-                        var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, newX, newY);
-                        gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>(), this));
+                        newXcoords.Add(newXleft);
                     }
-                    else if (occupiedPiece.PieceColour != piece.PieceColour)
+
+                    int newXright = piece.Xcoord + 1;
+                    if (newXright < XLength)
                     {
-                        int jumpedX = ((newX - piece.Xcoord) * 2) + piece.Xcoord;
-                        int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
-                        if (jumpedX >= 0 && jumpedX < XLength && jumpedY >= 0 && jumpedY < YLength)
+                        newXcoords.Add(newXright);
+                    }
+
+                    foreach (var newX in newXcoords)
+                    {
+                        var occupiedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
+                        if (occupiedPiece == null)
                         {
-                            var jumpedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
-                            if (jumpedPiece == null)
+                            var newRank = CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
+                            var endPiece = new GamePiece(piece.PieceColour, newRank, newX, newY);
+                            gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>(), this));
+                        }
+                        else if (occupiedPiece.PieceColour != piece.PieceColour)
+                        {
+                            int jumpedX = ((newX - piece.Xcoord) * 2) + piece.Xcoord;
+                            int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
+                            if (jumpedX >= 0 && jumpedX < XLength && jumpedY >= 0 && jumpedY < YLength)
                             {
-                                var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, jumpedX, jumpedY);
-                                gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }, this));
+                                var jumpedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
+                                if (jumpedPiece == null)
+                                {
+                                    var newRank = CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
+                                    var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
+                                    gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }, this));
+                                }
                             }
                         }
                     }
