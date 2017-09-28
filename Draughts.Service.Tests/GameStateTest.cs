@@ -256,5 +256,37 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(x - 1, piece4.Xcoord);
             Assert.AreEqual(y - 1, piece4.Ycoord);
         }
+
+        [TestMethod]
+        public void SinglePieceWhiteBlockedByTopEdgeGameMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 7;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var gameState = GameStateFactory.SinglePieceGameState(gamePiece);
+
+            var moves = gameState.CalculateAvailableMoves();
+
+            Assert.AreEqual(0, moves.Count);
+        }
+
+        [TestMethod]
+        public void SinglePieceBlackBlockedByBottomEdgeGameMove()
+        {
+            var pieceColour = PieceColour.Black;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var gameState = GameStateFactory.SinglePieceGameState(gamePiece);
+
+            var moves = gameState.CalculateAvailableMoves();
+
+            Assert.AreEqual(0, moves.Count);
+        }
     }
 }

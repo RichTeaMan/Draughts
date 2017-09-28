@@ -85,6 +85,12 @@ namespace Draughts.Service
 
                 foreach (var newY in newYList)
                 {
+                    // check the y coord is in game bounds
+                    if (newY < 0 || newY >= YLength)
+                    {
+                        continue;
+                    }
+
                     var newXcoords = new List<int>();
                     int newXleft = piece.Xcoord - 1;
                     if (newXleft >= 0)
