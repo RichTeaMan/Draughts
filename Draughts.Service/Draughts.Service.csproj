@@ -42,11 +42,15 @@
   <ItemGroup>
     <Compile Include="GameMove.cs" />
     <Compile Include="GamePiece.cs" />
+    <Compile Include="GamePlayerMoveResult.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="GameStateFactory.cs" />
+    <Compile Include="IGamePlayer.cs" />
+    <Compile Include="MoveStatus.cs" />
     <Compile Include="PieceColour.cs" />
     <Compile Include="PieceRank.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomGamePlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

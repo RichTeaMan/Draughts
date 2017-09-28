@@ -11,6 +11,8 @@ namespace Draughts.UI.Console
     {
         static void Main(string[] args)
         {
+            IGamePlayer ai = new RandomGamePlayer();
+
             var gameState = GameStateFactory.StandardStartGameState();
 
             while (true)
@@ -33,13 +35,21 @@ namespace Draughts.UI.Console
                         {
                             pieceSymbol = ' ';
                         }
-                        else if (PieceColour.Black == piece.PieceColour)
+                        else if (PieceColour.Black == piece.PieceColour && PieceRank.King == piece.PieceRank)
                         {
                             pieceSymbol = 'X';
                         }
-                        else if (PieceColour.White == piece.PieceColour)
+                        else if (PieceColour.White == piece.PieceColour && PieceRank.King == piece.PieceRank)
                         {
                             pieceSymbol = 'O';
+                        }
+                        else if (PieceColour.Black == piece.PieceColour && PieceRank.Minion == piece.PieceRank)
+                        {
+                            pieceSymbol = 'x';
+                        }
+                        else if (PieceColour.White == piece.PieceColour && PieceRank.Minion == piece.PieceRank)
+                        {
+                            pieceSymbol = 'o';
                         }
                         else
                         {
@@ -54,7 +64,14 @@ namespace Draughts.UI.Console
 
                 var moveOutputLines = new List<string>();
                 var moves = new List<GameMove>();
-                foreach (var move in gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White))
+                var availableMoves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+                if (availableMoves.Count == 0)
+                {
+                    System.Console.WriteLine("No available moves. You have lost.");
+                    System.Console.ReadKey();
+                    return;
+                }
+                foreach (var move in availableMoves)
                 {
                     int index = moves.Count;
                     var s = move.StartGamePiece;
@@ -94,6 +111,23 @@ namespace Draughts.UI.Console
                 }
                 var selectedMove = moves[selection];
                 gameState = selectedMove.PerformMove();
+
+                // perform ai move
+                var aiResult = ai.MakeMove(PieceColour.Black, gameState);
+
+                if (aiResult.MoveStatus == MoveStatus.NoLegalMoves)
+                {
+                    System.Console.WriteLine("Opponent cannot move. You have won.");
+                    System.Console.ReadKey();
+                    return;
+                } else if(aiResult.MoveStatus == MoveStatus.SuccessfulMove)
+                {
+                    gameState = aiResult.GameState;
+                } else
+                {
+                    throw new ApplicationException("Unknown AI result state.");
+                }
+
                 System.Console.Clear();
             }
         }
