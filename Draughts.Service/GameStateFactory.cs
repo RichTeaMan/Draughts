@@ -23,6 +23,17 @@ namespace Draughts.Service
         }
 
         /// <summary>
+        /// Creates a game state with the single specified piece.
+        /// </summary>
+        /// <param name="gamePiece"></param>
+        /// <returns></returns>
+        public static GameState SeveralPieceGameState(params GamePiece[] gamePieces)
+        {
+            var gameState = new GameState(gamePieces, StandardLength, StandardLength);
+            return gameState;
+        }
+
+        /// <summary>
         /// Creates a standard game state for play with 12 pieces each.
         /// </summary>
         /// <param name="gamePiece"></param>

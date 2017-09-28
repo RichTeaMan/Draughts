@@ -55,7 +55,7 @@ namespace Draughts.Service
 
                 foreach (var newX in newXcoords)
                 {
-                    var occupiedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == newX && piece.Ycoord == newY);
+                    var occupiedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
                     if (occupiedPiece == null)
                     {
                         var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, newX, newY);
