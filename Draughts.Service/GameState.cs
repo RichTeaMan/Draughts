@@ -61,7 +61,7 @@ namespace Draughts.Service
                     if (occupiedPiece == null)
                     {
                         var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, newX, newY);
-                        gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>()));
+                        gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>(), this));
                     }
                     else if (occupiedPiece.PieceColour != piece.PieceColour)
                     {
@@ -73,7 +73,7 @@ namespace Draughts.Service
                             if (jumpedPiece == null)
                             {
                                 var endPiece = new GamePiece(piece.PieceColour, piece.PieceRank, jumpedX, jumpedY);
-                                gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }));
+                                gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }, this));
                             }
                         }
                     }

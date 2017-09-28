@@ -161,5 +161,48 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(x + 2, piece1.Xcoord);
             Assert.AreEqual(y + 2, piece1.Ycoord);
         }
+
+        [TestMethod]
+        public void SinglePieceWhitePerformMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var gameState = GameStateFactory.SinglePieceGameState(gamePiece);
+
+            var moves = gameState.CalculateAvailableMoves();
+
+            var afterState = moves.First().PerformMove();
+
+            Assert.AreEqual(1, afterState.GamePieceList.Count);
+
+            Assert.AreEqual(x - 1, afterState.GamePieceList[0].Xcoord);
+            Assert.AreEqual(y + 1, afterState.GamePieceList[0].Ycoord);
+        }
+
+        [TestMethod]
+        public void SinglePieceWhiteTakePerformMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece = new GamePiece(PieceColour.Black, pieceRank, x + 1, y + 1);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var afterState = moves.First().PerformMove();
+
+            Assert.AreEqual(1, afterState.GamePieceList.Count);
+
+            Assert.AreEqual(x + 2, afterState.GamePieceList[0].Xcoord);
+            Assert.AreEqual(y + 2, afterState.GamePieceList[0].Ycoord);
+        }
     }
 }
