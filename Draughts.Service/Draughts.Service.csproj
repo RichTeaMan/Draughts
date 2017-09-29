@@ -51,6 +51,7 @@
     <Compile Include="PieceRank.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGamePlayer.cs" />
+    <Compile Include="WeightedAiGamePlayer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
