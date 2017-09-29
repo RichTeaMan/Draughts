@@ -57,10 +57,11 @@ namespace Draughts.UI.Console
                         }
                         row.Add(pieceSymbol.ToString());
                     }
-                    rows.Add(string.Join("|", row.ToArray()));
+                    rows.Add($"{y}|{string.Join("|", row.ToArray())}");
                 }
-                var rowSeperator = new string(Enumerable.Range(0, (gameState.XLength * 2) - 1).Select(i => i % 2 == 0 ? '-' : '+').ToArray());
+                var rowSeperator = new string(Enumerable.Range(0, ((gameState.XLength + 1) * 2) - 1).Select(i => i % 2 == 0 ? '-' : '+').ToArray());
                 var output = string.Join(Environment.NewLine + rowSeperator + Environment.NewLine, rows.Reverse<string>());
+                output += Environment.NewLine + " |" + string.Join(string.Empty, Enumerable.Range(0, (gameState.XLength * 2) - 1).Select(i => i % 2 == 0 ? (i/2).ToString() : "|").ToArray());
 
                 var moveOutputLines = new List<string>();
                 var moves = new List<GameMove>();
