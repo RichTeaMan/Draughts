@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Draughts.Ai.Trainer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,8 @@ namespace Draughts.Service
 {
     public class WeightedAiGamePlayer : IGamePlayer
     {
+        double mutationFactor = 0.1;
+
         public double NextAvailableMoveCountWeight { get; private set; }
 
         public double NextMovePiecesAtRiskWeight { get; private set; }
@@ -18,17 +21,42 @@ namespace Draughts.Service
 
         public double NextMoveKingWeight { get; private set; }
 
+        public int Generation { get; }
+
+        private Random _random;
+
         public WeightedAiGamePlayer() : this(new Random())
         {
         }
 
         public WeightedAiGamePlayer(Random random)
         {
+            _random = random;
+
             NextAvailableMoveCountWeight = (random.NextDouble() * 2) - 1;
             NextMovePiecesAtRiskWeight = (random.NextDouble() * 2) - 1;
             NextMovePiecesToTakeWeight = (random.NextDouble() * 2) - 1;
             KingWeight = (random.NextDouble() * 2) - 1;
             NextMoveKingWeight = (random.NextDouble() * 2) - 1;
+            Generation = 0;
+        }
+
+        public WeightedAiGamePlayer(
+            double nextAvailableMoveCountWeight,
+            double nextMovePiecesAtRiskWeight,
+            double nextMovePiecesToTakeWeight,
+            double kingWeight,
+            double nextMoveKingWeight,
+            int generation,
+            Random random)
+        {
+            NextAvailableMoveCountWeight = nextAvailableMoveCountWeight;
+            NextMovePiecesAtRiskWeight = nextMovePiecesAtRiskWeight;
+            NextMovePiecesToTakeWeight = nextMovePiecesToTakeWeight;
+            KingWeight = kingWeight;
+            NextMoveKingWeight = nextMoveKingWeight;
+            Generation = generation;
+            _random = random;
         }
 
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
@@ -57,7 +85,7 @@ namespace Draughts.Service
                 weightedResult += NextMovePiecesAtRiskWeight * opponentMoves.Sum(m => m.TakenGamePieces.Count);
                 weightedResult += NextMovePiecesToTakeWeight * friendlyMoves.Sum(m => m.TakenGamePieces.Count);
                 weightedResult += NextMoveKingWeight * friendlyMoves.Count(
-                    m => m.StartGamePiece.PieceRank == PieceRank.Minion && 
+                    m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
                     m.EndGamePiece.PieceRank == PieceRank.King);
 
                 var resultTuple = new Tuple<double, GameMove>(weightedResult, move);
@@ -69,5 +97,19 @@ namespace Draughts.Service
             var result = new GamePlayerMoveResult(selectedGameState, MoveStatus.SuccessfulMove);
             return result;
         }
+
+        public WeightedAiGamePlayer SpawnNewWeightedAiGamePlayer()
+        {
+            var newPlayer = new WeightedAiGamePlayer(
+                _random.NextDouble(NextAvailableMoveCountWeight, mutationFactor),
+                _random.NextDouble(NextMovePiecesAtRiskWeight, mutationFactor),
+                _random.NextDouble(NextMovePiecesToTakeWeight, mutationFactor),
+                _random.NextDouble(KingWeight, mutationFactor),
+                _random.NextDouble(NextMoveKingWeight, mutationFactor),
+                Generation + 1,
+                _random);
+            return newPlayer;
+        }
+
     }
 }
