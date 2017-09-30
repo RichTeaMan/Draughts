@@ -288,5 +288,51 @@ namespace Draughts.Service.Tests
 
             Assert.AreEqual(0, moves.Count);
         }
+
+        [TestMethod]
+        public void SinglePieceWhiteTakeStraightChainGameMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 0;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, x + 1, y + 1);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, x + 3, y + 3);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var piece1 = moves[0].EndGamePiece;
+
+            Assert.AreEqual(1, moves.Count);
+
+            Assert.AreEqual(x + 4, piece1.Xcoord);
+            Assert.AreEqual(y + 4, piece1.Ycoord);
+        }
+
+        [TestMethod]
+        public void SinglePieceWhiteTakeStraightCrookedGameMove()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 0;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, x + 1, y + 1);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, x + 1, y + 3);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var piece1 = moves[0].EndGamePiece;
+
+            Assert.AreEqual(1, moves.Count);
+
+            Assert.AreEqual(x, piece1.Xcoord);
+            Assert.AreEqual(y + 4, piece1.Ycoord);
+        }
     }
 }

@@ -54,82 +54,8 @@ namespace Draughts.Service
             var gameMoves = new List<GameMove>();
             foreach (var piece in GamePieceList)
             {
-                var newYList = new List<int>();
-
-                if (piece.PieceRank == PieceRank.Minion)
-                {
-                    int yDelta = 0;
-                    if (piece.PieceColour == PieceColour.White)
-                    {
-                        yDelta = 1;
-                    }
-                    else if (piece.PieceColour == PieceColour.Black)
-                    {
-                        yDelta = -1;
-                    }
-                    else
-                    {
-                        throw new ApplicationException("Unknown piece colour.");
-                    }
-                    newYList.Add(piece.Ycoord + yDelta);
-                }
-                else if (piece.PieceRank == PieceRank.King)
-                {
-                    newYList.Add(piece.Ycoord + 1);
-                    newYList.Add(piece.Ycoord - 1);
-                }
-                else
-                {
-                    throw new ApplicationException("Unknown piece rank.");
-                }
-
-                foreach (var newY in newYList)
-                {
-                    // check the y coord is in game bounds
-                    if (newY < 0 || newY >= YLength)
-                    {
-                        continue;
-                    }
-
-                    var newXcoords = new List<int>();
-                    int newXleft = piece.Xcoord - 1;
-                    if (newXleft >= 0)
-                    {
-                        newXcoords.Add(newXleft);
-                    }
-
-                    int newXright = piece.Xcoord + 1;
-                    if (newXright < XLength)
-                    {
-                        newXcoords.Add(newXright);
-                    }
-
-                    foreach (var newX in newXcoords)
-                    {
-                        var occupiedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
-                        if (occupiedPiece == null)
-                        {
-                            var newRank = CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
-                            var endPiece = new GamePiece(piece.PieceColour, newRank, newX, newY);
-                            gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>(), this));
-                        }
-                        else if (occupiedPiece.PieceColour != piece.PieceColour)
-                        {
-                            int jumpedX = ((newX - piece.Xcoord) * 2) + piece.Xcoord;
-                            int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
-                            if (jumpedX >= 0 && jumpedX < XLength && jumpedY >= 0 && jumpedY < YLength)
-                            {
-                                var jumpedPiece = GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
-                                if (jumpedPiece == null)
-                                {
-                                    var newRank = CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
-                                    var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
-                                    gameMoves.Add(new GameMove(piece, endPiece, new[] { occupiedPiece }, this));
-                                }
-                            }
-                        }
-                    }
-                }
+                var pieceMoves = FindMovesForPiece(this, piece);
+                gameMoves.AddRange(pieceMoves);
             }
 
             var resultGameMoves = new List<GameMove>();
@@ -148,6 +74,95 @@ namespace Draughts.Service
             }
 
             return resultGameMoves;
+        }
+
+        private static List<GameMove> FindMovesForPiece(GameState gameState, GamePiece piece)
+        {
+            var gameMoves = new List<GameMove>();
+            var newYList = new List<int>();
+
+            if (piece.PieceRank == PieceRank.Minion)
+            {
+                int yDelta = 0;
+                if (piece.PieceColour == PieceColour.White)
+                {
+                    yDelta = 1;
+                }
+                else if (piece.PieceColour == PieceColour.Black)
+                {
+                    yDelta = -1;
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown piece colour.");
+                }
+                newYList.Add(piece.Ycoord + yDelta);
+            }
+            else if (piece.PieceRank == PieceRank.King)
+            {
+                newYList.Add(piece.Ycoord + 1);
+                newYList.Add(piece.Ycoord - 1);
+            }
+            else
+            {
+                throw new ApplicationException("Unknown piece rank.");
+            }
+
+            foreach (var newY in newYList)
+            {
+                // check the y coord is in game bounds
+                if (newY < 0 || newY >= gameState.YLength)
+                {
+                    continue;
+                }
+
+                var newXcoords = new List<int>();
+                int newXleft = piece.Xcoord - 1;
+                if (newXleft >= 0)
+                {
+                    newXcoords.Add(newXleft);
+                }
+
+                int newXright = piece.Xcoord + 1;
+                if (newXright < gameState.XLength)
+                {
+                    newXcoords.Add(newXright);
+                }
+
+                foreach (var newX in newXcoords)
+                {
+                    var occupiedPiece = gameState.GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
+                    if (occupiedPiece == null)
+                    {
+                        var newRank = gameState.CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
+                        var endPiece = new GamePiece(piece.PieceColour, newRank, newX, newY);
+                        gameMoves.Add(new GameMove(piece, endPiece, new List<GamePiece>(), gameState));
+                    }
+                    else if (occupiedPiece.PieceColour != piece.PieceColour)
+                    {
+                        int jumpedX = ((newX - piece.Xcoord) * 2) + piece.Xcoord;
+                        int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
+                        if (jumpedX >= 0 && jumpedX < gameState.XLength && jumpedY >= 0 && jumpedY < gameState.YLength)
+                        {
+                            var jumpedPiece = gameState.GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
+                            if (jumpedPiece == null)
+                            {
+                                var newRank = gameState.CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
+                                var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
+                                var foundMove = new GameMove(piece, endPiece, new[] { occupiedPiece }, gameState);
+                                var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece);
+                                if (chainedMoves.Where(m => m.StartGamePiece == endPiece && m.TakenGamePieces.Any()).Any()) {
+                                    gameMoves.AddRange(chainedMoves);
+                                } else {
+                                    gameMoves.Add(foundMove);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        
+            return gameMoves;
         }
     }
 }
