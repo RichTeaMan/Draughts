@@ -23,10 +23,11 @@ namespace Draughts.Ai.Trainer
                 ).ToList();
 
             var gameMatch = new GameMatch();
-            int gamesPlayed = 0;
-            int gamesDrawn = 0;
-            foreach(var i in Enumerable.Range(0, iterationCount)) {
-                
+            foreach (var i in Enumerable.Range(0, iterationCount))
+            {
+                int gamesPlayed = 0;
+                int gamesDrawn = 0;
+
                 Console.WriteLine($"Iteration {i} underway.");
 
                 Parallel.ForEach(contestants, contestant =>
@@ -66,25 +67,25 @@ namespace Draughts.Ai.Trainer
 
                 Console.WriteLine("Matches complete.");
 
-                var winningContestants = contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2).ToList();
-                
-                Console.WriteLine($"Top winner won {winningContestants.First().Wins} matches.");
+                var winningContestant = contestants.OrderByDescending(c => c.Wins).First();
 
+                Console.WriteLine($"Top winner won {winningContestant.Wins} matches.");
+
+                winningContestant.ResetStats();
                 var nextContestants = new List<Contestant<WeightedAiGamePlayer>>();
-                foreach(var contestant in winningContestants)
+                nextContestants.Add(winningContestant);
+                foreach (var contestantI in Enumerable.Range(0, generationCount - 1))
                 {
-                    contestant.ResetStats();
-                    nextContestants.Add(contestant);
-                    var spawnContestant = new Contestant<WeightedAiGamePlayer>(contestant.GamePlayer.SpawnNewWeightedAiGamePlayer());
+                    var spawnContestant = new Contestant<WeightedAiGamePlayer>(winningContestant.GamePlayer.SpawnNewWeightedAiGamePlayer());
                     nextContestants.Add(spawnContestant);
                 }
                 contestants = nextContestants;
 
-                var bestContestant = contestants.OrderBy(c => c.Draws).ThenByDescending(c => c.Wins).First();
                 int wins = 0;
                 int games = 50;
-                foreach (var randomGameI in Enumerable.Range(0, games)) {
-                    var outcome = gameMatch.CompleteMatch(GameStateFactory.StandardStartGameState(), bestContestant.GamePlayer, new RandomGamePlayer());
+                foreach (var randomGameI in Enumerable.Range(0, games))
+                {
+                    var outcome = gameMatch.CompleteMatch(GameStateFactory.StandardStartGameState(), winningContestant.GamePlayer, new RandomGamePlayer());
                     if (outcome == GameMatchOutcome.WhiteWin)
                     {
                         wins++;
@@ -94,9 +95,9 @@ namespace Draughts.Ai.Trainer
             }
 
             contestants = contestants.OrderBy(c => c.Draws).ThenByDescending(c => c.Wins).ToList();
-            
+
             var champion = contestants.First();
-            
+
             Console.WriteLine($"Training complete. Top winner won {champion.Wins} matches. It is generation {champion.GamePlayer.Generation}.");
             Console.ReadLine();
         }
