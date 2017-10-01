@@ -9,7 +9,7 @@ namespace Draughts.Service
 {
     public class WeightedAiGamePlayer : IGamePlayer
     {
-        double mutationFactor = 0.1;
+        double mutationFactor = 0.001;
 
         public double NextAvailableMoveCountWeight { get; private set; }
 
