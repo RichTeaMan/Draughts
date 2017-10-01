@@ -20,7 +20,7 @@ var buildDir = Directory(configuration);
 Task("Clean")
     .Does(() =>
 {
-    CleanDirectory(buildDir);
+    CleanDirectories("./**/bin");
 });
 
 Task("Restore-NuGet-Packages")
@@ -46,7 +46,7 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    NUnit3("./**/bin/Debug/*.Tests.dll", new NUnit3Settings {
+    NUnit3($"./**/bin/{buildDir}/*.Tests.dll", new NUnit3Settings {
         NoResults = true
     });
 });
