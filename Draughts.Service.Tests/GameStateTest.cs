@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using NUnit.Framework;
 
 namespace Draughts.Service.Tests
 {
-    [TestClass]
+    [TestFixture]
     public class GameStateTest
     {
 
-        [TestMethod]
+        [Test]
         public void SinglePieceGameState()
         {
             var pieceColour = PieceColour.Black;
@@ -26,7 +26,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y, gameState.GamePieceList.First().Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -51,7 +51,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 1, piece2.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteLeftEdgeGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -72,7 +72,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 1, piece1.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceBlackGameMove()
         {
             var pieceColour = PieceColour.Black;
@@ -97,7 +97,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y - 1, piece2.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceBlackLeftEdgeGameMove()
         {
             var pieceColour = PieceColour.Black;
@@ -118,7 +118,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y - 1, piece1.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteBlockedGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -140,7 +140,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 1, piece1.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteTakeGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -162,7 +162,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 2, piece1.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhitePerformMove()
         {
             var pieceColour = PieceColour.White;
@@ -183,7 +183,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 1, afterState.GamePieceList[0].Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteTakePerformMove()
         {
             var pieceColour = PieceColour.White;
@@ -205,7 +205,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 2, afterState.GamePieceList[0].Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteKingOnLastRow()
         {
             var pieceColour = PieceColour.White;
@@ -224,7 +224,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(PieceRank.King, afterState.GamePieceList[0].PieceRank);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceKingWhiteGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -257,7 +257,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y - 1, piece4.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteBlockedByTopEdgeGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -273,7 +273,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(0, moves.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceBlackBlockedByBottomEdgeGameMove()
         {
             var pieceColour = PieceColour.Black;
@@ -289,7 +289,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(0, moves.Count);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteTakeStraightChainGameMove()
         {
             var pieceColour = PieceColour.White;
@@ -312,7 +312,7 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(y + 4, piece1.Ycoord);
         }
 
-        [TestMethod]
+        [Test]
         public void SinglePieceWhiteTakeStraightCrookedGameMove()
         {
             var pieceColour = PieceColour.White;

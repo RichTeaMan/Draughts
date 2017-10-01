@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////
 
 var target = Argument("target", "Default");
-var configuration = Argument("configuration", "Release");
+var configuration = Argument("configuration", "Debug");
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -46,7 +46,9 @@ Task("Run-Unit-Tests")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    MSTest("./**/*.Tests.dll");
+    NUnit3("./**/bin/Debug/*.Tests.dll", new NUnit3Settings {
+        NoResults = true
+    });
 });
 
 //////////////////////////////////////////////////////////////////////
