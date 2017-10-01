@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.UI.Console", "Draughts.UI.Console\Draughts.UI.Console.csproj", "{7301E0B1-88FF-4981-BA2F-8ED1A8A93B90}"
 EndProject
@@ -10,6 +10,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Service.Tests", "Draughts.Service.Tests\Draughts.Service.Tests.csproj", "{72538143-337F-4428-9E91-E7008AA13FC4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Ai.Trainer", "Draughts.Ai.Trainer\Draughts.Ai.Trainer.csproj", "{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC0B3B93-3984-42EB-A65A-FF35AB5632B7}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +41,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8BD38108-7ADE-426B-8FD6-4405547FE2E1}
 	EndGlobalSection
 EndGlobal
