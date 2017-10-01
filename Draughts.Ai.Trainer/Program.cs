@@ -10,8 +10,8 @@ namespace Draughts.Ai.Trainer
 {
     class Program
     {
-        private const int generationCount = 20;
-        
+        private const int generationCount = 40;
+
         private const int iterationCount = 10;
 
         static void Main(string[] args)
@@ -71,13 +71,13 @@ namespace Draughts.Ai.Trainer
 
                 Console.WriteLine($"Top winner won {winningContestant.Wins} matches.");
 
-                winningContestant.ResetStats();
                 var nextContestants = new List<Contestant<WeightedAiGamePlayer>>();
-                nextContestants.Add(winningContestant);
-                foreach (var contestantI in Enumerable.Range(0, generationCount - 1))
+                foreach (var contestantI in contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2))
                 {
                     var spawnContestant = new Contestant<WeightedAiGamePlayer>(winningContestant.GamePlayer.SpawnNewWeightedAiGamePlayer());
                     nextContestants.Add(spawnContestant);
+                    nextContestants.Add(contestantI);
+                    contestantI.ResetStats();
                 }
                 contestants = nextContestants;
 
