@@ -51,6 +51,18 @@ Task("Run-Unit-Tests")
     });
 });
 
+Task("Train")
+    .IsDependentOn("Run-Unit-Tests")
+    .Does(() =>
+{
+    using(var process = StartAndReturnProcess($"./Draughts.Ai.Trainer/bin/{buildDir}/Draughts.Ai.Trainer.exe"))
+    {
+        process.WaitForExit();
+        // This should output 0 as valid arguments supplied
+        Information("Exit code: {0}", process.GetExitCode());
+    }
+});
+
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS
 //////////////////////////////////////////////////////////////////////
