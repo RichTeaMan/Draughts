@@ -1,4 +1,5 @@
 ﻿using Draughts.Service;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,6 +68,11 @@ namespace Draughts.Ai.Trainer
 
                 Console.WriteLine("Matches complete.");
 
+                var json = JsonConvert.SerializeObject(contestants.OrderByDescending(c => c.Wins).ToArray());
+                System.IO.File.WriteAllText($"Iteration{i}.json", json);
+
+                Console.WriteLine("Contestants saved.");
+
                 var winningContestant = contestants.OrderByDescending(c => c.Wins).First();
 
                 Console.WriteLine($"Top winner won {winningContestant.Wins} matches.");
@@ -99,7 +105,6 @@ namespace Draughts.Ai.Trainer
             var champion = contestants.First();
 
             Console.WriteLine($"Training complete. Top winner won {champion.Wins} matches. It is generation {champion.GamePlayer.Generation}.");
-            Console.ReadLine();
         }
     }
 }
