@@ -1,4 +1,5 @@
 ﻿using Draughts.Ai.Trainer;
+using NameUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,11 @@ namespace Draughts.Service
         public double NextMoveKingWeight { get; private set; }
 
         public int Generation { get; }
+
+        public string Name
+        {
+            get { return this.GenerateName(); }
+        }
 
         private Random _random;
 

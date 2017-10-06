@@ -24,7 +24,6 @@ Task("Clean")
 });
 
 Task("Restore-NuGet-Packages")
-    .IsDependentOn("Clean")
     .Does(() =>
 {
     NuGetRestore("./Draughts.sln");
@@ -52,13 +51,24 @@ Task("Run-Unit-Tests")
 });
 
 Task("Train")
-    .IsDependentOn("Run-Unit-Tests")
+    .IsDependentOn("Build")
     .Does(() =>
 {
     using(var process = StartAndReturnProcess($"./Draughts.Ai.Trainer/bin/{buildDir}/Draughts.Ai.Trainer.exe"))
     {
         process.WaitForExit();
         // This should output 0 as valid arguments supplied
+        Information("Exit code: {0}", process.GetExitCode());
+    }
+});
+
+Task("Show-Names")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    using(var process = StartAndReturnProcess($"./NameUtility.Display/bin/{buildDir}/NameUtility.Display.exe"))
+    {
+        process.WaitForExit();
         Information("Exit code: {0}", process.GetExitCode());
     }
 });

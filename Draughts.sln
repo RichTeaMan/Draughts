@@ -13,9 +13,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Ai.Trainer", "Drau
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{EC0B3B93-3984-42EB-A65A-FF35AB5632B7}"
 	ProjectSection(SolutionItems) = preProject
+		build.cake = build.cake
 		licence.txt = licence.txt
 		readme.md = readme.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NameUtility", "NameUtility\NameUtility.csproj", "{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NameUtility.Display", "NameUtility.Display\NameUtility.Display.csproj", "{C78B34AC-231B-47E8-84E4-564EECE9A978}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +44,14 @@ Global
 		{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C78B34AC-231B-47E8-84E4-564EECE9A978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C78B34AC-231B-47E8-84E4-564EECE9A978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C78B34AC-231B-47E8-84E4-564EECE9A978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C78B34AC-231B-47E8-84E4-564EECE9A978}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

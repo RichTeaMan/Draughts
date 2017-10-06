@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Draughts.Ai.Trainer</RootNamespace>
-    <AssemblyName>Draughts.Ai.Trainer</AssemblyName>
+    <ProjectGuid>{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NameUtility</RootNamespace>
+    <AssemblyName>NameUtility</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -42,24 +41,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contestant.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="NameUtility.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomExtension.cs" />
-    <Compile Include="WeightedAiGamePlayer.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
-      <Project>{1289c147-29de-42a9-ac47-1529f4ba813b}</Project>
-      <Name>Draughts.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NameUtility\NameUtility.csproj">
-      <Project>{a4ce3ffc-96a6-498c-b45a-4fd43b9572c2}</Project>
-      <Name>NameUtility</Name>
-    </ProjectReference>
+    <EmbeddedResource Include="Resources\Names_En.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
