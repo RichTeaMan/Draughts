@@ -24,7 +24,6 @@ namespace Draughts.Ai.Trainer
                     spawner.SpawnNewWeightedAiGamePlayer())
                 ).ToList();
 
-            var gameMatch = new GameMatch();
             foreach (var i in Enumerable.Range(0, iterationCount))
             {
                 int gamesPlayed = 0;
@@ -36,11 +35,12 @@ namespace Draughts.Ai.Trainer
                 {
                     foreach (var opponent in contestants.Where(c => c != contestant).ToList())
                     {
-
-                        var matchResult = gameMatch.CompleteMatch(
+                        var gameMatch = new GameMatch(
                             GameStateFactory.StandardStartGameState(),
                             contestant.GamePlayer,
                             opponent.GamePlayer);
+
+                var matchResult = gameMatch.CompleteMatch();
 
                         var _count = Interlocked.Increment(ref gamesPlayed);
                         if (_count % 100 == 0)
@@ -92,7 +92,11 @@ namespace Draughts.Ai.Trainer
                 int games = 50;
                 foreach (var randomGameI in Enumerable.Range(0, games))
                 {
-                    var outcome = gameMatch.CompleteMatch(GameStateFactory.StandardStartGameState(), winningContestant.GamePlayer, new RandomGamePlayer());
+                    var gameMatch = new GameMatch(
+                        GameStateFactory.StandardStartGameState(),
+                        winningContestant.GamePlayer,
+                        new RandomGamePlayer());
+                    var outcome = gameMatch.CompleteMatch();
                     if (outcome == GameMatchOutcome.WhiteWin)
                     {
                         wins++;

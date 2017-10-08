@@ -25,12 +25,6 @@ namespace Draughts.Service
 
         public GameMatchOutcome GameMatchOutcome { get; private set; } = GameMatchOutcome.InProgress;
 
-        [Obsolete]
-        public GameMatch()
-        {
-
-        }
-
         /// <summary>
         /// Creates a game match with the given game and players.
         /// </summary>
@@ -99,39 +93,5 @@ namespace Draughts.Service
             return GameMatchOutcome;
         }
 
-        /// <summary>
-        /// Completes a match between two players. White always plays first.
-        /// </summary>
-        /// <param name="gameState"></param>
-        /// <param name="whiteGamePlayer"></param>
-        /// <param name="blackGamePlayer"></param>
-        /// <returns></returns>
-        [Obsolete]
-        public GameMatchOutcome CompleteMatch(GameState gameState, IGamePlayer whiteGamePlayer, IGamePlayer blackGamePlayer)
-        {
-            GameMatchOutcome outcome = GameMatchOutcome.Draw;
-            var currentGameState = gameState;
-            int turns = 0;
-            while(turns < TurnLimit) {
-
-                var whiteResult = whiteGamePlayer.MakeMove(PieceColour.White, currentGameState);
-                if (whiteResult.MoveStatus == MoveStatus.NoLegalMoves)
-                {
-                    outcome = GameMatchOutcome.BlackWin;
-                    break;
-                }
-                currentGameState = whiteResult.GameState;
-
-                var blackResult = blackGamePlayer.MakeMove(PieceColour.Black, currentGameState);
-                if (blackResult.MoveStatus == MoveStatus.NoLegalMoves)
-                {
-                    outcome = GameMatchOutcome.WhiteWin;
-                    break;
-                }
-                currentGameState = blackResult.GameState;
-                turns++;
-            }
-            return outcome;
-        }
     }
 }
