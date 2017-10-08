@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,6 +29,36 @@ namespace Draughts.Service
             PieceRank = pieceRank;
             Xcoord = xCoord;
             Ycoord = yCoord;
+        }
+
+        public override string ToString()
+        {
+            return new ToStringBuilder<GamePiece>(this)
+                .Append(p => p.PieceColour)
+                .Append(p => p.PieceRank)
+                .Append(p => p.Xcoord)
+                .Append(p => p.Ycoord)
+                .ToString();
+        }
+
+        public override bool Equals(object that)
+        {
+            return new EqualsBuilder<GamePiece>(this, that)
+                .Append(p => p.PieceColour)
+                .Append(p => p.PieceRank)
+                .Append(p => p.Xcoord)
+                .Append(p => p.Ycoord)
+                .Equals();
+        }
+
+        public override int GetHashCode()
+        {
+            return new HashCodeBuilder<GamePiece>(this)
+                .Append(p => p.PieceColour)
+                .Append(p => p.PieceRank)
+                .Append(p => p.Xcoord)
+                .Append(p => p.Ycoord)
+            .HashCode;
         }
     }
 }

@@ -54,5 +54,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomGamePlayer.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
