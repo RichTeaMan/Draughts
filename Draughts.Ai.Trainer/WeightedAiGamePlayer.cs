@@ -1,5 +1,6 @@
 ﻿using Draughts.Ai.Trainer;
 using NameUtility;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,19 @@ namespace Draughts.Service
 {
     public class WeightedAiGamePlayer : IGamePlayer
     {
-        public double NextAvailableMoveCountWeight { get; private set; }
+        public double NextAvailableMoveCountWeight { get; set; }
 
-        public double NextMovePiecesAtRiskWeight { get; private set; }
+        public double NextMovePiecesAtRiskWeight { get; set; }
 
-        public double NextMovePiecesToTakeWeight { get; private set; }
+        public double NextMovePiecesToTakeWeight { get; set; }
 
-        public double KingWeight { get; private set; }
+        public double KingWeight { get; set; }
 
-        public double NextMoveKingWeight { get; private set; }
+        public double NextMoveKingWeight { get; set; }
 
-        public int Generation { get; }
+        public int Generation { get; set;  }
 
+        [JsonIgnore]
         public string Name
         {
             get { return this.GenerateName(); }
