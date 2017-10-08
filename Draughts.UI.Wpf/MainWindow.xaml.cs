@@ -1,4 +1,5 @@
 ﻿using Draughts.Service;
+using Draughts.UI.Wpf.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,19 +31,23 @@ namespace Draughts.UI.Wpf
 
         private GameMatch gameMatch;
 
+        private AiLoader aiLoader;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            WhitePlayer = new RandomGamePlayer();
-            BlackPlayer = new RandomGamePlayer();
+            aiLoader = ((App)App.Current).AiLoader;
+
+            WhitePlayer = aiLoader.LoadedGamePlayers[0];
+            BlackPlayer = aiLoader.LoadedGamePlayers[1];
 
             gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), WhitePlayer, BlackPlayer);
 
             dispatcherTimer.Tick += dispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
-
+            
         }
 
         private void dispatcherTimer_Tick(object sender, EventArgs e)

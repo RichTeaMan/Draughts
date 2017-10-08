@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -56,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Services\AiLoader.cs" />
     <Page Include="DraughtsBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -94,6 +98,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -107,6 +112,10 @@
     <Resource Include="Resources\white.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Draughts.Ai.Trainer\Draughts.Ai.Trainer.csproj">
+      <Project>{71036d3a-c4f4-4f9a-a353-60f9ae74bb5e}</Project>
+      <Name>Draughts.Ai.Trainer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
       <Project>{1289C147-29DE-42A9-AC47-1529F4BA813B}</Project>
       <Name>Draughts.Service</Name>
