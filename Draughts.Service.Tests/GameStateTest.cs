@@ -9,6 +9,22 @@ namespace Draughts.Service.Tests
     {
 
         [Test]
+        public void PieceEquals()
+        {
+            var pieceA = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+            var pieceAClone = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+
+            var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+            var pieceBClone = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+
+            Assert.AreEqual(pieceA, pieceAClone);
+            Assert.AreEqual(pieceB, pieceBClone);
+
+            Assert.AreNotEqual(pieceA, pieceBClone);
+            Assert.AreNotEqual(pieceB, pieceAClone);
+        }
+
+        [Test]
         public void SinglePieceGameState()
         {
             var pieceColour = PieceColour.Black;
