@@ -241,6 +241,53 @@ namespace Draughts.Service.Tests
         }
 
         [Test]
+        public void SinglePieceWhiteKingOnLastRowAfterJump()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 0;
+            int y = 5;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece = new GamePiece(PieceColour.Black, pieceRank, 1, 6);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var afterState = moves.First().PerformMove();
+
+            var expectedPiece = new GamePiece(PieceColour.White, PieceRank.King, 2, 7);
+
+            Assert.AreEqual(1, afterState.GamePieceList.Count);
+
+            Assert.AreEqual(expectedPiece, afterState.GamePieceList[0]);
+        }
+
+        [Test]
+        public void SinglePieceWhiteKingOnLastRowAfterDoubleJump()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 2;
+            int y = 3;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, 1, 6);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, 1, 4);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var afterState = moves.First().PerformMove();
+
+            var expectedPiece = new GamePiece(PieceColour.White, PieceRank.King, 2, 7);
+
+            Assert.AreEqual(1, afterState.GamePieceList.Count);
+
+            Assert.AreEqual(expectedPiece, afterState.GamePieceList[0]);
+        }
+
+        [Test]
         public void SinglePieceKingWhiteGameMove()
         {
             var pieceColour = PieceColour.White;

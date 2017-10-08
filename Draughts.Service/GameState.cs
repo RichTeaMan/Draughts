@@ -147,7 +147,7 @@ namespace Draughts.Service
                             var jumpedPiece = gameState.GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
                             if (jumpedPiece == null)
                             {
-                                var newRank = gameState.CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
+                                var newRank = gameState.CalculatePieceRank(jumpedY, piece.PieceColour, piece.PieceRank);
                                 var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
                                 var foundMove = new GameMove(piece, endPiece, new[] { occupiedPiece }, gameState);
                                 var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece);
