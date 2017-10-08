@@ -18,9 +18,10 @@ namespace Draughts.Ai.Trainer
         static void Main(string[] args)
         {
             Random random = new Random();
+            var spawner = new WeightedAiGamePlayerSpawner();
             var contestants = Enumerable.Range(0, generationCount)
                 .Select(i => new Contestant<WeightedAiGamePlayer>(
-                    new WeightedAiGamePlayer(random))
+                    spawner.SpawnNewWeightedAiGamePlayer())
                 ).ToList();
 
             var gameMatch = new GameMatch();
@@ -80,7 +81,7 @@ namespace Draughts.Ai.Trainer
                 var nextContestants = new List<Contestant<WeightedAiGamePlayer>>();
                 foreach (var contestantI in contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2))
                 {
-                    var spawnContestant = new Contestant<WeightedAiGamePlayer>(winningContestant.GamePlayer.SpawnNewWeightedAiGamePlayer());
+                    var spawnContestant = new Contestant<WeightedAiGamePlayer>(spawner.SpawnNewWeightedAiGamePlayer(winningContestant.GamePlayer));
                     nextContestants.Add(spawnContestant);
                     nextContestants.Add(contestantI);
                     contestantI.ResetStats();
