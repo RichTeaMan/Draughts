@@ -1,4 +1,5 @@
-﻿using Draughts.Ai.Trainer;
+﻿using Common;
+using Draughts.Ai.Trainer;
 using NameUtility;
 using Newtonsoft.Json;
 using System;
@@ -21,7 +22,7 @@ namespace Draughts.Service
 
         public double NextMoveKingWeight { get; set; }
 
-        public int Generation { get; set;  }
+        public int Generation { get; set; }
 
         [JsonIgnore]
         public string Name
@@ -82,6 +83,42 @@ namespace Draughts.Service
             var selectedGameState = selectedMove.PerformMove();
             var result = new GamePlayerMoveResult(selectedGameState, MoveStatus.SuccessfulMove);
             return result;
+        }
+
+        public override string ToString()
+        {
+            return new ToStringBuilder<WeightedAiGamePlayer>(this)
+                .Append(p => p.NextAvailableMoveCountWeight)
+                .Append(p => p.NextMovePiecesAtRiskWeight)
+                .Append(p => p.NextMovePiecesToTakeWeight)
+                .Append(p => p.KingWeight)
+                .Append(p => p.NextMoveKingWeight)
+                .Append(p => p.Generation)
+                .ToString();
+        }
+
+        public override bool Equals(object that)
+        {
+            return new EqualsBuilder<WeightedAiGamePlayer>(this, that)
+                .Append(p => p.NextAvailableMoveCountWeight)
+                .Append(p => p.NextMovePiecesAtRiskWeight)
+                .Append(p => p.NextMovePiecesToTakeWeight)
+                .Append(p => p.KingWeight)
+                .Append(p => p.NextMoveKingWeight)
+                .Append(p => p.Generation)
+                .Equals();
+        }
+
+        public override int GetHashCode()
+        {
+            return new HashCodeBuilder<WeightedAiGamePlayer>(this)
+            .Append(p => p.NextAvailableMoveCountWeight)
+            .Append(p => p.NextMovePiecesAtRiskWeight)
+            .Append(p => p.NextMovePiecesToTakeWeight)
+            .Append(p => p.KingWeight)
+            .Append(p => p.NextMoveKingWeight)
+            .Append(p => p.Generation)
+            .HashCode;
         }
 
     }

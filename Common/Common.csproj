@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Draughts.Ai.Trainer</RootNamespace>
-    <AssemblyName>Draughts.Ai.Trainer</AssemblyName>
+    <ProjectGuid>{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Common</RootNamespace>
+    <AssemblyName>Common</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,9 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,30 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Contestant.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="EqualsBuilder.cs" />
+    <Compile Include="HashBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RandomExtension.cs" />
-    <Compile Include="WeightedAiGamePlayerSpawner.cs" />
-    <Compile Include="WeightedAiGamePlayer.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{cc77cc8b-1c00-4595-bed1-2fadf7c3d327}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
-      <Project>{1289c147-29de-42a9-ac47-1529f4ba813b}</Project>
-      <Name>Draughts.Service</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\NameUtility\NameUtility.csproj">
-      <Project>{a4ce3ffc-96a6-498c-b45a-4fd43b9572c2}</Project>
-      <Name>NameUtility</Name>
-    </ProjectReference>
+    <Compile Include="ToStringBuilder.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
