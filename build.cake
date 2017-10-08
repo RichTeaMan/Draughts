@@ -36,8 +36,13 @@ Task("Build")
     if(IsRunningOnWindows())
     {
       // Use MSBuild
-      MSBuild("Draughts.sln", settings =>
-        settings.SetConfiguration(configuration));
+      MSBuild("Draughts.sln", new MSBuildSettings {
+        Verbosity = Verbosity.Minimal,
+        ToolVersion = MSBuildToolVersion.VS2017,
+        Configuration = configuration,
+        PlatformTarget = PlatformTarget.MSIL,
+        ToolPath = "D:/VS2017/MSBuild/15.0/Bin/MSBuild.exe"
+        });
     }
 });
 
