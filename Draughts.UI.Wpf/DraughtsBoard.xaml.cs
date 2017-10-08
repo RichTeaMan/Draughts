@@ -68,12 +68,25 @@ namespace Draughts.UI.Wpf
                 var panel = FindSquare(piece.Xcoord, piece.Ycoord);
 
                 string fileName;
-                if (piece.PieceColour == PieceColour.Black)
+                if (piece.PieceColour == PieceColour.Black && piece.PieceRank == PieceRank.Minion)
                 {
                     fileName = "black";
-                } else
+                }
+                else if (piece.PieceColour == PieceColour.White && piece.PieceRank == PieceRank.Minion)
                 {
                     fileName = "white";
+                }
+                else if (piece.PieceColour == PieceColour.Black && piece.PieceRank == PieceRank.King)
+                {
+                    fileName = "kingblack";
+                }
+                else if (piece.PieceColour == PieceColour.White && piece.PieceRank == PieceRank.King)
+                {
+                    fileName = "kingwhite";
+                }
+                else
+                {
+                    throw new ApplicationException("Unknown piece.");
                 }
 
                 var image = new Image();

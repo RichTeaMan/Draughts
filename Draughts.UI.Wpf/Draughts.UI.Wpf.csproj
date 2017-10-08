@@ -121,5 +121,9 @@
       <Name>Draughts.Service</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\kingblack.png" />
+    <Resource Include="Resources\kingwhite.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
