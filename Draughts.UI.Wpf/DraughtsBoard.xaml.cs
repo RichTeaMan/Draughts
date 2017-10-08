@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Draughts.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -52,9 +53,49 @@ namespace Draughts.UI.Wpf
                     Grid.SetColumn(cell, width);
                     Grid.SetRow(cell, height);
                     Board.Children.Add(cell);
+
                 }
             }
+            SetupFromGameState(GameStateFactory.StandardStartGameState());
+        }
 
+        public void SetupFromGameState(GameState gameState)
+        {
+            foreach (var piece in gameState.GamePieceList)
+            {
+                var panel = FindSquare(piece.Xcoord, piece.Ycoord);
+
+                string fileName;
+                if (piece.PieceColour == PieceColour.Black)
+                {
+                    fileName = "black";
+                } else
+                {
+                    fileName = "white";
+                }
+
+                var image = new Image();
+                image.Tag = "piece";
+                image.Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"));
+                panel.Children.Add(image);
+            }
+        }
+
+        public void ClearState()
+        {
+            var imageList = Board.Children.Cast<UIElement>().OfType<Image>().Where(e => e.Tag as string == "piece");
+            foreach (var image in imageList)
+            {
+                Board.Children.Remove(image);
+            }
+        }
+
+        private Panel FindSquare(int x, int y)
+        {
+            int convertedY = (BoardHeight - 1) - y;
+
+            var square = (Panel)Board.Children.Cast<UIElement>().Single(e => Grid.GetColumn(e) == x && Grid.GetRow(e) == convertedY);
+            return square;
         }
     }
 }
