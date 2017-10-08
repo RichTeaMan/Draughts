@@ -10,6 +10,7 @@ namespace Draughts.Service
     {
         WhiteWin,
         BlackWin,
-        Draw
+        Draw,
+        InProgress,
     }
 }

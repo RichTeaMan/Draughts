@@ -29,6 +29,8 @@ namespace Draughts.UI.Wpf
 
         public Brush LightColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
+        private List<Grid> squareList = new List<Grid>();
+
         public DraughtsBoard()
         {
             InitializeComponent();
@@ -53,7 +55,7 @@ namespace Draughts.UI.Wpf
                     Grid.SetColumn(cell, width);
                     Grid.SetRow(cell, height);
                     Board.Children.Add(cell);
-
+                    squareList.Add(cell);
                 }
             }
             SetupFromGameState(GameStateFactory.StandardStartGameState());
@@ -75,7 +77,6 @@ namespace Draughts.UI.Wpf
                 }
 
                 var image = new Image();
-                image.Tag = "piece";
                 image.Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"));
                 panel.Children.Add(image);
             }
@@ -83,10 +84,9 @@ namespace Draughts.UI.Wpf
 
         public void ClearState()
         {
-            var imageList = Board.Children.Cast<UIElement>().OfType<Image>().Where(e => e.Tag as string == "piece");
-            foreach (var image in imageList)
+            foreach (var square in squareList)
             {
-                Board.Children.Remove(image);
+                square.Children.Clear();
             }
         }
 
