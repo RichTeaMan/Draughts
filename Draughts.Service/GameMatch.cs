@@ -89,7 +89,7 @@ namespace Draughts.Service
         /// <returns></returns>
         public GameMatchOutcome CompleteMatch()
         {
-            while (CompleteTurn() != GameMatchOutcome.InProgress) ;
+            while (CompleteTurn() == GameMatchOutcome.InProgress) ;
             return GameMatchOutcome;
         }
 
