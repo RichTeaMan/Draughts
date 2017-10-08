@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Draughts.UI.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+    <Grid Name="Board">
         <Grid.Resources></Grid.Resources>
         
         <Grid.RowDefinitions>
