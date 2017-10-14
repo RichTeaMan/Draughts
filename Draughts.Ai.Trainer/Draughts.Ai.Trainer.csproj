@@ -8,9 +8,10 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Draughts.Ai.Trainer</RootNamespace>
     <AssemblyName>Draughts.Ai.Trainer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -62,7 +63,7 @@
       <Name>Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
-      <Project>{1289c147-29de-42a9-ac47-1529f4ba813b}</Project>
+      <Project>{7d75f891-e4a0-4f88-b7d3-f4b0e4ea1763}</Project>
       <Name>Draughts.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\NameUtility\NameUtility.csproj">

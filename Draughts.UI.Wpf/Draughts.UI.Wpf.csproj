@@ -8,11 +8,12 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Draughts.UI.Wpf</RootNamespace>
     <AssemblyName>Draughts.UI.Wpf</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -117,7 +118,7 @@
       <Name>Draughts.Ai.Trainer</Name>
     </ProjectReference>
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
-      <Project>{1289C147-29DE-42A9-AC47-1529F4BA813B}</Project>
+      <Project>{7d75f891-e4a0-4f88-b7d3-f4b0e4ea1763}</Project>
       <Name>Draughts.Service</Name>
     </ProjectReference>
   </ItemGroup>

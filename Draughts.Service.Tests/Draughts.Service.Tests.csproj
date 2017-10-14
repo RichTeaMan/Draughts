@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Draughts.Service.Tests</RootNamespace>
     <AssemblyName>Draughts.Service.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
@@ -20,6 +20,7 @@
     <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -60,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
-      <Project>{1289c147-29de-42a9-ac47-1529f4ba813b}</Project>
+      <Project>{7d75f891-e4a0-4f88-b7d3-f4b0e4ea1763}</Project>
       <Name>Draughts.Service</Name>
     </ProjectReference>
   </ItemGroup>

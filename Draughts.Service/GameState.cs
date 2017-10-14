@@ -94,7 +94,7 @@ namespace Draughts.Service
                 }
                 else
                 {
-                    throw new ApplicationException("Unknown piece colour.");
+                    throw new InvalidOperationException("Unknown piece colour.");
                 }
                 newYList.Add(piece.Ycoord + yDelta);
             }
@@ -105,7 +105,7 @@ namespace Draughts.Service
             }
             else
             {
-                throw new ApplicationException("Unknown piece rank.");
+                throw new InvalidOperationException("Unknown piece rank.");
             }
 
             foreach (var newY in newYList)

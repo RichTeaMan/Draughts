@@ -11,9 +11,9 @@ namespace Draughts.Ai.Trainer
 {
     class Program
     {
-        private const int generationCount = 40;
+        private const int generationCount = 20;
 
-        private const int iterationCount = 10;
+        private const int iterationCount = 100;
 
         static void Main(string[] args)
         {
