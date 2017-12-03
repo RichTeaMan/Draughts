@@ -101,7 +101,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -127,11 +129,6 @@
   <ItemGroup>
     <Resource Include="Resources\kingblack.png" />
     <Resource Include="Resources\kingwhite.png" />
-  </ItemGroup>
-  <ItemGroup>
-  <PackageReference Include="Legacy2CPSWorkaround" Version="1.0.0">
-    <PrivateAssets>All</PrivateAssets>
-  </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets" Condition="Exists('..\packages\NETStandard.Library.2.0.1\build\NETStandard.Library.targets')" />
