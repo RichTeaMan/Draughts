@@ -1,4 +1,5 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
+#tool "nuget:?package=vswhere"
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
 //////////////////////////////////////////////////////////////////////
@@ -35,14 +36,17 @@ Task("Build")
 {
     if(IsRunningOnWindows())
     {
-      // Use MSBuild
-      MSBuild("Draughts.sln", new MSBuildSettings {
-        Verbosity = Verbosity.Minimal,
-        ToolVersion = MSBuildToolVersion.VS2017,
-        Configuration = configuration,
-        PlatformTarget = PlatformTarget.MSIL,
-        ToolPath = "D:/VS2017/MSBuild/15.0/Bin/MSBuild.exe"
-        });
+		DirectoryPath vsLatest  = VSWhereLatest();
+		FilePath msBuildPathX64 = (vsLatest==null)
+								? null
+								: vsLatest.CombineWithFilePath("./MSBuild/15.0/Bin/MSBuild.exe");
+
+		MSBuild("Draughts.sln", new MSBuildSettings {
+		Verbosity = Verbosity.Minimal,
+		Configuration = configuration,
+		PlatformTarget = PlatformTarget.MSIL,
+		ToolPath = msBuildPathX64
+		});
     }
 });
 
