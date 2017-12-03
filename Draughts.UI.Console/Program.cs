@@ -53,7 +53,7 @@ namespace Draughts.UI.Console
                         }
                         else
                         {
-                            throw new ApplicationException("Unknown piece colour.");
+                            throw new GameException("Unknown piece colour.");
                         }
                         row.Add(pieceSymbol.ToString());
                     }
@@ -126,7 +126,7 @@ namespace Draughts.UI.Console
                     gameState = aiResult.GameState;
                 } else
                 {
-                    throw new ApplicationException("Unknown AI result state.");
+                    throw new GameException("Unknown AI result state.");
                 }
 
                 System.Console.Clear();

@@ -51,8 +51,20 @@ namespace Draughts.Service
 
         public IList<GameMove> CalculateAvailableMoves()
         {
+            var moves = CalculateAvailableMoves(GamePieceList);
+            return moves;
+        }
+
+        public IList<GameMove> CalculateAvailableMoves(PieceColour pieceColour)
+        {
+            var moves = CalculateAvailableMoves(GamePieceList.Where(p => p.PieceColour == pieceColour));
+            return moves;
+        }
+
+        public IList<GameMove> CalculateAvailableMoves(IEnumerable<GamePiece> gamePieces)
+        {
             var gameMoves = new List<GameMove>();
-            foreach (var piece in GamePieceList)
+            foreach (var piece in gamePieces)
             {
                 var pieceMoves = FindMovesForPiece(this, piece);
                 gameMoves.AddRange(pieceMoves);
@@ -62,12 +74,13 @@ namespace Draughts.Service
 
             // pieces must be taken
             var colourGroupList = gameMoves.GroupBy(m => m.StartGamePiece.PieceColour);
-            foreach(var colourGroup in colourGroupList)
+            foreach (var colourGroup in colourGroupList)
             {
                 if (colourGroup.Any(m => m.TakenGamePieces.Count > 0))
                 {
                     resultGameMoves.AddRange(colourGroup.Where(m => m.TakenGamePieces.Count > 0));
-                } else
+                }
+                else
                 {
                     resultGameMoves.AddRange(colourGroup);
                 }

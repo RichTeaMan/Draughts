@@ -48,7 +48,7 @@ namespace Draughts.Service
 
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
         {
-            var currentMoves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == pieceColour).ToList();
+            var currentMoves = gameState.CalculateAvailableMoves(pieceColour).ToList();
             if (!currentMoves.Any())
             {
                 return new GamePlayerMoveResult(null, MoveStatus.NoLegalMoves);

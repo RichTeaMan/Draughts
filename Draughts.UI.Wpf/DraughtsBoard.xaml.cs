@@ -89,8 +89,10 @@ namespace Draughts.UI.Wpf
                     throw new ApplicationException("Unknown piece.");
                 }
 
-                var image = new Image();
-                image.Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"));
+                var image = new Image()
+                {
+                    Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"))
+                };
                 panel.Children.Add(image);
             }
         }

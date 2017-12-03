@@ -59,24 +59,27 @@ Task("Train")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    using(var process = StartAndReturnProcess($"./Draughts.Ai.Trainer/bin/{buildDir}/Draughts.Ai.Trainer.exe"))
-    {
-        process.WaitForExit();
-        // This should output 0 as valid arguments supplied
-        Information("Exit code: {0}", process.GetExitCode());
-    }
+    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp1.1/Draughts.Ai.Trainer.CLI.dll");
 });
 
 Task("Show-Names")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    using(var process = StartAndReturnProcess($"./NameUtility.Display/bin/{buildDir}/NameUtility.Display.exe"))
+    DotNetCoreExecute($"./NameUtility.Display/bin/{buildDir}//netcoreapp1.1/NameUtility.Display.dll");
+});
+
+Task("Game")
+    .IsDependentOn("Build")
+    .Does(() =>
+{
+    using(var process = StartAndReturnProcess($"./Draughts.UI.Wpf/bin/{buildDir}/Draughts.UI.Wpf.exe"))
     {
         process.WaitForExit();
         Information("Exit code: {0}", process.GetExitCode());
     }
 });
+
 
 //////////////////////////////////////////////////////////////////////
 // TASK TARGETS

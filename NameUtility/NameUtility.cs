@@ -18,7 +18,7 @@ namespace NameUtility
         {
             if (null == Names)
             {
-                var assembly = Assembly.GetExecutingAssembly();
+                var assembly = typeof(NameUtility).GetTypeInfo().Assembly;
                 var resourceName = "NameUtility.Resources.Names_En.txt";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
