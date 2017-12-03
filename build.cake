@@ -36,11 +36,13 @@ Task("Build")
 {
     if(IsRunningOnWindows())
     {
+
 		DirectoryPath vsLatest  = VSWhereLatest();
 		FilePath msBuildPathX64 = (vsLatest==null)
 								? null
 								: vsLatest.CombineWithFilePath("./MSBuild/15.0/Bin/MSBuild.exe");
 
+		Information($"MS Build Path: {msBuildPathX64}");
 		MSBuild("Draughts.sln", new MSBuildSettings {
 		Verbosity = Verbosity.Minimal,
 		Configuration = configuration,
