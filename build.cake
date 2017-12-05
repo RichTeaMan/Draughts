@@ -52,7 +52,7 @@ Task("Build")
     }
 });
 
-Task("Run-Unit-Tests")
+Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
@@ -92,7 +92,7 @@ Task("Game")
 //////////////////////////////////////////////////////////////////////
 
 Task("Default")
-    .IsDependentOn("Run-Unit-Tests");
+    .IsDependentOn("Test");
 
 //////////////////////////////////////////////////////////////////////
 // EXECUTION

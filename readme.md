@@ -8,7 +8,7 @@ These weights are honed with a generic algorithm.
 This project uses [Cake](https://cakebuild.net)!
 * cake -target=Clean
 * cake -target=Build
-* cake -target=Run-Unit-Tests
+* cake -target=Test
 * cake -target=Train
 * cake -target=Show-Names
 
