@@ -1,5 +1,6 @@
 ﻿using Draughts.Service;
 using Newtonsoft.Json;
+using RichTea.CommandLineParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,14 +12,56 @@ namespace Draughts.Ai.Trainer
 {
     class Program
     {
-        private const int generationCount = 20;
-
-        private const int iterationCount = 100;
-
         private static bool shouldClose = false;
 
         static void Main(string[] args)
         {
+            MethodInvoker command = null;
+            try
+            {
+                command = new CommandLineParserInvoker().GetCommand(typeof(Program), args);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error parsing command:");
+                Console.WriteLine(ex);
+            }
+            if (command != null)
+            {
+                try
+                {
+                    command.Invoke();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error running command:");
+                    Console.WriteLine(ex);
+
+                    var inner = ex.InnerException;
+                    while (inner != null)
+                    {
+                        Console.WriteLine(inner);
+                        Console.WriteLine();
+                        inner = inner.InnerException;
+                    }
+
+                    Console.WriteLine(ex.StackTrace);
+                }
+            }
+        }
+
+        [ClCommand("train")]
+        public static void TrainAi(
+            [ClArgs("generation-count", "gc")]
+            int generationCount = 20,
+            [ClArgs("iteration-count", "ic")]
+            int iterationCount = 100
+            )
+        {
+            Console.WriteLine("Training draughts AI.");
+            Console.WriteLine($"Generation count: {generationCount}");
+            Console.WriteLine($"Iteration count: {iterationCount}");
             Console.CancelKeyPress += Console_CancelKeyPress;
             Random random = new Random();
             var spawner = new WeightedAiGamePlayerSpawner();
@@ -78,7 +121,7 @@ namespace Draughts.Ai.Trainer
 
                 if (shouldClose)
                 {
-                    return;// 1;
+                    return;
                 }
 
                 Console.WriteLine("Matches complete.");
@@ -118,7 +161,7 @@ namespace Draughts.Ai.Trainer
                 }
                 if (shouldClose)
                 {
-                    return;// 1;
+                    return;
                 }
                 Console.WriteLine($"Best contestant beat random AI {wins} out {games} games.");
             }
@@ -128,7 +171,7 @@ namespace Draughts.Ai.Trainer
             var champion = contestants.First();
 
             Console.WriteLine($"Training complete. Top winner won {champion.Wins} matches. It is generation {champion.GamePlayer.Generation}.");
-            return;// 0;
+            return;
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)

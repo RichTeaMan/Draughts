@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.15
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Service.Tests", "Draughts.Service.Tests\Draughts.Service.Tests.csproj", "{72538143-337F-4428-9E91-E7008AA13FC4}"
 EndProject
@@ -19,13 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NameUtility", "NameUtility\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.UI.Wpf", "Draughts.UI.Wpf\Draughts.UI.Wpf.csproj", "{342EE64B-01B9-4D5D-8492-CC7BAB8398F9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.Service", "Draughts.Service\Draughts.Service.csproj", "{7D75F891-E4A0-4F88-B7D3-F4B0E4EA1763}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.UI.Console", "Draughts.UI.Console\Draughts.UI.Console.csproj", "{6FD5D08F-B90B-4108-8C81-22D7369A91B4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.UI.Console", "Draughts.UI.Console\Draughts.UI.Console.csproj", "{6FD5D08F-B90B-4108-8C81-22D7369A91B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NameUtility.Display", "NameUtility.Display\NameUtility.Display.csproj", "{0B2000BB-0D3C-4E92-B4A1-DA0CE06EC72B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NameUtility.Display", "NameUtility.Display\NameUtility.Display.csproj", "{0B2000BB-0D3C-4E92-B4A1-DA0CE06EC72B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.Ai.Trainer.CLI", "Draughts.Ai.Trainer.CLI\Draughts.Ai.Trainer.CLI.csproj", "{1EF2A88C-A930-4F18-883B-14DE50C32C89}"
 EndProject
@@ -51,10 +49,6 @@ Global
 		{342EE64B-01B9-4D5D-8492-CC7BAB8398F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{342EE64B-01B9-4D5D-8492-CC7BAB8398F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{342EE64B-01B9-4D5D-8492-CC7BAB8398F9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CC77CC8B-1C00-4595-BED1-2FADF7C3D327}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7D75F891-E4A0-4F88-B7D3-F4B0E4EA1763}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7D75F891-E4A0-4F88-B7D3-F4B0E4EA1763}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7D75F891-E4A0-4F88-B7D3-F4B0E4EA1763}.Release|Any CPU.ActiveCfg = Release|Any CPU
