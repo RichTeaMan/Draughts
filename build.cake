@@ -7,6 +7,9 @@
 var target = Argument("target", "Default");
 var configuration = Argument("configuration", "Release");
 
+var generationCount = Argument("generation-count", 20);
+var iterationCount = Argument("iteration-count", 100);
+
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -65,7 +68,9 @@ Task("Train")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp1.1/Draughts.Ai.Trainer.CLI.dll");
+    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp1.1/Draughts.Ai.Trainer.CLI.dll",
+        $"train -generation-count {generationCount} -iteration-count {iterationCount}"
+    );
 });
 
 Task("Show-Names")
