@@ -43,12 +43,11 @@ namespace Draughts.Service
 
         public override bool Equals(object that)
         {
-            return new EqualsBuilder<GamePiece>(this, that)
-                .Append(p => p.PieceColour)
-                .Append(p => p.PieceRank)
-                .Append(p => p.Xcoord)
-                .Append(p => p.Ycoord)
-                .Equals();
+            var o = (GamePiece)that;
+            return Xcoord == o.Xcoord &&
+                Ycoord == o.Ycoord &&
+                PieceColour == o.PieceColour &&
+                PieceRank == o.PieceRank;
         }
 
         public override int GetHashCode()
