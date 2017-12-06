@@ -28,6 +28,25 @@ namespace Draughts.Service
             _random = random;
         }
 
+        public WeightedAiGamePlayer SpawnManualWeightedAiGamePlayer()
+        {
+            var nextAvailableMoveCountWeight = 0.1;
+            var nextMovePiecesAtRiskWeight = -0.5;
+            var nextMovePiecesToTakeWeight = 0.2;
+            var kingWeight = 0.5;
+            var nextMoveKingWeight = 0.5;
+            var generation = 0;
+
+            var newPlayer = new WeightedAiGamePlayer(
+                nextAvailableMoveCountWeight,
+                nextMovePiecesAtRiskWeight,
+                nextMovePiecesToTakeWeight,
+                kingWeight,
+                nextMoveKingWeight,
+                generation);
+            return newPlayer;
+        }
+
         public WeightedAiGamePlayer SpawnNewWeightedAiGamePlayer()
         {
             var nextAvailableMoveCountWeight = (_random.NextDouble() * 2) - 1;

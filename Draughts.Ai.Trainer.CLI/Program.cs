@@ -145,25 +145,19 @@ namespace Draughts.Ai.Trainer
                 }
                 contestants = nextContestants;
 
-                int wins = 0;
-                int games = 50;
-                foreach (var randomGameI in Enumerable.Range(0, games).Where(g => !shouldClose))
-                {
-                    var gameMatch = new GameMatch(
-                        GameStateFactory.StandardStartGameState(),
-                        winningContestant.GamePlayer,
-                        new RandomGamePlayer());
-                    var outcome = gameMatch.CompleteMatch();
-                    if (outcome == GameMatchOutcome.WhiteWin)
-                    {
-                        wins++;
-                    }
-                }
+                int testGameCount = 50;
+                int randomWins = PlayGames(winningContestant.GamePlayer, new RandomGamePlayer(), testGameCount);
                 if (shouldClose)
                 {
                     return;
                 }
-                Console.WriteLine($"Best contestant beat random AI {wins} out {games} games.");
+                Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
+                int manualWins = PlayGames(winningContestant.GamePlayer, spawner.SpawnManualWeightedAiGamePlayer(), testGameCount);
+                if (shouldClose)
+                {
+                    return;
+                }
+                Console.WriteLine($"Best contestant beat manually tuned AI {manualWins} out {testGameCount} games.");
             }
 
             contestants = contestants.OrderBy(c => c.Draws).ThenByDescending(c => c.Wins).ToList();
@@ -178,6 +172,24 @@ namespace Draughts.Ai.Trainer
         {
             Console.WriteLine("Trainer stopping...");
             shouldClose = true;
+        }
+
+        private static int PlayGames(IGamePlayer contestant, IGamePlayer opponent, int gameCount)
+        {
+            int wins = 0;
+            foreach (var randomGameI in Enumerable.Range(0, gameCount).Where(g => !shouldClose))
+            {
+                var gameMatch = new GameMatch(
+                    GameStateFactory.StandardStartGameState(),
+                    contestant,
+                    opponent);
+                var outcome = gameMatch.CompleteMatch();
+                if (outcome == GameMatchOutcome.WhiteWin)
+                {
+                    wins++;
+                }
+            }
+            return wins;
         }
     }
 }
