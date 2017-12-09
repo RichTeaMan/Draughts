@@ -97,7 +97,7 @@ namespace Draughts.Ai.Trainer
                         var _count = Interlocked.Increment(ref gamesPlayed);
                         if (_count % 100 == 0)
                         {
-                            Console.WriteLine($"{_count} games played. {gamesDrawn} games drawn.");
+                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn.                            ");
                         }
 
                         contestant.IncrementMatch();
@@ -124,6 +124,7 @@ namespace Draughts.Ai.Trainer
                     return;
                 }
 
+                Console.WriteLine();
                 Console.WriteLine("Matches complete.");
 
                 var json = JsonConvert.SerializeObject(contestants.OrderByDescending(c => c.Wins).ToArray());
