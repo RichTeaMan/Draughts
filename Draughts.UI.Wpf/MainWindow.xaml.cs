@@ -59,13 +59,12 @@ namespace Draughts.UI.Wpf
                 });
                 Board.ClearState();
                 Board.SetupFromGameState(gameMatch.GameState);
+                dispatcherTimer.Start();
             }
             else
             {
                 MessageBox.Show($"Game over in {gameMatch.TurnCount} turns: {gameMatch.GameMatchOutcome}.");
-                dispatcherTimer.Stop();
             }
-            dispatcherTimer.Start();
         }
     }
 }
