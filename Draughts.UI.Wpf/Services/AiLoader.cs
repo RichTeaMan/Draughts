@@ -1,4 +1,5 @@
-﻿using Draughts.Service;
+﻿using Draughts.Ai.Trainer;
+using Draughts.Service;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,9 +22,9 @@ namespace Draughts.UI.Wpf.Services
         public void LoadFromJsonfile(string filePath)
         {
             var contents = File.ReadAllText(filePath);
-            var players = JsonConvert.DeserializeObject<WeightedAiGamePlayer[]>(contents);
+            var players = JsonConvert.DeserializeObject<Contestant<WeightedAiGamePlayer>[]>(contents);
 
-            LoadedGamePlayers = new List<IGamePlayer>(players);
+            LoadedGamePlayers = new List<IGamePlayer>(players.Select(p => p.GamePlayer));
         }
     }
 }
