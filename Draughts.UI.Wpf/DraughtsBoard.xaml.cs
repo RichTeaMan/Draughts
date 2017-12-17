@@ -144,13 +144,17 @@ namespace Draughts.UI.Wpf
                     square.GameSquareState = GameSquareState.Standard;
                 }
 
-                gameSquare.GameSquareState = GameSquareState.PlayerSelected;
-                SelectedGamePiece = gameSquare.Piece;
-                var possibleMoves = CurrentGameState.CalculateAvailableMoves().Where(m => m.StartGamePiece == gameSquare.Piece);
-                foreach (var possibleMove in possibleMoves)
+                if (gameSquare.Piece != null)
                 {
-                    var possibleSquare = FindSquare(possibleMove.EndGamePiece.Xcoord, possibleMove.EndGamePiece.Ycoord);
-                    possibleSquare.GameSquareState = GameSquareState.PossibleMove;
+
+                    gameSquare.GameSquareState = GameSquareState.PlayerSelected;
+                    SelectedGamePiece = gameSquare.Piece;
+                    var possibleMoves = CurrentGameState.CalculateAvailableMoves().Where(m => m.StartGamePiece == gameSquare.Piece);
+                    foreach (var possibleMove in possibleMoves)
+                    {
+                        var possibleSquare = FindSquare(possibleMove.EndGamePiece.Xcoord, possibleMove.EndGamePiece.Ycoord);
+                        possibleSquare.GameSquareState = GameSquareState.PossibleMove;
+                    }
                 }
             }
         }
