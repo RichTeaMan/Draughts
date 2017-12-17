@@ -25,9 +25,17 @@ namespace Draughts.UI.Wpf
 
         public readonly int BoardHeight = 8;
 
+        public GameState CurrentGameState { get; private set; }
+
+        public GamePiece SelectedGamePiece { get; private set; }
+
         public Brush DarkColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(140, 140, 140));
 
         public Brush LightColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(255, 255, 255));
+
+        public Brush SelectedColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(50, 50, 255));
+
+        public Brush PossibleMoveColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(255, 50, 50));
 
         private List<Grid> squareList = new List<Grid>();
 
@@ -63,6 +71,7 @@ namespace Draughts.UI.Wpf
 
         public void SetupFromGameState(GameState gameState)
         {
+            CurrentGameState = gameState;
             foreach (var piece in gameState.GamePieceList)
             {
                 var panel = FindSquare(piece.Xcoord, piece.Ycoord);
@@ -94,6 +103,12 @@ namespace Draughts.UI.Wpf
                     Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"))
                 };
                 panel.Children.Add(image);
+
+                var selectedPiece = piece;
+                var selectedPanel = panel;
+                panel.MouseLeftButtonDown += (sender, e) => {
+                    PieceLeftButtonDown(selectedPanel, selectedPiece, e);
+                };
             }
         }
 
@@ -105,12 +120,18 @@ namespace Draughts.UI.Wpf
             }
         }
 
-        private Panel FindSquare(int x, int y)
+        public Panel FindSquare(int x, int y)
         {
             int convertedY = (BoardHeight - 1) - y;
 
             var square = (Panel)Board.Children.Cast<UIElement>().Single(e => Grid.GetColumn(e) == x && Grid.GetRow(e) == convertedY);
             return square;
+        }
+
+        private void PieceLeftButtonDown(Panel panel, GamePiece gamePiece, MouseButtonEventArgs e)
+        {
+            panel.Background = SelectedColourBrush;
+            SelectedGamePiece = gamePiece;
         }
     }
 }

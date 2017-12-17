@@ -40,7 +40,7 @@ namespace Draughts.UI.Wpf
             aiLoader = ((App)App.Current).AiLoader;
 
             WhitePlayer = aiLoader.LoadedGamePlayers[0];
-            BlackPlayer = aiLoader.LoadedGamePlayers[1];
+            BlackPlayer = new HumanPlayer() { DraughtsBoard = Board };
 
             gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), WhitePlayer, BlackPlayer);
 
@@ -50,11 +50,14 @@ namespace Draughts.UI.Wpf
             
         }
 
-        private void DispatcherTimer_Tick(object sender, EventArgs e)
+        private async void DispatcherTimer_Tick(object sender, EventArgs e)
         {
             if (gameMatch.GameMatchOutcome == GameMatchOutcome.InProgress)
             {
-                gameMatch.CompleteTurn();
+                await Task.Run(() =>
+                {
+                    gameMatch.CompleteTurn();
+                });
                 Board.ClearState();
                 Board.SetupFromGameState(gameMatch.GameState);
             }
