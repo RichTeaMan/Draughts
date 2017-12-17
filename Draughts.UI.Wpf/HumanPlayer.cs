@@ -19,11 +19,20 @@ namespace Draughts.UI.Wpf
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
         {
             CurrentTurn = true;
-            while (null == SelectedMove)
+            GamePlayerMoveResult gamePlayerMoveResult;
+            // check if human has lost
+            if (gameState.CalculateAvailableMoves(pieceColour).Count > 0)
             {
-                Thread.Sleep(10);
+                while (null == SelectedMove)
+                {
+                    Thread.Sleep(10);
+                }
+                gamePlayerMoveResult = new GamePlayerMoveResult(SelectedMove.PerformMove(), MoveStatus.SuccessfulMove);
             }
-            var gamePlayerMoveResult = new GamePlayerMoveResult(SelectedMove.PerformMove(), MoveStatus.SuccessfulMove);
+            else
+            {
+                gamePlayerMoveResult = new GamePlayerMoveResult(gameState, MoveStatus.NoLegalMoves);
+            }
             SelectedMove = null;
             CurrentTurn = false;
             return gamePlayerMoveResult;
