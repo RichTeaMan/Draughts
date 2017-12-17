@@ -62,9 +62,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GameSquare.xaml.cs">
+      <DependentUpon>GameSquare.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GameSquareState.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Services\AiLoader.cs" />
     <Page Include="DraughtsBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameSquare.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

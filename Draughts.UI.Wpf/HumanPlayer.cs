@@ -13,21 +13,7 @@ namespace Draughts.UI.Wpf
         {
             while (true)
             {
-                if (DraughtsBoard.SelectedGamePiece != null)
-                {
-                    var piecesToHighlight = gameState.CalculateAvailableMoves()
-                        .Where(p => p.StartGamePiece == DraughtsBoard.SelectedGamePiece);
-
-                    foreach (var piece in piecesToHighlight)
-                    {
-                        DraughtsBoard.Dispatcher.Invoke(() =>
-                        {
-                            var panel = DraughtsBoard.FindSquare(piece.EndGamePiece.Xcoord, piece.EndGamePiece.Ycoord);
-                            panel.Background = DraughtsBoard.PossibleMoveColourBrush;
-                        });
-                    }
-                }
-                Thread.Sleep(100);
+                Thread.Sleep(10000);
             }
         }
     }

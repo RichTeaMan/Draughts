@@ -33,11 +33,7 @@ namespace Draughts.UI.Wpf
 
         public Brush LightColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(255, 255, 255));
 
-        public Brush SelectedColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(50, 50, 255));
-
-        public Brush PossibleMoveColourBrush { get; set; } = new SolidColorBrush(Color.FromRgb(255, 50, 50));
-
-        private List<Grid> squareList = new List<Grid>();
+        private List<GameSquare> squareList = new List<GameSquare>();
 
         public DraughtsBoard()
         {
@@ -47,18 +43,18 @@ namespace Draughts.UI.Wpf
             {
                 foreach (var height in Enumerable.Range(0, BoardHeight))
                 {
-                    var cell = new Grid();
+                    var cell = new GameSquare();
                     if (width % 2 == 0 && height % 2 == 0)
                     {
-                        cell.Background = LightColourBrush;
+                        cell.SquareColour = LightColourBrush;
                     }
                     else if (width % 2 != 0 && height % 2 != 0)
                     {
-                        cell.Background = LightColourBrush;
+                        cell.SquareColour = LightColourBrush;
                     }
                     else
                     {
-                        cell.Background = DarkColourBrush;
+                        cell.SquareColour = DarkColourBrush;
                     }
                     Grid.SetColumn(cell, width);
                     Grid.SetRow(cell, height);
@@ -74,39 +70,13 @@ namespace Draughts.UI.Wpf
             CurrentGameState = gameState;
             foreach (var piece in gameState.GamePieceList)
             {
-                var panel = FindSquare(piece.Xcoord, piece.Ycoord);
+                var gameSquare = FindSquare(piece.Xcoord, piece.Ycoord);
 
-                string fileName;
-                if (piece.PieceColour == PieceColour.Black && piece.PieceRank == PieceRank.Minion)
-                {
-                    fileName = "black";
-                }
-                else if (piece.PieceColour == PieceColour.White && piece.PieceRank == PieceRank.Minion)
-                {
-                    fileName = "white";
-                }
-                else if (piece.PieceColour == PieceColour.Black && piece.PieceRank == PieceRank.King)
-                {
-                    fileName = "kingblack";
-                }
-                else if (piece.PieceColour == PieceColour.White && piece.PieceRank == PieceRank.King)
-                {
-                    fileName = "kingwhite";
-                }
-                else
-                {
-                    throw new ApplicationException("Unknown piece.");
-                }
-
-                var image = new Image()
-                {
-                    Source = new BitmapImage(new Uri($"pack://application:,,,/Draughts.UI.Wpf;component/Resources/{fileName}.png"))
-                };
-                panel.Children.Add(image);
+                gameSquare.Piece = piece;
 
                 var selectedPiece = piece;
-                var selectedPanel = panel;
-                panel.MouseLeftButtonDown += (sender, e) => {
+                var selectedPanel = gameSquare;
+                gameSquare.MouseLeftButtonDown += (sender, e) => {
                     PieceLeftButtonDown(selectedPanel, selectedPiece, e);
                 };
             }
@@ -116,22 +86,33 @@ namespace Draughts.UI.Wpf
         {
             foreach (var square in squareList)
             {
-                square.Children.Clear();
+                square.ClearPiece();
             }
         }
 
-        public Panel FindSquare(int x, int y)
+        public GameSquare FindSquare(int x, int y)
         {
             int convertedY = (BoardHeight - 1) - y;
 
-            var square = (Panel)Board.Children.Cast<UIElement>().Single(e => Grid.GetColumn(e) == x && Grid.GetRow(e) == convertedY);
+            var square = Board.Children.Cast<GameSquare>().Single(e => Grid.GetColumn(e) == x && Grid.GetRow(e) == convertedY);
             return square;
         }
 
-        private void PieceLeftButtonDown(Panel panel, GamePiece gamePiece, MouseButtonEventArgs e)
+        private void PieceLeftButtonDown(GameSquare gameSquare, GamePiece gamePiece, MouseButtonEventArgs e)
         {
-            panel.Background = SelectedColourBrush;
+            foreach(var square in squareList)
+            {
+                square.GameSquareState = GameSquareState.Standard;
+            }
+
+            gameSquare.GameSquareState = GameSquareState.PlayerSelected;
             SelectedGamePiece = gamePiece;
+            var possibleMoves = CurrentGameState.CalculateAvailableMoves().Where(m => m.StartGamePiece == gamePiece);
+            foreach(var possibleMove in possibleMoves)
+            {
+                var possibleSquare = FindSquare(possibleMove.EndGamePiece.Xcoord, possibleMove.EndGamePiece.Ycoord);
+                possibleSquare.GameSquareState = GameSquareState.PossibleMove;
+            }
         }
     }
 }
