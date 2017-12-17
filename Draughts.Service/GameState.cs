@@ -168,8 +168,10 @@ namespace Draughts.Service
                                     // combine chain moves
                                     foreach (var chainMove in chainedMoves)
                                     {
-                                        var takenPieces = new List<GamePiece>();
-                                        takenPieces.Add(occupiedPiece);
+                                        var takenPieces = new List<GamePiece>
+                                        {
+                                            occupiedPiece
+                                        };
                                         takenPieces.AddRange(chainMove.TakenGamePieces);
                                         var gameMove = new GameMove(piece, chainMove.EndGamePiece, takenPieces, gameState);
                                         gameMoves.Add(gameMove);
