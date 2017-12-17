@@ -163,9 +163,17 @@ namespace Draughts.Service
                                 var newRank = gameState.CalculatePieceRank(jumpedY, piece.PieceColour, piece.PieceRank);
                                 var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
                                 var foundMove = new GameMove(piece, endPiece, new[] { occupiedPiece }, gameState);
-                                var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece);
-                                if (chainedMoves.Where(m => m.StartGamePiece == endPiece && m.TakenGamePieces.Any()).Any()) {
-                                    gameMoves.AddRange(chainedMoves);
+                                var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece).Where(m => m.StartGamePiece == endPiece && m.TakenGamePieces.Any());
+                                if (chainedMoves.Any()) {
+                                    // combine chain moves
+                                    foreach (var chainMove in chainedMoves)
+                                    {
+                                        var takenPieces = new List<GamePiece>();
+                                        takenPieces.Add(occupiedPiece);
+                                        takenPieces.AddRange(chainMove.TakenGamePieces);
+                                        var gameMove = new GameMove(piece, chainMove.EndGamePiece, takenPieces, gameState);
+                                        gameMoves.Add(gameMove);
+                                    }
                                 } else {
                                     gameMoves.Add(foundMove);
                                 }

@@ -288,6 +288,51 @@ namespace Draughts.Service.Tests
         }
 
         [Test]
+        public void SinglePieceWhiteKingOnLastRowAfterDoubleJumpCheckMoveObjects()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.King;
+            int x = 3;
+            int y = 7;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, 4, 6);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, 6, 6);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var expectedPiece = new GamePiece(PieceColour.White, PieceRank.King, 7, 7);
+
+            Assert.AreEqual(2, moves.First().TakenGamePieces.Count);
+            Assert.AreEqual(gamePiece, moves.First().StartGamePiece);
+            Assert.AreEqual(expectedPiece, moves.First().EndGamePiece);
+        }
+
+        [Test]
+        public void SinglePieceWhiteKingOnLastRowAfterTripleJumpCheckMoveObjects()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.King;
+            int x = 1;
+            int y = 7;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, 2, 6);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, 4, 6);
+            var blockingGamePiece3 = new GamePiece(PieceColour.Black, pieceRank, 6, 6);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2, blockingGamePiece3);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var expectedPiece = new GamePiece(PieceColour.White, PieceRank.King, 7, 5);
+
+            Assert.AreEqual(3, moves.First().TakenGamePieces.Count);
+            Assert.AreEqual(gamePiece, moves.First().StartGamePiece);
+            Assert.AreEqual(expectedPiece, moves.First().EndGamePiece);
+        }
+
+        [Test]
         public void SinglePieceKingWhiteGameMove()
         {
             var pieceColour = PieceColour.White;
