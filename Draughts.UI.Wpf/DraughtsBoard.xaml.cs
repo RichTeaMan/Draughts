@@ -109,7 +109,7 @@ namespace Draughts.UI.Wpf
             if (gameSquare.GameSquareState == GameSquareState.PossibleMove)
             {
                 var startPiece = squareList.Single(s => s.GameSquareState == GameSquareState.PlayerSelected)?.Piece;
-                var move = CurrentGameState.CalculateAvailableMoves().SingleOrDefault(m => 
+                var move = CurrentGameState.CalculateAvailableMoves().SingleOrDefault(m =>
                     m.StartGamePiece == startPiece &&
                     m.EndGamePiece.Xcoord == gameSquare.Xcoord &&
                     m.EndGamePiece.Ycoord == gameSquare.Ycoord);
@@ -125,6 +125,13 @@ namespace Draughts.UI.Wpf
                     blackHuman.SelectedMove = move;
                 }
 
+                foreach (var square in squareList)
+                {
+                    square.GameSquareState = GameSquareState.Standard;
+                }
+            }
+            else if (gameSquare.GameSquareState == GameSquareState.PlayerSelected)
+            {
                 foreach (var square in squareList)
                 {
                     square.GameSquareState = GameSquareState.Standard;
