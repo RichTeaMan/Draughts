@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,9 +24,6 @@ namespace Draughts.UI.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
-        public IGamePlayer WhitePlayer { get; set; }
-
-        public IGamePlayer BlackPlayer { get; set; }
 
         private DispatcherTimer dispatcherTimer = new DispatcherTimer();
 
@@ -39,19 +37,20 @@ namespace Draughts.UI.Wpf
 
             aiLoader = ((App)App.Current).AiLoader;
 
-            WhitePlayer = aiLoader.LoadedGamePlayers[0];
-            BlackPlayer = new HumanPlayer() { DraughtsBoard = Board };
+            Board.WhitePlayer = aiLoader.LoadedGamePlayers[0];
+            Board.BlackPlayer = new HumanPlayer() { DraughtsBoard = Board };
 
-            gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), WhitePlayer, BlackPlayer);
+            gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), Board.WhitePlayer, Board.BlackPlayer);
 
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
-            
+
         }
 
         private async void DispatcherTimer_Tick(object sender, EventArgs e)
         {
+            dispatcherTimer.Stop();
             if (gameMatch.GameMatchOutcome == GameMatchOutcome.InProgress)
             {
                 await Task.Run(() =>
@@ -66,6 +65,7 @@ namespace Draughts.UI.Wpf
                 MessageBox.Show($"Game over in {gameMatch.TurnCount} turns: {gameMatch.GameMatchOutcome}.");
                 dispatcherTimer.Stop();
             }
+            dispatcherTimer.Start();
         }
     }
 }

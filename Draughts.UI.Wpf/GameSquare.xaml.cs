@@ -1,6 +1,7 @@
 ﻿using Draughts.Service;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,6 +52,10 @@ namespace Draughts.UI.Wpf
             }
         }
 
+        public int Xcoord { get; }
+
+        public int Ycoord { get; }
+
         public GamePiece Piece
         {
             get { return _piece; }
@@ -86,6 +91,19 @@ namespace Draughts.UI.Wpf
         public GameSquare()
         {
             InitializeComponent();
+
+            if (!DesignerProperties.GetIsInDesignMode(this))
+            {
+                throw new ApplicationException("This constructor cannot be used at runtime, only design mode.");
+            }
+        }
+
+        public GameSquare(int x, int y)
+        {
+            InitializeComponent();
+
+            Xcoord = x;
+            Ycoord = y;
         }
 
         public void ClearPiece()

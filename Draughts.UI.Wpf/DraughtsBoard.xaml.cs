@@ -25,6 +25,10 @@ namespace Draughts.UI.Wpf
 
         public readonly int BoardHeight = 8;
 
+        public IGamePlayer WhitePlayer { get; set; }
+
+        public IGamePlayer BlackPlayer { get; set; }
+
         public GameState CurrentGameState { get; private set; }
 
         public GamePiece SelectedGamePiece { get; private set; }
@@ -43,7 +47,8 @@ namespace Draughts.UI.Wpf
             {
                 foreach (var height in Enumerable.Range(0, BoardHeight))
                 {
-                    var cell = new GameSquare();
+                    int convertedY = (BoardHeight - 1) - height;
+                    var cell = new GameSquare(width, convertedY);
                     if (width % 2 == 0 && height % 2 == 0)
                     {
                         cell.SquareColour = LightColourBrush;
@@ -56,6 +61,9 @@ namespace Draughts.UI.Wpf
                     {
                         cell.SquareColour = DarkColourBrush;
                     }
+
+                    cell.MouseLeftButtonDown += PieceLeftButtonDown;
+
                     Grid.SetColumn(cell, width);
                     Grid.SetRow(cell, height);
                     Board.Children.Add(cell);
@@ -76,9 +84,6 @@ namespace Draughts.UI.Wpf
 
                 var selectedPiece = piece;
                 var selectedPanel = gameSquare;
-                gameSquare.MouseLeftButtonDown += (sender, e) => {
-                    PieceLeftButtonDown(selectedPanel, selectedPiece, e);
-                };
             }
         }
 
@@ -98,20 +103,48 @@ namespace Draughts.UI.Wpf
             return square;
         }
 
-        private void PieceLeftButtonDown(GameSquare gameSquare, GamePiece gamePiece, MouseButtonEventArgs e)
+        private void PieceLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            foreach(var square in squareList)
+            var gameSquare = (GameSquare)sender;
+            if (gameSquare.GameSquareState == GameSquareState.PossibleMove)
             {
-                square.GameSquareState = GameSquareState.Standard;
-            }
+                var startPiece = squareList.Single(s => s.GameSquareState == GameSquareState.PlayerSelected)?.Piece;
+                var move = CurrentGameState.CalculateAvailableMoves().SingleOrDefault(m => 
+                    m.StartGamePiece == startPiece &&
+                    m.EndGamePiece.Xcoord == gameSquare.Xcoord &&
+                    m.EndGamePiece.Ycoord == gameSquare.Ycoord);
 
-            gameSquare.GameSquareState = GameSquareState.PlayerSelected;
-            SelectedGamePiece = gamePiece;
-            var possibleMoves = CurrentGameState.CalculateAvailableMoves().Where(m => m.StartGamePiece == gamePiece);
-            foreach(var possibleMove in possibleMoves)
+                var whiteHuman = WhitePlayer as HumanPlayer;
+                var blackHuman = BlackPlayer as HumanPlayer;
+                if (whiteHuman?.CurrentTurn == true)
+                {
+                    whiteHuman.SelectedMove = move;
+                }
+                if (blackHuman?.CurrentTurn == true)
+                {
+                    blackHuman.SelectedMove = move;
+                }
+
+                foreach (var square in squareList)
+                {
+                    square.GameSquareState = GameSquareState.Standard;
+                }
+            }
+            else
             {
-                var possibleSquare = FindSquare(possibleMove.EndGamePiece.Xcoord, possibleMove.EndGamePiece.Ycoord);
-                possibleSquare.GameSquareState = GameSquareState.PossibleMove;
+                foreach (var square in squareList)
+                {
+                    square.GameSquareState = GameSquareState.Standard;
+                }
+
+                gameSquare.GameSquareState = GameSquareState.PlayerSelected;
+                SelectedGamePiece = gameSquare.Piece;
+                var possibleMoves = CurrentGameState.CalculateAvailableMoves().Where(m => m.StartGamePiece == gameSquare.Piece);
+                foreach (var possibleMove in possibleMoves)
+                {
+                    var possibleSquare = FindSquare(possibleMove.EndGamePiece.Xcoord, possibleMove.EndGamePiece.Ycoord);
+                    possibleSquare.GameSquareState = GameSquareState.PossibleMove;
+                }
             }
         }
     }
