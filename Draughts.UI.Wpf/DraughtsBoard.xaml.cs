@@ -116,11 +116,11 @@ namespace Draughts.UI.Wpf
 
                 var whiteHuman = WhitePlayer as HumanPlayer;
                 var blackHuman = BlackPlayer as HumanPlayer;
-                if (whiteHuman?.CurrentTurn == true)
+                if (whiteHuman?.CurrentTurn == true && move.StartGamePiece.PieceColour == PieceColour.White)
                 {
                     whiteHuman.SelectedMove = move;
                 }
-                if (blackHuman?.CurrentTurn == true)
+                if (blackHuman?.CurrentTurn == true && move.StartGamePiece.PieceColour == PieceColour.Black)
                 {
                     blackHuman.SelectedMove = move;
                 }
