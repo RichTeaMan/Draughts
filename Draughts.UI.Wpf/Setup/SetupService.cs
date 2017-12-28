@@ -16,11 +16,20 @@ namespace Draughts.UI.Wpf.Setup
         [DefaultClCommand]
         public static void DefaultGameSetup(
             [ClArgs("white", "w")]
-            GameParameter whiteGameParameter,
+            GameParameter whiteGameParameter = null,
             [ClArgs("black", "b")]
-            GameParameter blackGameParameter
+            GameParameter blackGameParameter = null
             )
         {
+            if (null == whiteGameParameter)
+            {
+                whiteGameParameter = new GameParameter(PieceColour.White, PlayerType.Human);
+            }
+            if (null == blackGameParameter)
+            {
+                blackGameParameter = new GameParameter(PieceColour.Black, PlayerType.Human);
+            }
+
             var gameParameterList = new List<GameParameter>
             {
                 whiteGameParameter,
