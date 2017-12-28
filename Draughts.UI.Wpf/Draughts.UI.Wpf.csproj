@@ -37,8 +37,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Common, Version=0.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RichTea.Common.0.5.0-beta\lib\netstandard1.4\Common.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="RichTea.CommandLineParser, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RichTea.CommandLineParser.0.2.0-beta\lib\netstandard1.4\RichTea.CommandLineParser.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -68,6 +74,9 @@
     <Compile Include="GameSquareState.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Services\AiLoader.cs" />
+    <Compile Include="Setup\GameParameter.cs" />
+    <Compile Include="Setup\GameParameterParser.cs" />
+    <Compile Include="Setup\PlayerType.cs" />
     <Page Include="DraughtsBoard.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
