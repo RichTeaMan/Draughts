@@ -74,6 +74,7 @@
     <Compile Include="GameSquareState.cs" />
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="Services\AiLoader.cs" />
+    <Compile Include="Setup\SetupService.cs" />
     <Compile Include="Setup\GameParameter.cs" />
     <Compile Include="Setup\GameParameterParser.cs" />
     <Compile Include="Setup\PlayerType.cs" />

@@ -1,5 +1,6 @@
 ﻿using Draughts.Service;
 using Draughts.UI.Wpf.Services;
+using Draughts.UI.Wpf.Setup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,8 +38,8 @@ namespace Draughts.UI.Wpf
 
             aiLoader = ((App)App.Current).AiLoader;
 
-            Board.WhitePlayer = aiLoader.LoadedGamePlayers[0];
-            Board.BlackPlayer = new HumanPlayer() { DraughtsBoard = Board };
+            Board.WhitePlayer = SetupService.FetchWhitePlayer();
+            Board.BlackPlayer = SetupService.FetchBlackPlayer();
 
             gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), Board.WhitePlayer, Board.BlackPlayer);
 

@@ -1,4 +1,6 @@
 ﻿using Draughts.UI.Wpf.Services;
+using Draughts.UI.Wpf.Setup;
+using RichTea.CommandLineParser;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -22,21 +24,11 @@ namespace Draughts.UI.Wpf
             base.OnStartup(e);
 
             Console.WriteLine("Draughts.UI.Wpf loaded.");
-            Console.WriteLine($"'{e.Args.Count()}'program arguments:");
-            foreach(var arg in e.Args)
-            {
-                Console.WriteLine(arg);
-            }
 
-            AiLoader = new AiLoader();
+            var commandLineInvoker = new CommandLineParserInvoker().AddParameterParser(new GameParameterParser());
+            commandLineInvoker.GetCommand(typeof(SetupService), e.Args).Invoke();
 
-            foreach(var arg in e.Args)
-            {
-                if(File.Exists(arg))
-                {
-                    AiLoader.LoadFromJsonfile(arg);
-                }
-            }
+            StartupUri = new Uri("MainWindow.xaml", UriKind.Relative);
         }
     }
 }
