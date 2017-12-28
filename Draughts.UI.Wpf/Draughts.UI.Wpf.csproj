@@ -68,6 +68,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DraughtsBoardInfo.xaml.cs">
+      <DependentUpon>DraughtsBoardInfo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameSquare.xaml.cs">
       <DependentUpon>GameSquare.xaml</DependentUpon>
     </Compile>
@@ -79,6 +82,10 @@
     <Compile Include="Setup\GameParameterParser.cs" />
     <Compile Include="Setup\PlayerType.cs" />
     <Page Include="DraughtsBoard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DraughtsBoardInfo.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -143,6 +150,10 @@
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
       <Project>{7d75f891-e4a0-4f88-b7d3-f4b0e4ea1763}</Project>
       <Name>Draughts.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NameUtility\NameUtility.csproj">
+      <Project>{A4CE3FFC-96A6-498C-B45A-4FD43B9572C2}</Project>
+      <Name>NameUtility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

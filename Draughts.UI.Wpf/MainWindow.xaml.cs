@@ -42,6 +42,7 @@ namespace Draughts.UI.Wpf
             Board.BlackPlayer = SetupService.FetchBlackPlayer();
 
             gameMatch = new GameMatch(GameStateFactory.StandardStartGameState(), Board.WhitePlayer, Board.BlackPlayer);
+            Info.UpdateFromGameMatch(gameMatch);
 
             dispatcherTimer.Tick += DispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
@@ -60,6 +61,7 @@ namespace Draughts.UI.Wpf
                 });
                 Board.ClearState();
                 Board.SetupFromGameState(gameMatch.GameState);
+                Info.UpdateFromGameMatch(gameMatch);
                 dispatcherTimer.Start();
             }
             else

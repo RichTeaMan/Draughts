@@ -5,8 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Draughts.UI.Wpf"
         mc:Ignorable="d"
-        Title="Draughts: The Game" Height="525" Width="525" Icon="Resources/white.png">
+        Title="Draughts: The Game" Height="500" Width="725" Icon="Resources/white.png">
     <Grid>
-        <local:DraughtsBoard x:Name="Board" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <local:DraughtsBoard x:Name="Board" Grid.Column="0" Grid.Row="0" />
+
+        <local:DraughtsBoardInfo x:Name="Info" Grid.Column="1" Grid.Row="0" />
     </Grid>
 </Window>
