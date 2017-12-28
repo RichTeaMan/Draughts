@@ -34,7 +34,7 @@ namespace NameUtility
         public static string GenerateName(this object obj)
         {
             FindNames();
-            var hash = obj.GetHashCode();
+            var hash = Math.Abs(obj.GetHashCode());
             var nameIndex = hash % Names.Count();
             string name = Names[nameIndex];
 
