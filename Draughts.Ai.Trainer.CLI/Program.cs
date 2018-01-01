@@ -159,12 +159,6 @@ namespace Draughts.Ai.Trainer
                     return;
                 }
                 Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
-                int manualWins = PlayGames(winningContestant.GamePlayer, spawner.SpawnManualWeightedAiGamePlayer(), testGameCount);
-                if (shouldClose)
-                {
-                    return;
-                }
-                Console.WriteLine($"Best contestant beat manually tuned AI {manualWins} out {testGameCount} games.");
             }
 
             contestants = contestants.OrderBy(c => c.Draws).ThenByDescending(c => c.Wins).ToList();
