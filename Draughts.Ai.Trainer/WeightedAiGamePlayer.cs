@@ -11,6 +11,8 @@ namespace Draughts.Service
     {
         public double NextAvailableMoveCountWeight { get; set; }
 
+        public double OpponentNextAvailableMoveCountWeight { get; set; }
+
         public double NextMovePiecesAtRiskWeight { get; set; }
 
         public double NextMovePiecesToTakeWeight { get; set; }
@@ -18,6 +20,8 @@ namespace Draughts.Service
         public double KingWeight { get; set; }
 
         public double NextMoveKingWeight { get; set; }
+
+        public double OpponentNextMoveKingWeight { get; set; }
 
         public int Generation { get; set; }
 
@@ -29,17 +33,21 @@ namespace Draughts.Service
 
         public WeightedAiGamePlayer(
             double nextAvailableMoveCountWeight,
+            double opponentNextAvailableMoveCountWeight,
             double nextMovePiecesAtRiskWeight,
             double nextMovePiecesToTakeWeight,
             double kingWeight,
             double nextMoveKingWeight,
+            double opponentNextMoveKingWeight,
             int generation)
         {
             NextAvailableMoveCountWeight = nextAvailableMoveCountWeight;
+            OpponentNextAvailableMoveCountWeight = opponentNextAvailableMoveCountWeight;
             NextMovePiecesAtRiskWeight = nextMovePiecesAtRiskWeight;
             NextMovePiecesToTakeWeight = nextMovePiecesToTakeWeight;
             KingWeight = kingWeight;
             NextMoveKingWeight = nextMoveKingWeight;
+            OpponentNextMoveKingWeight = opponentNextAvailableMoveCountWeight;
             Generation = generation;
         }
 
@@ -64,11 +72,14 @@ namespace Draughts.Service
                 var friendlyMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour == pieceColour).ToList();
                 var opponentMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour != pieceColour).ToList();
 
-
                 weightedResult += NextAvailableMoveCountWeight * friendlyMoves.Count;
+                weightedResult += OpponentNextAvailableMoveCountWeight * opponentMoves.Count;
                 weightedResult += NextMovePiecesAtRiskWeight * opponentMoves.Sum(m => m.TakenGamePieces.Count);
                 weightedResult += NextMovePiecesToTakeWeight * friendlyMoves.Sum(m => m.TakenGamePieces.Count);
                 weightedResult += NextMoveKingWeight * friendlyMoves.Count(
+                    m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
+                    m.EndGamePiece.PieceRank == PieceRank.King);
+                weightedResult += OpponentNextMoveKingWeight * opponentMoves.Count(
                     m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
                     m.EndGamePiece.PieceRank == PieceRank.King);
 
@@ -109,13 +120,13 @@ namespace Draughts.Service
         public override int GetHashCode()
         {
             return new HashCodeBuilder<WeightedAiGamePlayer>(this)
-            .Append(p => p.NextAvailableMoveCountWeight)
-            .Append(p => p.NextMovePiecesAtRiskWeight)
-            .Append(p => p.NextMovePiecesToTakeWeight)
-            .Append(p => p.KingWeight)
-            .Append(p => p.NextMoveKingWeight)
-            .Append(p => p.Generation)
-            .HashCode;
+                .Append(p => p.NextAvailableMoveCountWeight)
+                .Append(p => p.NextMovePiecesAtRiskWeight)
+                .Append(p => p.NextMovePiecesToTakeWeight)
+                .Append(p => p.KingWeight)
+                .Append(p => p.NextMoveKingWeight)
+                .Append(p => p.Generation)
+                .HashCode;
         }
 
     }
