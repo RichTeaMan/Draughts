@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using RichTea.CommandLineParser;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -77,6 +78,9 @@ namespace Draughts.Ai.Trainer
 
                 Console.WriteLine($"Iteration {i} underway.");
 
+                Stopwatch stopwatch = new Stopwatch();
+                stopwatch.Start();
+
                 ParallelOptions parallelOptions = new ParallelOptions();
                 Parallel.ForEach(contestants, (contestant, loopState) =>
                 {
@@ -97,7 +101,8 @@ namespace Draughts.Ai.Trainer
                         var _count = Interlocked.Increment(ref gamesPlayed);
                         if (_count % 100 == 0)
                         {
-                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn.                            ");
+                            var gamesPerSecond = _count / stopwatch.Elapsed.TotalSeconds;
+                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn. Processing {gamesPerSecond:F2} games per second.                            ");
                         }
 
                         contestant.IncrementMatch();
@@ -118,6 +123,7 @@ namespace Draughts.Ai.Trainer
                         }
                     }
                 });
+                stopwatch.Stop();
 
                 if (shouldClose)
                 {
