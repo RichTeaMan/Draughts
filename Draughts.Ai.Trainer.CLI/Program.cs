@@ -1,4 +1,5 @@
 ﻿using Draughts.Service;
+using NameUtility;
 using Newtonsoft.Json;
 using RichTea.CommandLineParser;
 using System;
@@ -57,15 +58,34 @@ namespace Draughts.Ai.Trainer
             [ClArgs("generation-count", "gc")]
             int generationCount = 20,
             [ClArgs("iteration-count", "ic")]
-            int iterationCount = 100
+            int iterationCount = 100,
+            [ClArgs("threads")]
+            int? threads = null,
+            [ClArgs("seed")]
+            int? seed = null
             )
         {
             Console.WriteLine("Training draughts AI.");
             Console.WriteLine($"Generation count: {generationCount}");
             Console.WriteLine($"Iteration count: {iterationCount}");
+            if (!threads.HasValue)
+            {
+                threads = Environment.ProcessorCount;
+            }
+            Console.WriteLine($"Thread count: {threads}");
+            Random random;
+            if (seed.HasValue)
+            {
+                Console.WriteLine($"Random seed: {seed}");
+                random = new Random(seed.Value);
+            }
+            else
+            {
+                random = new Random();
+            }
+
             Console.CancelKeyPress += Console_CancelKeyPress;
-            Random random = new Random();
-            var spawner = new WeightedAiGamePlayerSpawner();
+            var spawner = new WeightedAiGamePlayerSpawner(random);
             var contestants = Enumerable.Range(0, generationCount)
                 .Select(i => new Contestant<WeightedAiGamePlayer>(
                     spawner.SpawnNewWeightedAiGamePlayer())
@@ -81,8 +101,11 @@ namespace Draughts.Ai.Trainer
                 Stopwatch stopwatch = new Stopwatch();
                 stopwatch.Start();
 
-                ParallelOptions parallelOptions = new ParallelOptions();
-                Parallel.ForEach(contestants, (contestant, loopState) =>
+                ParallelOptions parallelOptions = new ParallelOptions
+                {
+                    MaxDegreeOfParallelism = threads.Value
+                };
+                Parallel.ForEach(contestants, parallelOptions,(contestant, loopState) =>
                 {
                     foreach (var opponent in contestants.Where(c => c != contestant && !shouldClose).ToList())
                     {
@@ -102,7 +125,7 @@ namespace Draughts.Ai.Trainer
                         if (_count % 100 == 0)
                         {
                             var gamesPerSecond = _count / stopwatch.Elapsed.TotalSeconds;
-                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn. Processing {gamesPerSecond:F2} games per second.                            ");
+                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn. Processing {gamesPerSecond:F2} games per second.");
                         }
 
                         contestant.IncrementMatch();

@@ -92,7 +92,7 @@ namespace Draughts.Service
         private static List<GameMove> FindMovesForPiece(GameState gameState, GamePiece piece)
         {
             var gameMoves = new List<GameMove>();
-            var newYList = new List<int>();
+            var newYList = new List<int>(4);
 
             if (piece.PieceRank == PieceRank.Minion)
             {
@@ -129,7 +129,7 @@ namespace Draughts.Service
                     continue;
                 }
 
-                var newXcoords = new List<int>();
+                var newXcoords = new List<int>(2);
                 int newXleft = piece.Xcoord - 1;
                 if (newXleft >= 0)
                 {
@@ -144,7 +144,7 @@ namespace Draughts.Service
 
                 foreach (var newX in newXcoords)
                 {
-                    var occupiedPiece = gameState.GamePieceList.SingleOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
+                    var occupiedPiece = gameState.GamePieceList.FirstOrDefault(p => p.Xcoord == newX && p.Ycoord == newY);
                     if (occupiedPiece == null)
                     {
                         var newRank = gameState.CalculatePieceRank(newY, piece.PieceColour, piece.PieceRank);
@@ -157,12 +157,12 @@ namespace Draughts.Service
                         int jumpedY = ((newY - piece.Ycoord) * 2) + piece.Ycoord;
                         if (jumpedX >= 0 && jumpedX < gameState.XLength && jumpedY >= 0 && jumpedY < gameState.YLength)
                         {
-                            var jumpedPiece = gameState.GamePieceList.SingleOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
+                            var jumpedPiece = gameState.GamePieceList.FirstOrDefault(p => p.Xcoord == jumpedX && p.Ycoord == jumpedY);
                             if (jumpedPiece == null)
                             {
                                 var newRank = gameState.CalculatePieceRank(jumpedY, piece.PieceColour, piece.PieceRank);
                                 var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
-                                var foundMove = new GameMove(piece, endPiece, new[] { occupiedPiece }, gameState);
+                                var foundMove = new GameMove(piece, endPiece, new List<GamePiece>() { occupiedPiece }, gameState);
                                 var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece).Where(m => m.StartGamePiece == endPiece && m.TakenGamePieces.Any());
                                 if (chainedMoves.Any()) {
                                     // combine chain moves
