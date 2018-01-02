@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\NeuralNet\NeuralNetLib\NeuralNetLib.csproj" />
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj" />
     <ProjectReference Include="..\NameUtility\NameUtility.csproj" />
   </ItemGroup>

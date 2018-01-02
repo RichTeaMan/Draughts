@@ -1,13 +1,14 @@
 ﻿using Common;
+using Draughts.Service;
 using NameUtility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Draughts.Service
+namespace Draughts.Ai.Trainer
 {
-    public class WeightedAiGamePlayer : IGamePlayer
+    public class WeightedAiGamePlayer : IAiGamePlayer
     {
         public double NextAvailableMoveCountWeight { get; set; }
 

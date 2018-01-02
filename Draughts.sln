@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27004.2010
+VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Service.Tests", "Draughts.Service.Tests\Draughts.Service.Tests.csproj", "{72538143-337F-4428-9E91-E7008AA13FC4}"
 EndProject
@@ -28,6 +28,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.Ai.Trainer.CLI", "Draughts.Ai.Trainer.CLI\Draughts.Ai.Trainer.CLI.csproj", "{1EF2A88C-A930-4F18-883B-14DE50C32C89}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.UI.Wpf.Tests", "Draughts.UI.Wpf.Tests\Draughts.UI.Wpf.Tests.csproj", "{C0F9C1C2-F503-45A3-AFB4-9BA37427D935}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NeuralNetLib", "..\NeuralNet\NeuralNetLib\NeuralNetLib.csproj", "{4E938A0E-BA76-4569-85A6-A74D65E418E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,10 @@ Global
 		{C0F9C1C2-F503-45A3-AFB4-9BA37427D935}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0F9C1C2-F503-45A3-AFB4-9BA37427D935}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0F9C1C2-F503-45A3-AFB4-9BA37427D935}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E938A0E-BA76-4569-85A6-A74D65E418E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E938A0E-BA76-4569-85A6-A74D65E418E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E938A0E-BA76-4569-85A6-A74D65E418E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E938A0E-BA76-4569-85A6-A74D65E418E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

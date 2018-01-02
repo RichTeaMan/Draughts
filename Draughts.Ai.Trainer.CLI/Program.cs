@@ -59,6 +59,8 @@ namespace Draughts.Ai.Trainer
             int generationCount = 20,
             [ClArgs("iteration-count", "ic")]
             int iterationCount = 100,
+            [ClArgs("ai-type")]
+            string aiTypeStr = "weighted",
             [ClArgs("threads")]
             int? threads = null,
             [ClArgs("seed")]
@@ -83,12 +85,38 @@ namespace Draughts.Ai.Trainer
             {
                 random = new Random();
             }
+            AiType aiType;
+            switch(aiTypeStr.ToLower())
+            {
+                case "weighted":
+                    aiType = AiType.Weighted;
+                    
+                    break;
+                case "neuralnet":
+                    aiType = AiType.NeuralNet;
+                    break;
+                default:
+                    throw new Exception($"Unsupported AI type '{aiTypeStr}'.");
+            }
 
             Console.CancelKeyPress += Console_CancelKeyPress;
-            var spawner = new WeightedAiGamePlayerSpawner(random);
+
+            IAiGamePlayerSpawner spawner= null;
+            switch (aiType)
+            {
+                case AiType.Weighted:
+                    spawner = new WeightedAiGamePlayerSpawner(random);
+                    Console.WriteLine("Using weighted AI.");
+                    break;
+                case AiType.NeuralNet:
+                    spawner = new NeuralNetAiGamePlayerSpawner(random);
+                    Console.WriteLine("Using neural net AI.");
+                    break;
+            }
+
             var contestants = Enumerable.Range(0, generationCount)
-                .Select(i => new Contestant<WeightedAiGamePlayer>(
-                    spawner.SpawnNewWeightedAiGamePlayer())
+                .Select(i => new Contestant<IAiGamePlayer>(
+                    spawner.SpawnAiGamePlayer())
                 ).ToList();
 
             foreach (var i in Enumerable.Range(0, iterationCount).Where(g => !shouldClose && !shouldClose))
@@ -165,10 +193,10 @@ namespace Draughts.Ai.Trainer
 
                 Console.WriteLine($"Top player is '{winningContestant.GenerateName()}' and won {winningContestant.Wins} matches.");
 
-                var nextContestants = new List<Contestant<WeightedAiGamePlayer>>();
+                var nextContestants = new List<Contestant<IAiGamePlayer>>();
                 foreach (var contestantI in contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2))
                 {
-                    var spawnContestant = new Contestant<Service.WeightedAiGamePlayer>(spawner.SpawnNewWeightedAiGamePlayer(winningContestant.GamePlayer));
+                    var spawnContestant = new Contestant<IAiGamePlayer>(spawner.SpawnDerivedAiGamePlayer(winningContestant.GamePlayer));
                     nextContestants.Add(spawnContestant);
                     nextContestants.Add(contestantI);
                     contestantI.ResetStats();

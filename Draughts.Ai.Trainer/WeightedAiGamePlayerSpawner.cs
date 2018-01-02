@@ -8,14 +8,9 @@ using System.Threading.Tasks;
 
 namespace Draughts.Service
 {
-    public class WeightedAiGamePlayerSpawner
+    public class WeightedAiGamePlayerSpawner : IAiGamePlayerSpawner
     {
         double mutationFactor = 0.001;
-
-        public string Name
-        {
-            get { return this.GenerateName(); }
-        }
 
         private Random _random;
 
@@ -49,6 +44,21 @@ namespace Draughts.Service
                 opponentNextMoveKingWeight,
                 generation);
             return newPlayer;
+        }
+
+        public IAiGamePlayer SpawnAiGamePlayer()
+        {
+            return SpawnNewWeightedAiGamePlayer();
+        }
+
+        public IAiGamePlayer SpawnDerivedAiGamePlayer(IGamePlayer player)
+        {
+            var weightedAiGamePlayer = player as WeightedAiGamePlayer;
+            if (null == weightedAiGamePlayer)
+            {
+                throw new ArgumentException("Player must be of type WeightedAiGamePlayer.");
+            }
+            return SpawnNewWeightedAiGamePlayer(weightedAiGamePlayer);
         }
 
         public WeightedAiGamePlayer SpawnNewWeightedAiGamePlayer()
