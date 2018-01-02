@@ -29,6 +29,40 @@ namespace Draughts.Service
             GameState = gameState;
         }
 
+        public GameMoveMetrics CalculateGameMoveMetrics (PieceColour pieceColour)
+        {
+            int createdFriendlyKings = 0;
+            if (StartGamePiece.PieceColour == pieceColour && StartGamePiece.PieceRank == PieceRank.Minion && EndGamePiece.PieceRank == PieceRank.King)
+            {
+                createdFriendlyKings = 1;
+            }
+
+            var futureMoves = PerformMove().CalculateAvailableMoves();
+            var friendlyMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour == pieceColour).ToList();
+            var opponentMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour != pieceColour).ToList();
+
+            int friendlyMovesAvailable = friendlyMoves.Count;
+            int opponentMovesAvailable = opponentMoves.Count;
+            int nextMoveFriendlyPiecesAtRisk = opponentMoves.Sum(m => m.TakenGamePieces.Count);
+            int nextMoveOpponentPiecesAtRisk = friendlyMoves.Sum(m => m.TakenGamePieces.Count);
+            int nextMoveFriendlyKingsCreated = friendlyMoves.Count(
+                m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
+                m.EndGamePiece.PieceRank == PieceRank.King);
+            int nextMoveOpponentKingsCreated = opponentMoves.Count(
+                m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
+                m.EndGamePiece.PieceRank == PieceRank.King);
+
+            GameMoveMetrics gameMoveMetrics = new GameMoveMetrics(
+                createdFriendlyKings,
+                friendlyMovesAvailable,
+                opponentMovesAvailable,
+                nextMoveFriendlyPiecesAtRisk,
+                nextMoveOpponentPiecesAtRisk,
+                nextMoveFriendlyKingsCreated,
+                nextMoveOpponentKingsCreated);
+            return gameMoveMetrics;
+        }
+
         public GameState PerformMove()
         {
             var previousPieces = GameState.GamePieceList;

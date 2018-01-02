@@ -8,11 +8,11 @@ namespace Draughts.Service
 {
     public class GameState
     {
-        public readonly IReadOnlyList<GamePiece> GamePieceList;
+        public IReadOnlyList<GamePiece> GamePieceList { get; }
 
-        public readonly int XLength;
+        public int XLength { get; }
 
-        public readonly int YLength;
+        public int YLength { get; }
 
         public GameState(IEnumerable<GamePiece> gamePieceList, int xLength, int yLength)
         {
@@ -187,5 +187,7 @@ namespace Draughts.Service
         
             return gameMoves;
         }
+
+
     }
 }

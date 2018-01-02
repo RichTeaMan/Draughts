@@ -163,7 +163,7 @@ namespace Draughts.Ai.Trainer
 
                 var winningContestant = contestants.OrderByDescending(c => c.Wins).First();
 
-                Console.WriteLine($"Top winner won {winningContestant.Wins} matches.");
+                Console.WriteLine($"Top player is '{winningContestant.GenerateName()}' and won {winningContestant.Wins} matches.");
 
                 var nextContestants = new List<Contestant<WeightedAiGamePlayer>>();
                 foreach (var contestantI in contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2))

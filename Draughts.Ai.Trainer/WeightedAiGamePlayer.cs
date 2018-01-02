@@ -62,26 +62,16 @@ namespace Draughts.Service
             var moveWeights = new List<Tuple<double, GameMove>>();
             foreach (var move in currentMoves)
             {
+                var moveMetric = move.CalculateGameMoveMetrics(pieceColour);
+
                 double weightedResult = 0;
-                if (move.StartGamePiece.PieceRank == PieceRank.Minion && move.EndGamePiece.PieceRank == PieceRank.King)
-                {
-                    weightedResult += KingWeight;
-                }
-
-                var futureMoves = move.PerformMove().CalculateAvailableMoves();
-                var friendlyMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour == pieceColour).ToList();
-                var opponentMoves = futureMoves.Where(m => m.StartGamePiece.PieceColour != pieceColour).ToList();
-
-                weightedResult += NextAvailableMoveCountWeight * friendlyMoves.Count;
-                weightedResult += OpponentNextAvailableMoveCountWeight * opponentMoves.Count;
-                weightedResult += NextMovePiecesAtRiskWeight * opponentMoves.Sum(m => m.TakenGamePieces.Count);
-                weightedResult += NextMovePiecesToTakeWeight * friendlyMoves.Sum(m => m.TakenGamePieces.Count);
-                weightedResult += NextMoveKingWeight * friendlyMoves.Count(
-                    m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
-                    m.EndGamePiece.PieceRank == PieceRank.King);
-                weightedResult += OpponentNextMoveKingWeight * opponentMoves.Count(
-                    m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
-                    m.EndGamePiece.PieceRank == PieceRank.King);
+                weightedResult += KingWeight * moveMetric.CreatedFriendlyKings;
+                weightedResult += NextAvailableMoveCountWeight * moveMetric.FriendlyMovesAvailable;
+                weightedResult += OpponentNextAvailableMoveCountWeight * moveMetric.OpponentMovesAvailable;
+                weightedResult += NextMovePiecesAtRiskWeight * moveMetric.NextMoveFriendlyPiecesAtRisk;
+                weightedResult += NextMovePiecesToTakeWeight * moveMetric.NextMoveOpponentPiecesAtRisk;
+                weightedResult += NextMoveKingWeight * moveMetric.NextMoveFriendlyKingsCreated;
+                weightedResult += OpponentNextMoveKingWeight * moveMetric.NextMoveOpponentKingsCreated;
 
                 var resultTuple = new Tuple<double, GameMove>(weightedResult, move);
                 moveWeights.Add(resultTuple);
