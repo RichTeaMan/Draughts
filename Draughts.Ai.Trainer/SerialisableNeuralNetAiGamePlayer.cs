@@ -16,5 +16,12 @@ namespace Draughts.Ai.Trainer
 
         public int Generation { get; set; }
 
+        public NeuralNetAiGamePlayer CreateNeuralNetAiGamePlayer()
+        {
+            var net = Net.CreateNet();
+            var neuralNetAiGamePlayer = new NeuralNetAiGamePlayer(net, Generation);
+            return neuralNetAiGamePlayer;
+        }
+
     }
 }
