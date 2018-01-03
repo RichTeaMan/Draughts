@@ -84,6 +84,11 @@ namespace Draughts.Ai.Trainer
             return result;
         }
 
+        public object CreateObjectForSerialisation()
+        {
+            return this;
+        }
+
         public override string ToString()
         {
             return new ToStringBuilder<WeightedAiGamePlayer>(this)
@@ -119,6 +124,5 @@ namespace Draughts.Ai.Trainer
                 .Append(p => p.Generation)
                 .HashCode;
         }
-
     }
 }

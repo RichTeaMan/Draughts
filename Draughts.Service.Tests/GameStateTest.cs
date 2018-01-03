@@ -25,6 +25,66 @@ namespace Draughts.Service.Tests
         }
 
         [Test]
+        public void GameStateEquals()
+        {
+            var pieceA = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+            var pieceAClone = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+
+            var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+            var pieceBClone = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+
+            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(new[] { pieceAClone, pieceBClone }, 8, 8);
+
+            Assert.AreEqual(gameState, gameStateClone);
+        }
+
+        [Test]
+        public void GameStateNotEquals()
+        {
+            var pieceA = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+            var pieceAClone = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+
+            var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+            var pieceBBadClone = new GamePiece(PieceColour.Black, PieceRank.Minion, 0, 0);
+
+            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(new[] { pieceAClone, pieceBBadClone }, 8, 8);
+
+            Assert.AreNotEqual(gameState, gameStateClone);
+        }
+
+        [Test]
+        public void GameStateHashEquals()
+        {
+            var pieceA = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+            var pieceAClone = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+
+            var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+            var pieceBClone = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+
+            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(new[] { pieceAClone, pieceBClone }, 8, 8);
+
+            Assert.AreEqual(gameState.GetHashCode(), gameStateClone.GetHashCode());
+        }
+
+        [Test]
+        public void GameStateHashNotEquals()
+        {
+            var pieceA = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+            var pieceAClone = new GamePiece(PieceColour.Black, PieceRank.King, 5, 5);
+
+            var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
+            var pieceBBadClone = new GamePiece(PieceColour.Black, PieceRank.Minion, 0, 0);
+
+            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(new[] { pieceAClone, pieceBBadClone }, 8, 8);
+
+            Assert.AreNotEqual(gameState.GetHashCode(), gameStateClone.GetHashCode());
+        }
+
+        [Test]
         public void SinglePieceGameState()
         {
             var pieceColour = PieceColour.Black;

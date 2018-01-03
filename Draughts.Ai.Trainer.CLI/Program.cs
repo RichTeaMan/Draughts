@@ -156,8 +156,12 @@ namespace Draughts.Ai.Trainer
                             Console.Write($"\r{_count} games played. {gamesDrawn} games drawn. Processing {gamesPerSecond:F2} games per second.");
                         }
 
+                        int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
+
                         contestant.IncrementMatch();
+                        contestant.AddUniqueGameStates(uniqueGameStateCount);
                         opponent.IncrementMatch();
+                        opponent.AddUniqueGameStates(uniqueGameStateCount);
                         if (matchResult == GameMatchOutcome.WhiteWin)
                         {
                             contestant.IncrementWin();
@@ -184,17 +188,18 @@ namespace Draughts.Ai.Trainer
                 Console.WriteLine();
                 Console.WriteLine("Matches complete.");
 
-                var json = JsonConvert.SerializeObject(contestants.OrderByDescending(c => c.Wins).ToArray());
+                var orderedContestants = contestants.OrderByDescending(c => c.Wins).ThenBy(c => c.UniqueGameStates);
+                var json = JsonConvert.SerializeObject(orderedContestants.Select(c => c.GamePlayer.CreateObjectForSerialisation()).ToArray(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
                 System.IO.File.WriteAllText($"Iteration{i}.json", json);
 
                 Console.WriteLine("Contestants saved.");
 
-                var winningContestant = contestants.OrderByDescending(c => c.Wins).First();
+                var winningContestant = orderedContestants.First();
 
-                Console.WriteLine($"Top player is '{winningContestant.GenerateName()}' and won {winningContestant.Wins} matches.");
+                Console.WriteLine($"Top player is '{winningContestant.GenerateName()}' and won {winningContestant.Wins} matches with {winningContestant.UniqueGameStates} unique game states.");
 
                 var nextContestants = new List<Contestant<IAiGamePlayer>>();
-                foreach (var contestantI in contestants.OrderByDescending(c => c.Wins).Take(generationCount / 2))
+                foreach (var contestantI in orderedContestants.Take(generationCount / 2))
                 {
                     var spawnContestant = new Contestant<IAiGamePlayer>(spawner.SpawnDerivedAiGamePlayer(winningContestant.GamePlayer));
                     nextContestants.Add(spawnContestant);
@@ -212,11 +217,7 @@ namespace Draughts.Ai.Trainer
                 Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
             }
 
-            contestants = contestants.OrderBy(c => c.Draws).ThenByDescending(c => c.Wins).ToList();
-
-            var champion = contestants.First();
-
-            Console.WriteLine($"Training complete. Top winner won {champion.Wins} matches. It is generation {champion.GamePlayer.Generation}.");
+            Console.WriteLine($"Training complete.");
             return;
         }
 

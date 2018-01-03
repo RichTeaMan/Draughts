@@ -11,9 +11,16 @@ namespace Draughts.Service
     /// </summary>
     public class GameMatch
     {
-        public const int TurnLimit = 1000;
+        private List<GameState> _gameStateList = new List<GameState>();
+
+        public const int TurnLimit = 500;
 
         public GameState GameState { get; private set; }
+
+        /// <summary>
+        /// Gets a list of game states representing every turn in the game. The first turn is the first game state.
+        /// </summary>
+        public IReadOnlyList<GameState> GameStateList => _gameStateList;
 
         public IGamePlayer WhiteGamePlayer { get; private set; }
 
@@ -71,6 +78,7 @@ namespace Draughts.Service
                     else
                     {
                         GameState = turnResult.GameState;
+                        _gameStateList.Add(GameState);
                         TurnCount++;
                         CurrentTurn = nextTurn;
                     }

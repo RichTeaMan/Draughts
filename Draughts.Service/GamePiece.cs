@@ -53,11 +53,11 @@ namespace Draughts.Service
         public override int GetHashCode()
         {
             return new HashCodeBuilder<GamePiece>(this)
-                .Append(p => p.PieceColour)
-                .Append(p => p.PieceRank)
-                .Append(p => p.Xcoord)
-                .Append(p => p.Ycoord)
-            .HashCode;
+                .Append(PieceColour)
+                .Append(PieceRank)
+                .Append(Xcoord)
+                .Append(Ycoord)
+                .HashCode;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -188,6 +189,37 @@ namespace Draughts.Service
             return gameMoves;
         }
 
+        public override string ToString()
+        {
+            return new ToStringBuilder<GameState>(this)
+                .Append(p => p.GamePieceList)
+                .Append(p => p.XLength)
+                .Append(p => p.YLength)
+                .ToString();
+        }
+
+        public override bool Equals(object that)
+        {
+            var other = that as GameState;
+            if (null == other)
+            {
+                return false;
+            }
+            return new EqualsBuilder<GameState>(this, that)
+                .Append(GamePieceList, other.GamePieceList)
+                .Append(XLength, other.XLength)
+                .Append(YLength, other.YLength)
+                .Equals();
+        }
+
+        public override int GetHashCode()
+        {
+            return new HashCodeBuilder<GameState>(this)
+                .Append(GamePieceList)
+                .Append(XLength)
+                .Append(YLength)
+                .HashCode;
+        }
 
     }
 }

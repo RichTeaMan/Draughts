@@ -66,6 +66,16 @@ namespace Draughts.Ai.Trainer
             return result;
         }
 
+        public object CreateObjectForSerialisation()
+        {
+            var serialisablePlayer = new SerialisableNeuralNetAiGamePlayer
+            {
+                Generation = Generation,
+                Net = Net.CreateSerialisedNet()
+            };
+            return serialisablePlayer;
+        }
+
         public override string ToString()
         {
             return new ToStringBuilder<NeuralNetAiGamePlayer>(this)

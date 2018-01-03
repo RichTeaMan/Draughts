@@ -8,5 +8,7 @@ namespace Draughts.Ai.Trainer
     public interface IAiGamePlayer : IGamePlayer
     {
         int Generation { get; }
+
+        object CreateObjectForSerialisation();
     }
 }

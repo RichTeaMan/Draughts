@@ -19,6 +19,9 @@ namespace Draughts.Ai.Trainer
         private int _draws;
         public int Draws => _draws;
 
+        private int _uniqueGameStates;
+        public int UniqueGameStates => _uniqueGameStates;
+
         public T GamePlayer { get; private set; }
 
         public Contestant(T gamePlayer)
@@ -41,11 +44,17 @@ namespace Draughts.Ai.Trainer
             return Interlocked.Increment(ref _draws);
         }
 
+        public int AddUniqueGameStates(int uniqueGameStates)
+        {
+            return Interlocked.Add(ref _uniqueGameStates, uniqueGameStates);
+        }
+
         public void ResetStats()
         {
             _matches = 0;
             _wins = 0;
             _draws = 0;
+            _uniqueGameStates = 0;
         }
     }
 }
