@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using RichTea.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,11 +43,11 @@ namespace Draughts.Service
 
         public override bool Equals(object that)
         {
-            var o = (GamePiece)that;
-            return Xcoord == o.Xcoord &&
-                Ycoord == o.Ycoord &&
-                PieceColour == o.PieceColour &&
-                PieceRank == o.PieceRank;
+            var otherGamePiece = that as GamePiece;
+            return Xcoord == otherGamePiece?.Xcoord &&
+                Ycoord == otherGamePiece?.Ycoord &&
+                PieceColour == otherGamePiece?.PieceColour &&
+                PieceRank == otherGamePiece?.PieceRank;
         }
 
         public override int GetHashCode()

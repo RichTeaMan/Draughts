@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using RichTea.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -200,16 +200,12 @@ namespace Draughts.Service
 
         public override bool Equals(object that)
         {
-            var other = that as GameState;
-            if (null == other)
-            {
-                return false;
-            }
+            var otherGameState = that as GameState;
             return new EqualsBuilder<GameState>(this, that)
-                .Append(GamePieceList, other.GamePieceList)
-                .Append(XLength, other.XLength)
-                .Append(YLength, other.YLength)
-                .Equals();
+                .Append(GamePieceList, otherGameState?.GamePieceList)
+                .Append(XLength, otherGameState?.XLength)
+                .Append(YLength, otherGameState?.YLength)
+                .AreEqual;
         }
 
         public override int GetHashCode()

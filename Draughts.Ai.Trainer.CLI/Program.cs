@@ -102,6 +102,7 @@ namespace Draughts.Ai.Trainer
             Console.CancelKeyPress += Console_CancelKeyPress;
 
             IAiGamePlayerSpawner spawner= null;
+            var contestants = new List<Contestant>();
             switch (aiType)
             {
                 case AiType.Weighted:
@@ -114,10 +115,10 @@ namespace Draughts.Ai.Trainer
                     break;
             }
 
-            var contestants = Enumerable.Range(0, generationCount)
-                .Select(i => new Contestant<IAiGamePlayer>(
+            contestants.AddRange(Enumerable.Range(0, generationCount)
+                .Select(i => new Contestant(
                     spawner.SpawnAiGamePlayer())
-                ).ToList();
+                ));
 
             foreach (var i in Enumerable.Range(0, iterationCount).Where(g => !shouldClose && !shouldClose))
             {
@@ -152,8 +153,7 @@ namespace Draughts.Ai.Trainer
                         var _count = Interlocked.Increment(ref gamesPlayed);
                         if (_count % 100 == 0)
                         {
-                            var gamesPerSecond = _count / stopwatch.Elapsed.TotalSeconds;
-                            Console.Write($"\r{_count} games played. {gamesDrawn} games drawn. Processing {gamesPerSecond:F2} games per second.");
+                            PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, _count);
                         }
 
                         int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
@@ -179,6 +179,7 @@ namespace Draughts.Ai.Trainer
                     }
                 });
                 stopwatch.Stop();
+                PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, gamesPlayed);
 
                 if (shouldClose)
                 {
@@ -188,7 +189,7 @@ namespace Draughts.Ai.Trainer
                 Console.WriteLine();
                 Console.WriteLine("Matches complete.");
 
-                var orderedContestants = contestants.OrderByDescending(c => c.Wins).ThenBy(c => c.UniqueGameStates);
+                var orderedContestants = contestants.OrderByDescending(c => c.Wins).ThenBy(c => c.UniqueGameStates).ToList();
                 var json = JsonConvert.SerializeObject(orderedContestants.Select(c => c.GamePlayer.CreateObjectForSerialisation()).ToArray(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
                 System.IO.File.WriteAllText($"Iteration{i}.json", json);
 
@@ -196,17 +197,11 @@ namespace Draughts.Ai.Trainer
 
                 var winningContestant = orderedContestants.First();
 
-                Console.WriteLine($"Top player is '{winningContestant.GenerateName()}' and won {winningContestant.Wins} matches with {winningContestant.UniqueGameStates} unique game states.");
-
-                var nextContestants = new List<Contestant<IAiGamePlayer>>();
-                foreach (var contestantI in orderedContestants.Take(generationCount / 2))
+                for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
                 {
-                    var spawnContestant = new Contestant<IAiGamePlayer>(spawner.SpawnDerivedAiGamePlayer(winningContestant.GamePlayer));
-                    nextContestants.Add(spawnContestant);
-                    nextContestants.Add(contestantI);
-                    contestantI.ResetStats();
+                    var contestant = orderedContestants[topContestantIndex];
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Net Name: {(contestant.GamePlayer as NeuralNetAiGamePlayer).Net.CreateSerialisedNet().GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
                 }
-                contestants = nextContestants;
 
                 int testGameCount = 50;
                 int randomWins = PlayGames(winningContestant.GamePlayer, new RandomGamePlayer(), testGameCount);
@@ -215,10 +210,27 @@ namespace Draughts.Ai.Trainer
                     return;
                 }
                 Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
+
+                var nextContestants = new List<Contestant>();
+                foreach (var contestantI in orderedContestants.Take(generationCount / 2))
+                {
+                    var spawnContestant = new Contestant(spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer));
+                    nextContestants.Add(spawnContestant);
+                    nextContestants.Add(contestantI);
+                    contestantI.ResetStats();
+                }
+                contestants = nextContestants;
             }
 
             Console.WriteLine($"Training complete.");
             return;
+        }
+
+        private static void PrintStatus(int gamesDrawn, double totalSeconds, int _count)
+        {
+            var gamesPerSecond = _count / totalSeconds;
+            double percentageDrawn = ((double)gamesDrawn / _count) * 100;
+            Console.Write($"\r{_count} games played. {percentageDrawn:F0}% games drawn. Processing {gamesPerSecond:F2} games per second.");
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)

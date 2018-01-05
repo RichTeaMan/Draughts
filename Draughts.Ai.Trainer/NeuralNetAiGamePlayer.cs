@@ -79,7 +79,7 @@ namespace Draughts.Ai.Trainer
         public override string ToString()
         {
             return new ToStringBuilder<NeuralNetAiGamePlayer>(this)
-                .Append(p => p.Net)
+                .Append(p => p.Net.CreateSerialisedNet())
                 .Append(p => p.Generation)
                 .ToString();
         }
@@ -87,7 +87,7 @@ namespace Draughts.Ai.Trainer
         public override bool Equals(object that)
         {
             return new EqualsBuilder<NeuralNetAiGamePlayer>(this, that)
-                .Append(p => p.Net)
+                .Append(p => p.Net.CreateSerialisedNet())
                 .Append(p => p.Generation)
                 .AreEqual;
         }
@@ -95,7 +95,7 @@ namespace Draughts.Ai.Trainer
         public override int GetHashCode()
         {
             return new HashCodeBuilder<NeuralNetAiGamePlayer>(this)
-                .Append(Net)
+                .Append(Net.CreateSerialisedNet())
                 .Append(Generation)
                 .HashCode;
         }

@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using RichTea.Common;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -61,19 +61,19 @@ namespace Draughts.Service
                 .Append(m => m.NextMoveOpponentPiecesAtRisk)
                 .Append(m => m.NextMoveFriendlyKingsCreated)
                 .Append(m => m.NextMoveOpponentKingsCreated)
-                .Equals();
+                .AreEqual;
         }
 
         public override int GetHashCode()
         {
             return new HashCodeBuilder<GameMoveMetrics>(this)
-                .Append(m => m.CreatedFriendlyKings)
-                .Append(m => m.FriendlyMovesAvailable)
-                .Append(m => m.OpponentMovesAvailable)
-                .Append(m => m.NextMoveFriendlyPiecesAtRisk)
-                .Append(m => m.NextMoveOpponentPiecesAtRisk)
-                .Append(m => m.NextMoveFriendlyKingsCreated)
-                .Append(m => m.NextMoveOpponentKingsCreated)
+                .Append(CreatedFriendlyKings)
+                .Append(FriendlyMovesAvailable)
+                .Append(OpponentMovesAvailable)
+                .Append(NextMoveFriendlyPiecesAtRisk)
+                .Append(NextMoveOpponentPiecesAtRisk)
+                .Append(NextMoveFriendlyKingsCreated)
+                .Append(NextMoveOpponentKingsCreated)
                 .HashCode;
         }
     }

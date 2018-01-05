@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Draughts.Ai.Trainer
 {
-    public class Contestant<T> where T : IGamePlayer
+    public class Contestant
     {
         private int _matches = 0;
         public int Matches => _matches;
@@ -22,9 +22,9 @@ namespace Draughts.Ai.Trainer
         private int _uniqueGameStates;
         public int UniqueGameStates => _uniqueGameStates;
 
-        public T GamePlayer { get; private set; }
+        public IAiGamePlayer GamePlayer { get; private set; }
 
-        public Contestant(T gamePlayer)
+        public Contestant(IAiGamePlayer gamePlayer)
         {
             GamePlayer = gamePlayer;
         }

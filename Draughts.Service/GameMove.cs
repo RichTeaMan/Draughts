@@ -1,4 +1,4 @@
-﻿using Common;
+﻿using RichTea.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,16 +90,16 @@ namespace Draughts.Service
                 .Append(p => p.EndGamePiece)
                 .Append(p => p.TakenGamePieces)
                 .Append(p => p.GameState)
-                .Equals();
+                .AreEqual;
         }
 
         public override int GetHashCode()
         {
             return new HashCodeBuilder<GameMove>(this)
-                .Append(p => p.StartGamePiece)
-                .Append(p => p.EndGamePiece)
-                .Append(p => p.TakenGamePieces)
-                .Append(p => p.GameState)
+                .Append(StartGamePiece)
+                .Append(EndGamePiece)
+                .Append(TakenGamePieces)
+                .Append(GameState)
             .HashCode;
         }
     }
