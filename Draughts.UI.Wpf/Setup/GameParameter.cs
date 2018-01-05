@@ -1,5 +1,5 @@
-﻿using Common;
-using Draughts.Service;
+﻿using Draughts.Service;
+using RichTea.Common;
 
 namespace Draughts.UI.Wpf.Setup
 {
@@ -33,15 +33,15 @@ namespace Draughts.UI.Wpf.Setup
                 .Append(p => p.PieceColour)
                 .Append(p => p.PlayerType)
                 .Append(p => p.FilePath)
-                .Equals();
+                .AreEqual;
         }
 
         public override int GetHashCode()
         {
             return new HashCodeBuilder<GameParameter>(this)
-                .Append(p => p.PieceColour)
-                .Append(p => p.PlayerType)
-                .Append(p => p.FilePath)
+                .Append(PieceColour)
+                .Append(PlayerType)
+                .Append(FilePath)
                 .HashCode;
         }
     }
