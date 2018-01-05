@@ -1,11 +1,11 @@
 ﻿using System;
 using Draughts.UI.Wpf.Setup;
 using Draughts.Service;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Draughts.UI.Wpf.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class GameParameterParserTest
     {
         /// <summary>
@@ -13,13 +13,13 @@ namespace Draughts.UI.Wpf.Tests
         /// </summary>
         private GameParameterParser gameParameterParser;
 
-        [SetUp]
+        [TestInitialize]
         public void Setup()
         {
             gameParameterParser = new GameParameterParser();
         }
 
-        [Test]
+        [TestMethod]
         public void WhiteAiGameParameterParserTest()
         {
             // expected
@@ -33,7 +33,7 @@ namespace Draughts.UI.Wpf.Tests
             Assert.AreEqual(expectedGameParameter, actualGameParameter);
         }
 
-        [Test]
+        [TestMethod]
         public void BlackHumanGameParameterParserTest()
         {
             // expected
