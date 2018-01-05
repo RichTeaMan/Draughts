@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Draughts.Service.Tests", "Draughts.Service.Tests\Draughts.Service.Tests.csproj", "{72538143-337F-4428-9E91-E7008AA13FC4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.Service.Tests", "Draughts.Service.Tests\Draughts.Service.Tests.csproj", "{72538143-337F-4428-9E91-E7008AA13FC4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Draughts.Ai.Trainer", "Draughts.Ai.Trainer\Draughts.Ai.Trainer.csproj", "{71036D3A-C4F4-4F9A-A353-60F9AE74BB5E}"
 EndProject
