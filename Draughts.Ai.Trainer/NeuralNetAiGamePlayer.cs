@@ -1,8 +1,8 @@
-﻿using Common;
-using Draughts.Service;
+﻿using Draughts.Service;
 using NameUtility;
-using NeuralNetLib;
 using Newtonsoft.Json;
+using RichTea.Common;
+using RichTea.NeuralNetLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -89,14 +89,14 @@ namespace Draughts.Ai.Trainer
             return new EqualsBuilder<NeuralNetAiGamePlayer>(this, that)
                 .Append(p => p.Net)
                 .Append(p => p.Generation)
-                .Equals();
+                .AreEqual;
         }
 
         public override int GetHashCode()
         {
             return new HashCodeBuilder<NeuralNetAiGamePlayer>(this)
-                .Append(p => p.Net)
-                .Append(p => p.Generation)
+                .Append(Net)
+                .Append(Generation)
                 .HashCode;
         }
 

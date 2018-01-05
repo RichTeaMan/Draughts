@@ -1,7 +1,7 @@
-﻿using Common;
-using Draughts.Service;
+﻿using Draughts.Service;
 using NameUtility;
 using Newtonsoft.Json;
+using RichTea.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,18 +110,18 @@ namespace Draughts.Ai.Trainer
                 .Append(p => p.KingWeight)
                 .Append(p => p.NextMoveKingWeight)
                 .Append(p => p.Generation)
-                .Equals();
+                .AreEqual;
         }
 
         public override int GetHashCode()
         {
             return new HashCodeBuilder<WeightedAiGamePlayer>(this)
-                .Append(p => p.NextAvailableMoveCountWeight)
-                .Append(p => p.NextMovePiecesAtRiskWeight)
-                .Append(p => p.NextMovePiecesToTakeWeight)
-                .Append(p => p.KingWeight)
-                .Append(p => p.NextMoveKingWeight)
-                .Append(p => p.Generation)
+                .Append(NextAvailableMoveCountWeight)
+                .Append(NextMovePiecesAtRiskWeight)
+                .Append(NextMovePiecesToTakeWeight)
+                .Append(KingWeight)
+                .Append(NextMoveKingWeight)
+                .Append(Generation)
                 .HashCode;
         }
     }

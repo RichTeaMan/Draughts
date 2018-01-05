@@ -1,9 +1,7 @@
-﻿using Common;
-using Draughts.Service;
+﻿using Draughts.Service;
 using NameUtility;
-using NeuralNetLib;
-using NeuralNetLib.Serialisation;
 using Newtonsoft.Json;
+using RichTea.NeuralNetLib.Serialisation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

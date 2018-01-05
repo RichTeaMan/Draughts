@@ -1,6 +1,6 @@
 ﻿using Draughts.Ai.Trainer;
 using NameUtility;
-using NeuralNetLib;
+using RichTea.NeuralNetLib;
 using System;
 
 namespace Draughts.Service
