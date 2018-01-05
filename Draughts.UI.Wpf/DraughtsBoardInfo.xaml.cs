@@ -1,5 +1,5 @@
 ﻿using Draughts.Service;
-using NameUtility;
+using Draughts.UI.Wpf.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,24 +42,8 @@ namespace Draughts.UI.Wpf
                 PlayerTurnLbl.Text = "Black player's turn";
             }
 
-            if (gameMatch.WhiteGamePlayer is HumanPlayer)
-            {
-                WhitePlayerType.Text = "Human player";
-            }
-            else
-            {
-                WhitePlayerType.Text = $"AI player - {gameMatch.WhiteGamePlayer.GenerateName()}";
-            }
-
-            if (gameMatch.BlackGamePlayer is HumanPlayer)
-            {
-                BlackPlayerType.Text = "Human player";
-            }
-            else
-            {
-                BlackPlayerType.Text = $"AI player - {gameMatch.BlackGamePlayer.GenerateName()}";
-            }
-
+            WhitePlayerType.Text = gameMatch.WhiteGamePlayer.PlayerSummary();
+            BlackPlayerType.Text = gameMatch.BlackGamePlayer.PlayerSummary();
         }
     }
 }

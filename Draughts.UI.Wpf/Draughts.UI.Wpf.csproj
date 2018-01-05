@@ -74,6 +74,7 @@
     <Compile Include="DraughtsBoardInfo.xaml.cs">
       <DependentUpon>DraughtsBoardInfo.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Extensions\GamePlayerExtension.cs" />
     <Compile Include="GameSquare.xaml.cs">
       <DependentUpon>GameSquare.xaml</DependentUpon>
     </Compile>
