@@ -17,12 +17,34 @@ namespace Draughts.UI.Wpf.Services
             return new RandomGamePlayer();
         }
 
-        public List<IGamePlayer> LoadFromJsonfile(string filePath)
+        public List<IAiGamePlayer> LoadFromJsonfile(string filePath)
         {
             var contents = File.ReadAllText(filePath);
-            var players = JsonConvert.DeserializeObject<SerialisableNeuralNetAiGamePlayer[]>(contents);
-            var loadedGamePlayers = new List<IGamePlayer>(players.Select(p => p.CreateNeuralNetAiGamePlayer()));
-            return loadedGamePlayers;
+            var players = LoadFromJson(contents);
+            return players;
+        }
+
+        public List<IAiGamePlayer> LoadFromJson(string json)
+        {
+            var players = JsonConvert.DeserializeObject<object[]>(json, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+            List<IAiGamePlayer> loadedPlayerList = new List<IAiGamePlayer>();
+            foreach (var player in players)
+            {
+                if (player is WeightedAiGamePlayer weightedAiGamePlayer)
+                {
+                    loadedPlayerList.Add(weightedAiGamePlayer);
+                }
+                else if (player is SerialisableNeuralNetAiGamePlayer serialisableNeuralNetAiGamePlayer)
+                {
+                    var neuralNetAiGamePlayer = serialisableNeuralNetAiGamePlayer.CreateNeuralNetAiGamePlayer();
+                    loadedPlayerList.Add(neuralNetAiGamePlayer);
+                }
+                else
+                {
+                    throw new Exception($"Unknown player type: '{player.GetType()}'");
+                }
+            }
+            return loadedPlayerList;
         }
     }
 }

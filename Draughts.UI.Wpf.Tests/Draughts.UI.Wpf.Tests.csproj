@@ -48,6 +48,9 @@
     <Reference Include="Microsoft.Win32.Primitives, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Win32.Primitives.4.3.0\lib\net46\Microsoft.Win32.Primitives.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="RichTea.CommandLineParser, Version=0.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\RichTea.CommandLineParser.0.2.0-beta\lib\netstandard1.4\RichTea.CommandLineParser.dll</HintPath>
     </Reference>
@@ -132,6 +135,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AiLoaderTest.cs" />
     <Compile Include="GameParameterParserTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -140,6 +144,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Draughts.Ai.Trainer\Draughts.Ai.Trainer.csproj">
+      <Project>{71036d3a-c4f4-4f9a-a353-60f9ae74bb5e}</Project>
+      <Name>Draughts.Ai.Trainer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj">
       <Project>{7D75F891-E4A0-4F88-B7D3-F4B0E4EA1763}</Project>
       <Name>Draughts.Service</Name>

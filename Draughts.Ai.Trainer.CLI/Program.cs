@@ -190,7 +190,7 @@ namespace Draughts.Ai.Trainer
                 Console.WriteLine("Matches complete.");
 
                 var orderedContestants = contestants.OrderByDescending(c => c.Wins).ThenBy(c => c.UniqueGameStates).ToList();
-                var json = JsonConvert.SerializeObject(orderedContestants.Select(c => c.GamePlayer.CreateObjectForSerialisation()).ToArray(), new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
                 System.IO.File.WriteAllText($"Iteration{i}.json", json);
 
                 Console.WriteLine("Contestants saved.");
