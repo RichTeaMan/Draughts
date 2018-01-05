@@ -1,4 +1,3 @@
-#tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool "nuget:?package=vswhere"
 //////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -61,8 +60,16 @@ Task("Test")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    NUnit3($"./**/bin/{buildDir}/*.Tests.dll", new NUnit3Settings {
-        NoResults = true
+
+    DotNetCoreTest("./Draughts.Service.Tests/Draughts.Service.Tests.csproj");
+
+    DirectoryPath vsLatest  = VSWhereLatest();
+    FilePath vsTestPathX64 = (vsLatest==null)
+                            ? null
+                            : vsLatest.CombineWithFilePath("./Common7/IDE/Extensions/TestPlatform/vstest.console.exe");
+
+    VSTest($"./**/bin/{buildDir}/*.Tests.dll", new VSTestSettings {
+        ToolPath = vsTestPathX64
     });
 });
 
