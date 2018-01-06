@@ -25,6 +25,7 @@ var buildDir = Directory(configuration);
 Task("Clean")
     .Does(() =>
 {
+    DeleteFiles("./**/bin/**/**");
     CleanDirectories("./**/bin/**");
 });
 
@@ -57,6 +58,7 @@ Task("Build")
 });
 
 Task("Test")
+    .IsDependentOn("Clean")
     .IsDependentOn("Build")
     .Does(() =>
 {
