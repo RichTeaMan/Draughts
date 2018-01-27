@@ -2,6 +2,7 @@
 using NameUtility;
 using Newtonsoft.Json;
 using RichTea.CommandLineParser;
+using RichTea.NeuralNetLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -86,11 +87,11 @@ namespace Draughts.Ai.Trainer
                 random = new Random();
             }
             AiType aiType;
-            switch(aiTypeStr.ToLower())
+            switch (aiTypeStr.ToLower())
             {
                 case "weighted":
                     aiType = AiType.Weighted;
-                    
+
                     break;
                 case "neuralnet":
                     aiType = AiType.NeuralNet;
@@ -101,7 +102,7 @@ namespace Draughts.Ai.Trainer
 
             Console.CancelKeyPress += Console_CancelKeyPress;
 
-            IAiGamePlayerSpawner spawner= null;
+            IAiGamePlayerSpawner spawner = null;
             var contestants = new List<Contestant>();
             switch (aiType)
             {
@@ -114,6 +115,12 @@ namespace Draughts.Ai.Trainer
                     Console.WriteLine("Using neural net AI.");
                     break;
             }
+
+            RandomMutator randomMutator = new RandomMutator(random)
+            {
+                Deviation = 0.00001
+            };
+            SplitChromosomeMutator splitChromosomeMutator = new SplitChromosomeMutator(random);
 
             contestants.AddRange(Enumerable.Range(0, generationCount)
                 .Select(i => new Contestant(
@@ -134,50 +141,50 @@ namespace Draughts.Ai.Trainer
                 {
                     MaxDegreeOfParallelism = threads.Value
                 };
-                Parallel.ForEach(contestants, parallelOptions,(contestant, loopState) =>
-                {
-                    foreach (var opponent in contestants.Where(c => c != contestant && !shouldClose).ToList())
-                    {
-                        if (shouldClose)
-                        {
-                            loopState.Stop();
-                            break;
-                        }
-                        var gameMatch = new GameMatch(
-                            GameStateFactory.StandardStartGameState(),
-                            contestant.GamePlayer,
-                            opponent.GamePlayer);
+                Parallel.ForEach(contestants, parallelOptions, (contestant, loopState) =>
+                 {
+                     foreach (var opponent in contestants.Where(c => c != contestant && !shouldClose).ToList())
+                     {
+                         if (shouldClose)
+                         {
+                             loopState.Stop();
+                             break;
+                         }
+                         var gameMatch = new GameMatch(
+                             GameStateFactory.StandardStartGameState(),
+                             contestant.GamePlayer,
+                             opponent.GamePlayer);
 
-                        var matchResult = gameMatch.CompleteMatch();
+                         var matchResult = gameMatch.CompleteMatch();
 
-                        var _count = Interlocked.Increment(ref gamesPlayed);
-                        if (_count % 100 == 0)
-                        {
-                            PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, _count);
-                        }
+                         var _count = Interlocked.Increment(ref gamesPlayed);
+                         if (_count % 100 == 0)
+                         {
+                             PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, _count);
+                         }
 
-                        int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
+                         int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
 
-                        contestant.IncrementMatch();
-                        contestant.AddUniqueGameStates(uniqueGameStateCount);
-                        opponent.IncrementMatch();
-                        opponent.AddUniqueGameStates(uniqueGameStateCount);
-                        if (matchResult == GameMatchOutcome.WhiteWin)
-                        {
-                            contestant.IncrementWin();
-                        }
-                        else if (matchResult == GameMatchOutcome.BlackWin)
-                        {
-                            opponent.IncrementWin();
-                        }
-                        else if (matchResult == GameMatchOutcome.Draw)
-                        {
-                            contestant.IncrementDraw();
-                            opponent.IncrementDraw();
-                            Interlocked.Increment(ref gamesDrawn);
-                        }
-                    }
-                });
+                         contestant.IncrementMatch();
+                         contestant.AddUniqueGameStates(uniqueGameStateCount);
+                         opponent.IncrementMatch();
+                         opponent.AddUniqueGameStates(uniqueGameStateCount);
+                         if (matchResult == GameMatchOutcome.WhiteWin)
+                         {
+                             contestant.IncrementWin();
+                         }
+                         else if (matchResult == GameMatchOutcome.BlackWin)
+                         {
+                             opponent.IncrementWin();
+                         }
+                         else if (matchResult == GameMatchOutcome.Draw)
+                         {
+                             contestant.IncrementDraw();
+                             opponent.IncrementDraw();
+                             Interlocked.Increment(ref gamesDrawn);
+                         }
+                     }
+                 });
                 stopwatch.Stop();
                 PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, gamesPlayed);
 
@@ -214,7 +221,28 @@ namespace Draughts.Ai.Trainer
                 var nextContestants = new List<Contestant>();
                 foreach (var contestantI in orderedContestants.Take(generationCount / 2))
                 {
-                    var spawnContestant = new Contestant(spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer));
+                    IAiGamePlayer aiGamePlayer;
+                    if (contestantI.GamePlayer is NeuralNetAiGamePlayer netGamePlayer)
+                    {
+                        Net net;
+                        if (i % 2 == 0)
+                        {
+                            net = randomMutator.GenetateMutatedNeuralNet(netGamePlayer.Net);
+                        }
+                        else
+                        {
+                            // get random second parent
+                            int pick = random.Next(generationCount / 2);
+                            var secondNet = ((NeuralNetAiGamePlayer)orderedContestants[pick].GamePlayer).Net;
+                            net = splitChromosomeMutator.GenetateMutatedNeuralNet(netGamePlayer.Net, secondNet);
+                        }
+                        aiGamePlayer = new NeuralNetAiGamePlayer(net, netGamePlayer.Generation + 1);
+                    }
+                    else
+                    {
+                        aiGamePlayer = spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer);
+                    }
+                    var spawnContestant = new Contestant(aiGamePlayer);
                     nextContestants.Add(spawnContestant);
                     nextContestants.Add(contestantI);
                     contestantI.ResetStats();
