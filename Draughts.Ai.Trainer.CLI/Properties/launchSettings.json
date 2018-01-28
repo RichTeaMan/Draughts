@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Draughts.Ai.Trainer.CLI": {
+      "commandName": "Project",
+      "commandLineArgs": "train -gc 20 -ic 50000 -ai-type NeuralNet"
+    }
+  }
+}

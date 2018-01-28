@@ -199,7 +199,8 @@ namespace Draughts.Ai.Trainer
 
                 var orderedContestants = contestants.OrderByDescending(c => aiGamePlayerFitnessEvaluator.EvaluateGamePlayer(c)).ToList();
                 var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
-                System.IO.File.WriteAllText($"Iteration{i}.json", json);
+                System.IO.Directory.CreateDirectory("AiOutput");
+                System.IO.File.WriteAllText($"AiOutput/Iteration{i}.json", json);
 
                 Console.WriteLine("Contestants saved.");
 
