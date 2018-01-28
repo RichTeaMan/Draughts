@@ -25,8 +25,14 @@ var buildDir = Directory(configuration);
 Task("Clean")
     .Does(() =>
 {
-    DeleteFiles("./**/bin/**/**");
-    CleanDirectories("./**/bin/**");
+    try {
+        DeleteFiles("./**/bin/**/**/**");
+        DeleteFiles("./**/bin/**/**");
+        CleanDirectories("./**/bin/**/**");
+        CleanDirectories("./**/bin/**");
+    } catch (Exception ex) {
+        Information($"Failed to clean: {ex}");
+    }
 });
 
 Task("Restore-NuGet-Packages")
