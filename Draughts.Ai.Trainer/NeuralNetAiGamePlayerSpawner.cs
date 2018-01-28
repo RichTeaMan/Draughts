@@ -37,7 +37,7 @@ namespace Draughts.Service
         public NeuralNetAiGamePlayer SpawnNewNeuralNetAiGamePlayer()
         {
             NetFactory netFactory = new NetFactory();
-            Net net = netFactory.GenerateRandomNet(NeuralNetAiGamePlayer.NetInputs, 1, _random);
+            Net net = netFactory.GenerateRandomNet(NeuralNetAiGamePlayer.NetInputs, 1, 8, _random);
             var generation = 0;
 
             var newPlayer = new NeuralNetAiGamePlayer(

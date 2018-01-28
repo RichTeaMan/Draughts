@@ -121,6 +121,7 @@ namespace Draughts.Ai.Trainer
                 Deviation = 0.00001
             };
             SplitChromosomeMutator splitChromosomeMutator = new SplitChromosomeMutator(random);
+            AiGamePlayerFitnessEvaluator aiGamePlayerFitnessEvaluator = new AiGamePlayerFitnessEvaluator(random);
 
             contestants.AddRange(Enumerable.Range(0, generationCount)
                 .Select(i => new Contestant(
@@ -196,7 +197,7 @@ namespace Draughts.Ai.Trainer
                 Console.WriteLine();
                 Console.WriteLine("Matches complete.");
 
-                var orderedContestants = contestants.OrderByDescending(c => c.Wins).ThenBy(c => c.UniqueGameStates).ToList();
+                var orderedContestants = contestants.OrderByDescending(c => aiGamePlayerFitnessEvaluator.EvaluateGamePlayer(c)).ToList();
                 var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
                 System.IO.File.WriteAllText($"Iteration{i}.json", json);
 
@@ -207,7 +208,7 @@ namespace Draughts.Ai.Trainer
                 for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
                 {
                     var contestant = orderedContestants[topContestantIndex];
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Net Name: {(contestant.GamePlayer as NeuralNetAiGamePlayer).Net.CreateSerialisedNet().GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
                 }
 
                 int testGameCount = 50;

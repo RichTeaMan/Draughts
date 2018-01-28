@@ -11,7 +11,14 @@ namespace Draughts.Service
     /// </summary>
     public class RandomGamePlayer : IGamePlayer
     {
-        private Random random = new Random();
+        private Random _random;
+
+        public RandomGamePlayer() : this(new Random()) { }
+
+        public RandomGamePlayer(Random random)
+        {
+            _random = random;
+        }
 
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
         {
@@ -20,7 +27,7 @@ namespace Draughts.Service
             GamePlayerMoveResult gamePlayerMoveResult;
             if (moves.Count > 0)
             {
-                int selection = random.Next(moves.Count);
+                int selection = _random.Next(moves.Count);
                 var resultState = moves[selection].PerformMove();
                 gamePlayerMoveResult = new GamePlayerMoveResult(resultState, MoveStatus.SuccessfulMove);
             }
