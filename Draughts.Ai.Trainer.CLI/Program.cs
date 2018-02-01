@@ -68,6 +68,26 @@ namespace Draughts.Ai.Trainer
             int? seed = null
             )
         {
+            switch (aiTypeStr.ToLower())
+            {
+                case "weighted":
+                    TrainWeightedAi(generationCount, iterationCount, threads, seed);
+                    break;
+                case "neuralnet":
+                    TrainNeuralNet(generationCount, iterationCount, threads, seed);
+                    break;
+                default:
+                    throw new Exception($"Unsupported AI type '{aiTypeStr}'.");
+            }
+        }
+
+        public static void TrainWeightedAi(
+            int generationCount,
+            int iterationCount,
+            int? threads,
+            int? seed
+            )
+        {
             Console.WriteLine("Training draughts AI.");
             Console.WriteLine($"Generation count: {generationCount}");
             Console.WriteLine($"Iteration count: {iterationCount}");
@@ -86,41 +106,13 @@ namespace Draughts.Ai.Trainer
             {
                 random = new Random();
             }
-            AiType aiType;
-            switch (aiTypeStr.ToLower())
-            {
-                case "weighted":
-                    aiType = AiType.Weighted;
 
-                    break;
-                case "neuralnet":
-                    aiType = AiType.NeuralNet;
-                    break;
-                default:
-                    throw new Exception($"Unsupported AI type '{aiTypeStr}'.");
-            }
 
             Console.CancelKeyPress += Console_CancelKeyPress;
 
             IAiGamePlayerSpawner spawner = null;
             var contestants = new List<Contestant>();
-            switch (aiType)
-            {
-                case AiType.Weighted:
-                    spawner = new WeightedAiGamePlayerSpawner(random);
-                    Console.WriteLine("Using weighted AI.");
-                    break;
-                case AiType.NeuralNet:
-                    spawner = new NeuralNetAiGamePlayerSpawner(random);
-                    Console.WriteLine("Using neural net AI.");
-                    break;
-            }
 
-            RandomMutator randomMutator = new RandomMutator(random)
-            {
-                Deviation = 0.00001
-            };
-            SplitChromosomeMutator splitChromosomeMutator = new SplitChromosomeMutator(random);
             AiGamePlayerFitnessEvaluator aiGamePlayerFitnessEvaluator = new AiGamePlayerFitnessEvaluator(random);
 
             contestants.AddRange(Enumerable.Range(0, generationCount)
@@ -223,27 +215,7 @@ namespace Draughts.Ai.Trainer
                 var nextContestants = new List<Contestant>();
                 foreach (var contestantI in orderedContestants.Take(generationCount / 2))
                 {
-                    IAiGamePlayer aiGamePlayer;
-                    if (contestantI.GamePlayer is NeuralNetAiGamePlayer netGamePlayer)
-                    {
-                        Net net;
-                        if (i % 2 == 0)
-                        {
-                            net = randomMutator.GenetateMutatedNeuralNet(netGamePlayer.Net);
-                        }
-                        else
-                        {
-                            // get random second parent
-                            int pick = random.Next(generationCount / 2);
-                            var secondNet = ((NeuralNetAiGamePlayer)orderedContestants[pick].GamePlayer).Net;
-                            net = splitChromosomeMutator.GenetateMutatedNeuralNet(netGamePlayer.Net, secondNet);
-                        }
-                        aiGamePlayer = new NeuralNetAiGamePlayer(net, netGamePlayer.Generation + 1);
-                    }
-                    else
-                    {
-                        aiGamePlayer = spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer);
-                    }
+                    IAiGamePlayer aiGamePlayer = spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer);
                     var spawnContestant = new Contestant(aiGamePlayer);
                     nextContestants.Add(spawnContestant);
                     nextContestants.Add(contestantI);
@@ -251,6 +223,85 @@ namespace Draughts.Ai.Trainer
                 }
                 contestants = nextContestants;
             }
+
+            Console.WriteLine($"Training complete.");
+            return;
+        }
+
+        public static void TrainNeuralNet(
+            int generationCount,
+            int iterationCount,
+            int? threads,
+            int? seed
+            )
+        {
+            Console.WriteLine("Training draughts AI.");
+            Console.WriteLine($"Generation count: {generationCount}");
+            Console.WriteLine($"Iteration count: {iterationCount}");
+            if (!threads.HasValue)
+            {
+                threads = Environment.ProcessorCount;
+            }
+            Console.WriteLine($"Thread count: {threads}");
+            Random random;
+            if (seed.HasValue)
+            {
+                Console.WriteLine($"Random seed: {seed}");
+                random = new Random(seed.Value);
+            }
+            else
+            {
+                random = new Random();
+            }
+
+            Console.CancelKeyPress += Console_CancelKeyPress;
+
+            var trainer = new GeneticAlgorithmTrainer<AiGamePlayerFitnessEvaluator>(new AiGamePlayerFitnessEvaluator(random));
+
+            trainer.IterationStarted += (sender, args) =>
+            {
+                Console.WriteLine($"Iteration {args.TrainingStatus.CurrentIteration} underway.");
+            };
+
+            trainer.IterationInProgress += (sender, args) =>
+            {
+                if (args.TrainingStatus.GenerationEvaluations % 10 == 0)
+                {
+                    PrintStatus(sender.FitnessEvaluator.GamesDrawn, args.TrainingStatus.GenerationTimeSpan.TotalSeconds, sender.FitnessEvaluator.GamesPlayed);
+                }
+            };
+
+            trainer.IterationComplete += (sender, args) =>
+            {
+                PrintStatus(sender.FitnessEvaluator.GamesDrawn, args.TrainingStatus.GenerationTimeSpan.TotalSeconds, sender.FitnessEvaluator.GamesPlayed);
+
+                Console.WriteLine();
+                Console.WriteLine("Matches complete.");
+
+                var orderedContestants = args.EvaluatedNets.Select(n => new Contestant(new NeuralNetAiGamePlayer(n.Net, 0))).ToList();
+                var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
+                System.IO.Directory.CreateDirectory("AiOutput");
+                System.IO.File.WriteAllText($"AiOutput/Iteration{args.TrainingStatus.CurrentIteration}.json", json);
+
+                Console.WriteLine("Contestants saved.");
+
+                var winningContestant = orderedContestants.First();
+
+                for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
+                {
+                    var contestant = orderedContestants[topContestantIndex];
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
+                }
+
+                int testGameCount = 50;
+                int randomWins = PlayGames(winningContestant.GamePlayer, new RandomGamePlayer(), testGameCount);
+
+                sender.FitnessEvaluator.ResetStats();
+                Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
+
+            };
+
+            trainer.TrainAi(NeuralNetAiGamePlayer.NetInputs, 1, 3, generationCount, iterationCount);
 
             Console.WriteLine($"Training complete.");
             return;
