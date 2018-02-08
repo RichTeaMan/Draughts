@@ -9,6 +9,7 @@ namespace Draughts.UI.Wpf.Setup
     public enum PlayerType
     {
         Human,
-        AI
+        AI,
+        Random
     }
 }

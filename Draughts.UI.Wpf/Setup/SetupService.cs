@@ -62,6 +62,9 @@ namespace Draughts.UI.Wpf.Setup
                 case PlayerType.AI:
                     gamePlayer = new AiLoader().LoadFromJsonfile(gameParameter.FilePath).First();
                     break;
+                case PlayerType.Random:
+                    gamePlayer = new RandomGamePlayer();
+                    break;
                 default:
                     throw new ApplicationException($"Unknown player type '{gameParameter.PlayerType}'");
             }

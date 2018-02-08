@@ -43,9 +43,12 @@ namespace Draughts.UI.Wpf.Setup
                 case "ai":
                     playerType = PlayerType.AI;
                     break;
+                case "random":
+                    playerType = PlayerType.Random;
+                    break;
                 default:
                     error = true;
-                result.ErrorOutput.Add(new ParserOutput($"Unknown player type '{firstArg}' specified. Try 'human' or'ai'."));
+                    result.ErrorOutput.Add(new ParserOutput($"Unknown player type '{firstArg}' specified. Try 'human' or'ai'."));
                     break;
             }
 
