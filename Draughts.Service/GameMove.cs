@@ -17,7 +17,7 @@ namespace Draughts.Service
 
         public GameState GameState { get; }
 
-        public GameMove (
+        public GameMove(
             GamePiece startGamePiece,
             GamePiece endGamePiece,
             IEnumerable<GamePiece> takenGamePieces,
@@ -29,7 +29,7 @@ namespace Draughts.Service
             GameState = gameState;
         }
 
-        public GameMoveMetrics CalculateGameMoveMetrics (PieceColour pieceColour)
+        public GameMoveMetrics CalculateGameMoveMetrics(PieceColour pieceColour)
         {
             int createdFriendlyKings = 0;
             if (StartGamePiece.PieceColour == pieceColour && StartGamePiece.PieceRank == PieceRank.Minion && EndGamePiece.PieceRank == PieceRank.King)
@@ -52,6 +52,49 @@ namespace Draughts.Service
                 m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
                 m.EndGamePiece.PieceRank == PieceRank.King);
 
+            int totalPieces = GameState.GamePieceList.Count;
+            int totalFriendlyPieces = GameState.GamePieceList.Count(p => p.PieceColour == pieceColour);
+            int totalOpponentPieces = GameState.GamePieceList.Count(p => p.PieceColour != pieceColour);
+
+            int totalMinionPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.Minion);
+            int totalFriendlyMinionPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.Minion && p.PieceColour == pieceColour);
+            int totalOpponentMinionPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.Minion && p.PieceColour != pieceColour);
+
+            int totalKingPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.King);
+            int totalFriendlyKingPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.King && p.PieceColour == pieceColour);
+            int totalOpponentKingPieces = GameState.GamePieceList.Count(p => p.PieceRank == PieceRank.King && p.PieceColour != pieceColour);
+
+            var whitePiecesInBottom = GameState.GamePieceList.Where(p => p.PieceColour == PieceColour.White && p.Ycoord < GameState.YLength / 2);
+            var whitePiecesInTop = GameState.GamePieceList.Where(p => p.PieceColour == PieceColour.White && p.Ycoord > GameState.YLength / 2);
+
+            var blackPiecesInBottom = GameState.GamePieceList.Where(p => p.PieceColour == PieceColour.Black && p.Ycoord < GameState.YLength / 2);
+            var blackPiecesInTop = GameState.GamePieceList.Where(p => p.PieceColour == PieceColour.Black && p.Ycoord > GameState.YLength / 2);
+
+            int friendlyMinionsHome = 0;
+            int friendlyMinionsAway = 0;
+            int opponentMinionsHome = 0;
+            int opponentMinionsAway = 0;
+            if (pieceColour == PieceColour.White)
+            {
+                friendlyMinionsHome = whitePiecesInBottom.Count();
+                friendlyMinionsAway = whitePiecesInTop.Count();
+
+                opponentMinionsHome = blackPiecesInBottom.Count();
+                opponentMinionsAway = blackPiecesInTop.Count();
+            }
+            else if (pieceColour == PieceColour.Black)
+            {
+                friendlyMinionsHome = blackPiecesInTop.Count();
+                friendlyMinionsAway = blackPiecesInBottom.Count();
+
+                opponentMinionsHome = whitePiecesInTop.Count();
+                opponentMinionsAway = whitePiecesInBottom.Count();
+            }
+            else
+            {
+                throw new InvalidOperationException("Unknown piece colour.");
+            }
+
             GameMoveMetrics gameMoveMetrics = new GameMoveMetrics(
                 createdFriendlyKings,
                 friendlyMovesAvailable,
@@ -59,7 +102,21 @@ namespace Draughts.Service
                 nextMoveFriendlyPiecesAtRisk,
                 nextMoveOpponentPiecesAtRisk,
                 nextMoveFriendlyKingsCreated,
-                nextMoveOpponentKingsCreated);
+                nextMoveOpponentKingsCreated,
+                totalPieces,
+                totalFriendlyPieces,
+                totalOpponentPieces,
+                totalMinionPieces,
+                totalFriendlyMinionPieces,
+                totalOpponentMinionPieces,
+                totalKingPieces,
+                totalFriendlyKingPieces,
+                totalOpponentKingPieces,
+                friendlyMinionsHome,
+                opponentMinionsHome,
+                friendlyMinionsAway,
+                opponentMinionsAway
+            );
             return gameMoveMetrics;
         }
 

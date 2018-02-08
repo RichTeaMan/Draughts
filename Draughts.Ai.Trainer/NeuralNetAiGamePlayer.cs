@@ -11,7 +11,7 @@ namespace Draughts.Ai.Trainer
 {
     public class NeuralNetAiGamePlayer : IAiGamePlayer
     {
-        public const int NetInputs = 7;
+        public const int NetInputs = 20;
 
         public Net Net { get; }
 
@@ -45,13 +45,26 @@ namespace Draughts.Ai.Trainer
                 var moveMetric = move.CalculateGameMoveMetrics(pieceColour);
 
                 var inputs = new double[] {
-                moveMetric.CreatedFriendlyKings,
-                moveMetric.FriendlyMovesAvailable,
-                moveMetric.OpponentMovesAvailable,
-                moveMetric.NextMoveFriendlyPiecesAtRisk,
-                moveMetric.NextMoveOpponentPiecesAtRisk,
-                moveMetric.NextMoveFriendlyKingsCreated,
-                moveMetric.NextMoveOpponentKingsCreated
+                    moveMetric.CreatedFriendlyKings,
+                    moveMetric.FriendlyMovesAvailable,
+                    moveMetric.OpponentMovesAvailable,
+                    moveMetric.NextMoveFriendlyPiecesAtRisk,
+                    moveMetric.NextMoveOpponentPiecesAtRisk,
+                    moveMetric.NextMoveFriendlyKingsCreated,
+                    moveMetric.NextMoveOpponentKingsCreated,
+                    moveMetric.TotalPieces / 100.0,
+                    moveMetric.TotalFriendlyPieces / 100.0,
+                    moveMetric.TotalOpponentPieces / 100.0,
+                    moveMetric.TotalMinionPieces / 100.0,
+                    moveMetric.TotalFriendlyMinionPieces / 100.0,
+                    moveMetric.TotalOpponentMinionPieces / 100.0,
+                    moveMetric.TotalKingPieces / 100.0,
+                    moveMetric.TotalFriendlyKingPieces / 100.0,
+                    moveMetric.TotalOpponentKingPieces / 100.0,
+                    moveMetric.FriendlyMinionsHome / 100.0,
+                    moveMetric.OpponentMinionsHome / 100.0,
+                    moveMetric.FriendlyMinionsAway / 100.0,
+                    moveMetric.OpponentMinionsAway / 100.0
                 };
 
                 double weightedResult = Net.Calculate(inputs).Single();
