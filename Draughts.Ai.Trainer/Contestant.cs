@@ -16,6 +16,9 @@ namespace Draughts.Ai.Trainer
         private int _wins;
         public int Wins => _wins;
 
+        private int _randomWins;
+        public int RandomWins => _randomWins;
+
         private int _draws;
         public int Draws => _draws;
 
@@ -37,6 +40,11 @@ namespace Draughts.Ai.Trainer
         public int IncrementWin()
         {
             return Interlocked.Increment(ref _wins);
+        }
+
+        public int IncrementRandomWin()
+        {
+            return Interlocked.Increment(ref _randomWins);
         }
 
         public int IncrementDraw()

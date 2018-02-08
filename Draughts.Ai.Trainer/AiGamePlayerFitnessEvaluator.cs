@@ -14,7 +14,7 @@ namespace Draughts.Ai.Trainer
         private int _gamesDrawn;
 
         public int WinWeight { get; set; } = 1000;
-        public int DrawWeight { get; set; } = -50;
+        public int DrawWeight { get; set; } = -500;
         public int GenerationWeight { get; set; } = 10;
         public int RandomWinWeight { get; set; } = 100;
         public int UniqueGameStateWeight { get; set; } = 10;
@@ -22,6 +22,8 @@ namespace Draughts.Ai.Trainer
 
         public int GamesPlayed { get { return _gamesPlayed; } }
         public int GamesDrawn { get { return _gamesDrawn; } }
+
+        public Dictionary<Net, Contestant> NetPlayerLookup { get; private set; } = new Dictionary<Net, Contestant>();
 
         private Random _random;
 
@@ -54,33 +56,33 @@ namespace Draughts.Ai.Trainer
 
             int randomScore = randomWins * RandomWinWeight;
 
-            int score = winScore * drawScore * generationWeight * randomScore;
+            int score = winScore + drawScore + generationWeight + randomScore;
             return score;
         }
 
         public int EvaluateNet(IReadOnlyList<Net> competingNets, Net evaluatingNet, TrainingStatus trainingStatus)
         {
-            int wins = 0;
-            int draws = 0;
-            var currentPlayer = new NeuralNetAiGamePlayer(evaluatingNet, 0);
+            var currentPlayer = NetPlayerLookup[evaluatingNet];
             foreach (var opponentNet in competingNets)
             {
-                var opponent = new NeuralNetAiGamePlayer(opponentNet, 0);
+                var opponent = NetPlayerLookup[opponentNet];
 
                 var gameMatch = new GameMatch(
                     GameStateFactory.StandardStartGameState(),
-                    currentPlayer,
-                    opponent
+                    currentPlayer.GamePlayer,
+                    opponent.GamePlayer
                     );
 
                 var matchResult = gameMatch.CompleteMatch();
 
                 Interlocked.Increment(ref _gamesPlayed);
-                //int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
+                currentPlayer.IncrementMatch();
+                int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
+                currentPlayer.AddUniqueGameStates(uniqueGameStateCount);
 
                 if (matchResult == GameMatchOutcome.WhiteWin)
                 {
-                    wins++;
+                    currentPlayer.IncrementWin();
                 }
                 else if (matchResult == GameMatchOutcome.BlackWin)
                 {
@@ -88,14 +90,14 @@ namespace Draughts.Ai.Trainer
                 }
                 else if (matchResult == GameMatchOutcome.Draw)
                 {
-                    draws++;
+                    currentPlayer.IncrementDraw();
                     Interlocked.Increment(ref _gamesDrawn);
                 }
             }
 
 
-            int winScore = wins * WinWeight;
-            int drawScore = draws * DrawWeight;
+            int winScore = currentPlayer.Wins * WinWeight;
+            int drawScore = currentPlayer.Draws * DrawWeight;
             //int generationWeight = contestant.GamePlayer.Generation * GenerationWeight;
 
             var randomGamePlayer = new RandomGamePlayer(_random);
@@ -105,19 +107,30 @@ namespace Draughts.Ai.Trainer
             {
                 var gameMatch = new GameMatch(
                     GameStateFactory.StandardStartGameState(),
-                    currentPlayer,
+                    currentPlayer.GamePlayer,
                     randomGamePlayer);
                 var outcome = gameMatch.CompleteMatch();
                 if (outcome == GameMatchOutcome.WhiteWin)
                 {
                     randomWins++;
+                    currentPlayer.IncrementRandomWin();
                 }
             }
 
             int randomScore = randomWins * RandomWinWeight;
 
-            int score = winScore * drawScore * randomScore;
+            int score = winScore + drawScore + randomScore;
             return score;
+        }
+
+        public void RebuildPlayers(IEnumerable<Net> nets)
+        {
+            NetPlayerLookup = new Dictionary<Net, Contestant>();
+            foreach (var net in nets)
+            {
+                var gamePlayer = new NeuralNetAiGamePlayer(net, 0);
+                NetPlayerLookup.Add(net, new Contestant(gamePlayer));
+            }
         }
 
         public void ResetStats()

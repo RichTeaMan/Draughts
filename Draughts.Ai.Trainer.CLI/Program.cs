@@ -276,29 +276,34 @@ namespace Draughts.Ai.Trainer
                 PrintStatus(sender.FitnessEvaluator.GamesDrawn, args.TrainingStatus.GenerationTimeSpan.TotalSeconds, sender.FitnessEvaluator.GamesPlayed);
 
                 Console.WriteLine();
-                Console.WriteLine("Matches complete.");
+                Console.WriteLine($"{sender.FitnessEvaluator.GamesPlayed} matches complete.");
+                Console.WriteLine($"{args.EvaluatedNets.Count} nets evaulated.");
 
-                var orderedContestants = args.EvaluatedNets.Select(n => new Contestant(new NeuralNetAiGamePlayer(n.Net, 0))).ToList();
-                var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
+                var orderedContestants = args.EvaluatedNets.OrderByDescending(n => n.FitnessScore).Select(n => new { Score = n.FitnessScore, Contestant = sender.FitnessEvaluator.NetPlayerLookup[n.Net] }).ToList();
+                var json = new ContestantSerialiser().SerialiseContestants(orderedContestants.Select(c => c.Contestant).ToList());
                 System.IO.Directory.CreateDirectory("AiOutput");
                 System.IO.File.WriteAllText($"AiOutput/Iteration{args.TrainingStatus.CurrentIteration}.json", json);
 
                 Console.WriteLine("Contestants saved.");
 
-                var winningContestant = orderedContestants.First();
-
                 for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
                 {
-                    var contestant = orderedContestants[topContestantIndex];
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
+                    var scoredContestant = orderedContestants[topContestantIndex];
+                    var contestant = scoredContestant.Contestant;
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
                 }
 
-                int testGameCount = 50;
-                int randomWins = PlayGames(winningContestant.GamePlayer, new RandomGamePlayer(), testGameCount);
-
                 sender.FitnessEvaluator.ResetStats();
-                Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
+            };
 
+            trainer.NetsSpawned += (sender, args) =>
+            {
+                sender.FitnessEvaluator.RebuildPlayers(args.Nets);
+
+                if (null != args.NeuralNetMutator)
+                {
+                    Console.WriteLine($"Nets generated with mutator: '{args.NeuralNetMutator.GetType().Name}'");
+                }
             };
 
             trainer.TrainAi(NeuralNetAiGamePlayer.NetInputs, 1, 3, generationCount, iterationCount);
