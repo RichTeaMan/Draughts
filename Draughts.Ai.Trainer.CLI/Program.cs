@@ -256,7 +256,7 @@ namespace Draughts.Ai.Trainer
 
             Console.CancelKeyPress += Console_CancelKeyPress;
 
-            var trainer = new GeneticAlgorithmTrainer<AiGamePlayerFitnessEvaluator>(new AiGamePlayerFitnessEvaluator(random));
+            var trainer = new GeneticAlgorithmTrainer<AiGamePlayerFitnessEvaluator>(random, new AiGamePlayerFitnessEvaluator(random));
 
             trainer.IterationStarted += (sender, args) =>
             {

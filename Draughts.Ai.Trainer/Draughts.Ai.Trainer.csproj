@@ -23,10 +23,10 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+    <PackageReference Include="RichTea.NeuralNetLib" Version="0.4.0-beta" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\NeuralNet\NeuralNetLib\NeuralNetLib.csproj" />
     <ProjectReference Include="..\Draughts.Service\Draughts.Service.csproj" />
     <ProjectReference Include="..\NameUtility\NameUtility.csproj" />
   </ItemGroup>
