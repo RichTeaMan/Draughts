@@ -9,14 +9,17 @@ namespace Draughts.Service
 {
     public class GameState
     {
+        public GameState PreviousGameState { get; }
+
         public IReadOnlyList<GamePiece> GamePieceList { get; }
 
         public int XLength { get; }
 
         public int YLength { get; }
 
-        public GameState(IEnumerable<GamePiece> gamePieceList, int xLength, int yLength)
+        public GameState(GameState previousGameState, IEnumerable<GamePiece> gamePieceList, int xLength, int yLength)
         {
+            PreviousGameState = previousGameState;
             GamePieceList = gamePieceList.ToList();
             XLength = xLength;
             YLength = yLength;
@@ -87,7 +90,7 @@ namespace Draughts.Service
                 }
             }
 
-            return resultGameMoves;
+            return resultGameMoves;//.Where(gm => )
         }
 
         private static List<GameMove> FindMovesForPiece(GameState gameState, GamePiece piece)

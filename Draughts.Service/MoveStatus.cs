@@ -10,5 +10,6 @@ namespace Draughts.Service
     {
         SuccessfulMove,
         NoLegalMoves,
+        Resign,
     }
 }

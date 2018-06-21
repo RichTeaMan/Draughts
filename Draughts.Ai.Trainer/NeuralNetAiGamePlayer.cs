@@ -33,14 +33,28 @@ namespace Draughts.Ai.Trainer
 
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
         {
+            // build list of previous game states
+            var previousGameStates = new HashSet<GameState>();
+            GameState lastGameState = gameState;
+            while ((lastGameState = lastGameState.PreviousGameState) != null)
+            {
+                previousGameStates.Add(lastGameState);
+            }
+
             var currentMoves = gameState.CalculateAvailableMoves(pieceColour).ToList();
             if (!currentMoves.Any())
             {
                 return new GamePlayerMoveResult(null, MoveStatus.NoLegalMoves);
             }
 
+            var distinctMoves = currentMoves.Where(gm => !previousGameStates.Contains(gm.GameState)).ToList();
+            if (!distinctMoves.Any())
+            {
+                return new GamePlayerMoveResult(null, MoveStatus.Resign);
+            }
+
             var moveWeights = new List<Tuple<double, GameMove>>();
-            foreach (var move in currentMoves)
+            foreach (var move in distinctMoves)
             {
                 var moveMetric = move.CalculateGameMoveMetrics(pieceColour);
 

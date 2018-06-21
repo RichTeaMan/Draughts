@@ -18,7 +18,7 @@ namespace Draughts.Service
         public static GameState SinglePieceGameState(GamePiece gamePiece)
         {
             var pieces = new[] { gamePiece };
-            var gameState = new GameState(pieces, StandardLength, StandardLength);
+            var gameState = new GameState(null, pieces, StandardLength, StandardLength);
             return gameState;
         }
 
@@ -29,7 +29,7 @@ namespace Draughts.Service
         /// <returns></returns>
         public static GameState SeveralPieceGameState(params GamePiece[] gamePieces)
         {
-            var gameState = new GameState(gamePieces, StandardLength, StandardLength);
+            var gameState = new GameState(null, gamePieces, StandardLength, StandardLength);
             return gameState;
         }
 
@@ -80,7 +80,7 @@ namespace Draughts.Service
                 new GamePiece(PieceColour.Black, PieceRank.Minion, 7, 5),
             });
 
-            var gameState = new GameState(pieces, StandardLength, StandardLength);
+            var gameState = new GameState(null, pieces, StandardLength, StandardLength);
             return gameState;
         }
     }

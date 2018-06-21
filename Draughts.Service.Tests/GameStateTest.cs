@@ -32,8 +32,8 @@ namespace Draughts.Service.Tests
             var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
             var pieceBClone = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
 
-            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
-            var gameStateClone = new GameState(new[] { pieceAClone, pieceBClone }, 8, 8);
+            var gameState = new GameState(null, new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(null, new[] { pieceAClone, pieceBClone }, 8, 8);
 
             Assert.AreEqual(gameState, gameStateClone);
         }
@@ -47,8 +47,8 @@ namespace Draughts.Service.Tests
             var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
             var pieceBBadClone = new GamePiece(PieceColour.Black, PieceRank.Minion, 0, 0);
 
-            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
-            var gameStateClone = new GameState(new[] { pieceAClone, pieceBBadClone }, 8, 8);
+            var gameState = new GameState(null, new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(null, new[] { pieceAClone, pieceBBadClone }, 8, 8);
 
             Assert.AreNotEqual(gameState, gameStateClone);
         }
@@ -62,8 +62,8 @@ namespace Draughts.Service.Tests
             var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
             var pieceBClone = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
 
-            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
-            var gameStateClone = new GameState(new[] { pieceAClone, pieceBClone }, 8, 8);
+            var gameState = new GameState(null, new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(null, new[] { pieceAClone, pieceBClone }, 8, 8);
 
             Assert.AreEqual(gameState.GetHashCode(), gameStateClone.GetHashCode());
         }
@@ -77,8 +77,8 @@ namespace Draughts.Service.Tests
             var pieceB = new GamePiece(PieceColour.White, PieceRank.Minion, 0, 0);
             var pieceBBadClone = new GamePiece(PieceColour.Black, PieceRank.Minion, 0, 0);
 
-            var gameState = new GameState(new[] { pieceA, pieceB }, 8, 8);
-            var gameStateClone = new GameState(new[] { pieceAClone, pieceBBadClone }, 8, 8);
+            var gameState = new GameState(null, new[] { pieceA, pieceB }, 8, 8);
+            var gameStateClone = new GameState(null, new[] { pieceAClone, pieceBBadClone }, 8, 8);
 
             Assert.AreNotEqual(gameState.GetHashCode(), gameStateClone.GetHashCode());
         }

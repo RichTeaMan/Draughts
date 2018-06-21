@@ -127,7 +127,7 @@ namespace Draughts.Service
             var newPieces = previousPieces.Where(p => p != StartGamePiece && !TakenGamePieces.Contains(p)).ToList();
             newPieces.Add(EndGamePiece);
 
-            var newGameState = new GameState(newPieces, GameState.XLength, GameState.YLength);
+            var newGameState = new GameState(GameState, newPieces, GameState.XLength, GameState.YLength);
             return newGameState;
         }
 

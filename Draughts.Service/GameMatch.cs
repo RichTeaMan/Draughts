@@ -71,7 +71,7 @@ namespace Draughts.Service
                         nextTurn = PieceColour.White;
                     }
                     var turnResult = currentGamePlayer.MakeMove(CurrentTurn, GameState);
-                    if (turnResult.MoveStatus == MoveStatus.NoLegalMoves)
+                    if (turnResult.MoveStatus == MoveStatus.NoLegalMoves || turnResult.MoveStatus == MoveStatus.Resign)
                     {
                         GameMatchOutcome = winOutcome;
                     }
