@@ -85,7 +85,7 @@ Task("Train")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var command = $"train -generation-count {generationCount} -iteration-count {iterationCount}";
+    var command = $"train -generation-count {generationCount} -iteration-count {iterationCount} -ai-type NeuralNet";
     if (null != threadCount) {
         command += $" -threads {threadCount}";
     }
