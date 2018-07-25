@@ -73,6 +73,11 @@ Task("Build")
             Verbosity = DotNetCoreVerbosity.Minimal,
             Configuration = configuration
         });
+
+        DotNetCoreBuild("./NameUtility.Display/NameUtility.Display.csproj", new DotNetCoreBuildSettings {
+            Verbosity = DotNetCoreVerbosity.Minimal,
+            Configuration = configuration
+        });
     }
 });
 
@@ -107,7 +112,7 @@ Task("Train")
     if (null != seed) {
         command += $" -seed {seed}";
     }
-    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp1.1/Draughts.Ai.Trainer.CLI.dll",
+    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp2.0/Draughts.Ai.Trainer.CLI.dll",
          command
     );
 });
@@ -116,7 +121,7 @@ Task("Show-Names")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    DotNetCoreExecute($"./NameUtility.Display/bin/{buildDir}//netcoreapp1.1/NameUtility.Display.dll");
+    DotNetCoreExecute($"./NameUtility.Display/bin/{buildDir}/netcoreapp2.0/NameUtility.Display.dll");
 });
 
 Task("Game")
