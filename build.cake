@@ -38,7 +38,14 @@ Task("Clean")
 Task("Restore-NuGet-Packages")
     .Does(() =>
 {
-    NuGetRestore("./Draughts.sln");
+    if(IsRunningOnWindows())
+    {
+        NuGetRestore("./Draughts.sln");
+    }
+    else
+    {
+        DotNetCoreRestore("./Draughts.sln");
+    }
 });
 
 Task("Build")
@@ -55,10 +62,16 @@ Task("Build")
 
         Information($"MS Build Path: {msBuildPathX64}");
         MSBuild("Draughts.sln", new MSBuildSettings {
-        Verbosity = Verbosity.Minimal,
-        Configuration = configuration,
-        PlatformTarget = PlatformTarget.MSIL,
-        ToolPath = msBuildPathX64
+            Verbosity = Verbosity.Minimal,
+            Configuration = configuration,
+            PlatformTarget = PlatformTarget.MSIL,
+            ToolPath = msBuildPathX64
+        });
+    }
+    else {
+        DotNetCoreBuild("./Draughts.Ai.Trainer.CLI/Draughts.Ai.Trainer.CLI.csproj", new DotNetCoreBuildSettings {
+            Verbosity = DotNetCoreVerbosity.Minimal,
+            Configuration = configuration
         });
     }
 });
@@ -71,14 +84,16 @@ Task("Test")
 
     DotNetCoreTest("./Draughts.Service.Tests/Draughts.Service.Tests.csproj");
 
-    DirectoryPath vsLatest  = VSWhereLatest();
-    FilePath vsTestPathX64 = (vsLatest==null)
+    if (IsRunningOnWindows()) {
+        DirectoryPath vsLatest  = VSWhereLatest();
+        FilePath vsTestPathX64 = (vsLatest==null)
                             ? null
                             : vsLatest.CombineWithFilePath("./Common7/IDE/Extensions/TestPlatform/vstest.console.exe");
 
-    VSTest($"./**/bin/{buildDir}/*.Tests.dll", new VSTestSettings {
-        ToolPath = vsTestPathX64
-    });
+        VSTest($"./**/bin/{buildDir}/*.Tests.dll", new VSTestSettings {
+            ToolPath = vsTestPathX64
+        });
+    }
 });
 
 Task("Train")
@@ -108,10 +123,16 @@ Task("Game")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    using(var process = StartAndReturnProcess($"./Draughts.UI.Wpf/bin/{buildDir}/Draughts.UI.Wpf.exe"))
+    if (IsRunningOnWindows()) {
+        using(var process = StartAndReturnProcess($"./Draughts.UI.Wpf/bin/{buildDir}/Draughts.UI.Wpf.exe"))
+        {
+            process.WaitForExit();
+            Information("Exit code: {0}", process.GetExitCode());
+        }
+    }
+    else
     {
-        process.WaitForExit();
-        Information("Exit code: {0}", process.GetExitCode());
+        throw new Exception("Cannot run game UI on non Windows OS.");
     }
 });
 
