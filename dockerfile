@@ -11,5 +11,5 @@ ADD https://github.com/RichTeaMan/Draughts/archive/$branch.tar.gz draughts.tar.g
 RUN tar -xzf draughts.tar.gz --strip-components=1 -C Draughts
 WORKDIR /Draughts
 RUN ./cake.sh -target=build
-ENTRYPOINT "./cake.sh -target=Train"
+ENTRYPOINT ./cake.sh -target=Train
 
