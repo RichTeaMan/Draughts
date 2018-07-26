@@ -19,6 +19,13 @@ namespace Draughts.Ai.Trainer
 
         static void Main(string[] args)
         {
+            Console.WriteLine("Arguments:");
+            foreach(var arg in args)
+            {
+                Console.WriteLine(arg);
+            }
+
+
             MethodInvoker command = null;
             try
             {
