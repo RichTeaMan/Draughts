@@ -14,3 +14,11 @@ This project uses [Cake](https://cakebuild.net)!
 
 ## CI
 Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/apt6gir9l7wxun49?svg=true)](https://ci.appveyor.com/project/RichTeaMan/draughts)
+
+## UI
+
+Draughts.UI.Wpf can be configured with command line flags:
+
+```
+-w ai D:\Projects\Draughts\AiOutput\ai.json -b human
+````
