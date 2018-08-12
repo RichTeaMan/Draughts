@@ -16,9 +16,9 @@ namespace Draughts.Ai.Trainer
         public int WinWeight { get; set; } = 1000;
         public int DrawWeight { get; set; } = -500;
         public int GenerationWeight { get; set; } = 10;
-        public int RandomWinWeight { get; set; } = 100;
+        public int RandomWinWeight { get; set; } = 1000;
         public int UniqueGameStateWeight { get; set; } = 10;
-        public int RandomGamePlayedWeight { get; set; } = 50;
+        public int RandomGamesToPlay { get; set; } = 500;
 
         public int GamesPlayed { get { return _gamesPlayed; } }
         public int GamesDrawn { get { return _gamesDrawn; } }
@@ -41,7 +41,7 @@ namespace Draughts.Ai.Trainer
             var randomGamePlayer = new RandomGamePlayer(_random);
             int randomWins = 0;
 
-            foreach (var i in Enumerable.Range(0, RandomGamePlayedWeight))
+            foreach (var i in Enumerable.Range(0, RandomGamesToPlay))
             {
                 var gameMatch = new GameMatch(
                     GameStateFactory.StandardStartGameState(),
@@ -103,7 +103,7 @@ namespace Draughts.Ai.Trainer
             var randomGamePlayer = new RandomGamePlayer(_random);
             int randomWins = 0;
 
-            foreach (var i in Enumerable.Range(0, RandomGamePlayedWeight))
+            foreach (var i in Enumerable.Range(0, RandomGamesToPlay))
             {
                 var gameMatch = new GameMatch(
                     GameStateFactory.StandardStartGameState(),
