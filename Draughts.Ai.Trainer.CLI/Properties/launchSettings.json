@@ -2,7 +2,7 @@
   "profiles": {
     "Draughts.Ai.Trainer.CLI": {
       "commandName": "Project",
-      "commandLineArgs": "train -gc 50 -ic 50000 -ai-type NeuralNet"
+      "commandLineArgs": "train -gc 10 -ic 10 -ai-type NeuralNet"
     }
   }
 }

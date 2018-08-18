@@ -10,6 +10,8 @@ var generationCount = Argument("generation-count", 20);
 var iterationCount = Argument("iteration-count", 100);
 var threadCount = Argument<int?>("threads", null);
 var seed = Argument<int?>("seed", null);
+var contestantFile = Argument<string>("contestant-file", null);
+var outputFile = Argument<string>("output-path", null);
 
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
@@ -112,6 +114,13 @@ Task("Train")
     if (null != seed) {
         command += $" -seed {seed}";
     }
+    if (null != contestantFile) {
+        command += $" -contestant-file {contestantFile}";
+    }
+    if (null != outputFile) {
+        command += $" -output-path {outputFile}";
+    }
+
     DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp2.0/Draughts.Ai.Trainer.CLI.dll",
          command
     );

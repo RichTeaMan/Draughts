@@ -113,8 +113,12 @@ namespace Draughts.Ai.Trainer
 
         public override bool Equals(object that)
         {
+
+            var _that = that as NeuralNetAiGamePlayer;
+            var thisNet = Net.CreateSerialisedNet();
+            var thatNet = _that?.Net.CreateSerialisedNet();
             return new EqualsBuilder<NeuralNetAiGamePlayer>(this, that)
-                .Append(p => p.Net.CreateSerialisedNet())
+                .Append(thisNet, thatNet)
                 .Append(p => p.Generation)
                 .AreEqual;
         }

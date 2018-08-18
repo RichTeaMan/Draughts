@@ -6,21 +6,21 @@ using RichTea.NeuralNetLib;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Draughts.Ai.Trainer
 {
-    class Program
+    internal class Program
     {
         private static bool shouldClose = false;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Arguments:");
-            foreach(var arg in args)
+            foreach (var arg in args)
             {
                 Console.WriteLine(arg);
             }
@@ -72,7 +72,11 @@ namespace Draughts.Ai.Trainer
             [ClArgs("threads")]
             int? threads = null,
             [ClArgs("seed")]
-            int? seed = null
+            int? seed = null,
+            [ClArgs("contestant-file", "cf")]
+            string contestantFile = null,
+            [ClArgs("output-path", "op")]
+            string outputPath = null
             )
         {
             switch (aiTypeStr.ToLower())
@@ -81,7 +85,7 @@ namespace Draughts.Ai.Trainer
                     TrainWeightedAi(generationCount, iterationCount, threads, seed);
                     break;
                 case "neuralnet":
-                    TrainNeuralNet(generationCount, iterationCount, threads, seed);
+                    TrainNeuralNet(generationCount, iterationCount, threads, seed, contestantFile, outputPath);
                     break;
                 default:
                     throw new Exception($"Unsupported AI type '{aiTypeStr}'.");
@@ -239,7 +243,9 @@ namespace Draughts.Ai.Trainer
             int generationCount,
             int iterationCount,
             int? threads,
-            int? seed
+            int? seed,
+            string contestantFile,
+            string outputPath
             )
         {
             Console.WriteLine("Training draughts AI.");
@@ -288,8 +294,14 @@ namespace Draughts.Ai.Trainer
 
                 var orderedContestants = args.EvaluatedNets.OrderByDescending(n => n.FitnessScore).Select(n => new { Score = n.FitnessScore, Contestant = sender.FitnessEvaluator.NetPlayerLookup[n.Net] }).ToList();
                 var json = new ContestantSerialiser().SerialiseContestants(orderedContestants.Select(c => c.Contestant).ToList());
-                System.IO.Directory.CreateDirectory("AiOutput");
-                System.IO.File.WriteAllText($"AiOutput/Iteration{args.TrainingStatus.CurrentIteration}.json", json);
+                Directory.CreateDirectory("AiOutput");
+                File.WriteAllText($"AiOutput/Iteration{args.TrainingStatus.CurrentIteration}.json", json);
+
+                if (!string.IsNullOrEmpty(outputPath))
+                {
+                    Console.WriteLine($"Writing to '{outputPath}'.");
+                    File.WriteAllText(outputPath, json);
+                }
 
                 Console.WriteLine("Contestants saved.");
 
@@ -297,8 +309,9 @@ namespace Draughts.Ai.Trainer
                 {
                     var scoredContestant = orderedContestants[topContestantIndex];
                     var contestant = scoredContestant.Contestant;
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.GenerateName()} Hash: {contestant.GamePlayer.GetHashCode()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
                 }
+                Console.WriteLine($"Distincts: {orderedContestants.Distinct().Count()}");
 
                 sender.FitnessEvaluator.ResetStats();
             };
@@ -313,8 +326,42 @@ namespace Draughts.Ai.Trainer
                 }
             };
 
-            trainer.TrainAi(NeuralNetAiGamePlayer.NetInputs, 1, 3, generationCount, iterationCount);
+            List<Net> contestants = new List<Net>();
+            if (contestantFile != null)
+            {
+                if (File.Exists(contestantFile))
+                {
+                    var fileContents = File.ReadAllText(contestantFile);
+                    var players = JsonConvert.DeserializeObject<object[]>(fileContents, new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+                    var ais = players
+                        .Where(p => p is SerialisableNeuralNetAiGamePlayer)
+                        .Cast<SerialisableNeuralNetAiGamePlayer>()
+                        .Select(player => player.CreateNeuralNetAiGamePlayer())
+                        .ToList()
+                        .Distinct()
+                        .ToList();
 
+                    var netList = ais.Select(ai => ai.Net).ToList();
+                    Console.WriteLine($"Loading {ais.Count()} unique contestants from {contestantFile}.");
+                    ais.ForEach(ai => Console.WriteLine($"Loading {ai.GenerateName()}. Player hash: {ai.GetHashCode()} Net hash: {ai.Net.CreateSerialisedNet().GetHashCode()}"));
+
+                    contestants.AddRange(netList);
+
+                }
+                else
+                {
+                    Console.WriteLine("Could not load contestant file. Generating contestants instead.");
+                }
+            }
+
+            if (contestants.Count < generationCount)
+            {
+                var contestantsToGenerate = generationCount - contestants.Count;
+                Console.WriteLine($"Generating {contestantsToGenerate} contestants.");
+                contestants.AddRange(new NetFactory().GenerateRandomNetList(NeuralNetAiGamePlayer.NetInputs, 1, 3, random, generationCount - contestants.Count));
+            }
+
+            trainer.TrainAi(contestants, generationCount, iterationCount);
             Console.WriteLine($"Training complete.");
             return;
         }

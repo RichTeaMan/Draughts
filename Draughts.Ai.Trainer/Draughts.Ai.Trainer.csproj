@@ -22,8 +22,8 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="RichTea.NeuralNetLib" Version="0.5.1-beta" />
     <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
-    <PackageReference Include="RichTea.NeuralNetLib" Version="0.5.0-beta" />
   </ItemGroup>
 
   <ItemGroup>
