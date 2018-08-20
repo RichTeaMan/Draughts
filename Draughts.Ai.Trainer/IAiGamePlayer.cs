@@ -9,6 +9,11 @@ namespace Draughts.Ai.Trainer
     {
         int Generation { get; }
 
+        /// <summary>
+        /// Gets an identifierable name for the player.
+        /// </summary>
+        string Name { get; }
+
         object CreateObjectForSerialisation();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Draughts.Service;
-using NameUtility;
 using Newtonsoft.Json;
 using RichTea.CommandLineParser;
 using RichTea.NeuralNetLib;
@@ -212,7 +211,7 @@ namespace Draughts.Ai.Trainer
                 for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
                 {
                     var contestant = orderedContestants[topContestantIndex];
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.GenerateName()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.Name}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
                 }
 
                 int testGameCount = 50;
@@ -309,7 +308,7 @@ namespace Draughts.Ai.Trainer
                 {
                     var scoredContestant = orderedContestants[topContestantIndex];
                     var contestant = scoredContestant.Contestant;
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.GenerateName()} Hash: {contestant.GamePlayer.GetHashCode()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.Name} Hash: {contestant.GamePlayer.GetHashCode()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
                 }
                 Console.WriteLine($"Distincts: {orderedContestants.Distinct().Count()}");
 
@@ -343,7 +342,7 @@ namespace Draughts.Ai.Trainer
 
                     var netList = ais.Select(ai => ai.Net).ToList();
                     Console.WriteLine($"Loading {ais.Count()} unique contestants from {contestantFile}.");
-                    ais.ForEach(ai => Console.WriteLine($"Loading {ai.GenerateName()}. Player hash: {ai.GetHashCode()} Net hash: {ai.Net.CreateSerialisedNet().GetHashCode()}"));
+                    ais.ForEach(ai => Console.WriteLine($"Loading {ai.Name}. Player hash: {ai.GetHashCode()} Net hash: {ai.Net.CreateSerialisedNet().GetHashCode()}"));
 
                     contestants.AddRange(netList);
 

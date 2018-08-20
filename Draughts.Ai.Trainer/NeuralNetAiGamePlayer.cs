@@ -20,7 +20,7 @@ namespace Draughts.Ai.Trainer
         [JsonIgnore]
         public string Name
         {
-            get { return this.GenerateName(); }
+            get { return Net.CreateSerialisedNet().GenerateName(); }
         }
 
         public NeuralNetAiGamePlayer(

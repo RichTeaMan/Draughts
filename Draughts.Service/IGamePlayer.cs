@@ -9,5 +9,6 @@ namespace Draughts.Service
     public interface IGamePlayer
     {
         GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState);
+
     }
 }
