@@ -1,5 +1,4 @@
 ﻿using Draughts.Ai.Trainer;
-using NameUtility;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,4 @@
 ﻿using Draughts.Ai.Trainer;
-using NameUtility;
 using RichTea.NeuralNetLib;
 using System;
 

@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Draughts.Service
 {
@@ -12,6 +9,8 @@ namespace Draughts.Service
     public class RandomGamePlayer : IGamePlayer
     {
         private Random _random;
+
+        public string Name => "Random player";
 
         public RandomGamePlayer() : this(new Random()) { }
 

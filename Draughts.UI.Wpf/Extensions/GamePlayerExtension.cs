@@ -1,6 +1,5 @@
 ﻿using Draughts.Ai.Trainer;
 using Draughts.Service;
-using NameUtility;
 
 namespace Draughts.UI.Wpf.Extensions
 {
@@ -15,11 +14,11 @@ namespace Draughts.UI.Wpf.Extensions
             }
             else if (gamePlayer is WeightedAiGamePlayer)
             {
-                summary = $"Weighted AI player: {gamePlayer.GenerateName()}";
+                summary = $"Weighted AI player: {gamePlayer.Name}";
             }
             else if (gamePlayer is NeuralNetAiGamePlayer)
             {
-                summary = $"Neural Net AI player: {gamePlayer.GenerateName()}";
+                summary = $"Neural Net AI player: {gamePlayer.Name}";
             }
             else if (gamePlayer is RandomGamePlayer)
             {

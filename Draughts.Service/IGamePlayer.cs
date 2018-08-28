@@ -10,5 +10,10 @@ namespace Draughts.Service
     {
         GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState);
 
+        /// <summary>
+        /// Gets a name for the game player.
+        /// </summary>
+        string Name { get; }
+
     }
 }

@@ -1,8 +1,8 @@
 ﻿using Draughts.Service;
-using NameUtility;
 using Newtonsoft.Json;
 using RichTea.Common;
 using RichTea.NeuralNetLib;
+using RichTea.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,7 +20,7 @@ namespace Draughts.Ai.Trainer
         [JsonIgnore]
         public string Name
         {
-            get { return Net.CreateSerialisedNet().GenerateName(); }
+            get { return NameUtility.GenerateName(Net.CreateSerialisedNet()); }
         }
 
         public NeuralNetAiGamePlayer(

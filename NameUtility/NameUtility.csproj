@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>RichTea.Utilities.NameUtility</AssemblyName>
+    <RootNamespace>RichTea.Utilities</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

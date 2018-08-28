@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NameUtility.Display
+namespace RichTea.Utilities
 {
-    class Program
+    class NameUtilityProgram
     {
         static void Main(string[] args)
         {
@@ -17,7 +17,7 @@ namespace NameUtility.Display
             {
                 objectList.Add(new object());
             }
-            var names = objectList.Select(o => o.GenerateName()).Distinct().ToList();
+            var names = objectList.Select(o => NameUtility.GenerateName(o)).Distinct().ToList();
             var hashes = objectList.Select(o => o.GetHashCode()).Distinct().ToList();
             Console.WriteLine($"{names.Count} unique names generated, {hashes.Count} hashes generated");
             Console.WriteLine($"Total names available: {NameUtility.GetMaxNameCount()}");

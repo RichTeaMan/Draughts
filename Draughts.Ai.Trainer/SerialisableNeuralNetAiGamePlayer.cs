@@ -1,11 +1,5 @@
-﻿using Draughts.Service;
-using NameUtility;
-using Newtonsoft.Json;
-using RichTea.Common;
+﻿using RichTea.Common;
 using RichTea.NeuralNetLib.Serialisation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Draughts.Ai.Trainer
 {
