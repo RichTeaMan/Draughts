@@ -13,7 +13,7 @@ namespace Draughts.Service
     {
         private List<GameState> _gameStateList = new List<GameState>();
 
-        public const int TurnLimit = 100;
+        public const int TurnLimit = 300;
 
         public GameState GameState { get; private set; }
 
