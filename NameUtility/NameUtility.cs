@@ -23,7 +23,7 @@ namespace RichTea.Utilities
             if (null == Names)
             {
                 var assembly = typeof(NameUtility).GetTypeInfo().Assembly;
-                var resourceName = "RichTea.Utilities.NameUtility.Resources.Names_En.txt";
+                var resourceName = "RichTea.Utilities.Resources.Names_En.txt";
 
                 using (Stream stream = assembly.GetManifestResourceStream(resourceName))
                 using (StreamReader reader = new StreamReader(stream))
