@@ -3,7 +3,6 @@ using RichTea.NeuralNetLib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 
 namespace Draughts.Ai.Trainer
@@ -12,6 +11,9 @@ namespace Draughts.Ai.Trainer
     {
         private int _gamesPlayed;
         private int _gamesDrawn;
+
+        private int _whiteWins = 0;
+        private int _blackWins = 0;
 
         public int WinWeight { get; set; } = 1000;
         public int DrawWeight { get; set; } = -500;
@@ -23,41 +25,16 @@ namespace Draughts.Ai.Trainer
         public int GamesPlayed { get { return _gamesPlayed; } }
         public int GamesDrawn { get { return _gamesDrawn; } }
 
+        public int WhiteWins { get { return _whiteWins; } }
+        public int BlackWins { get { return _blackWins; } }
+
         public Dictionary<Net, Contestant> NetPlayerLookup { get; private set; } = new Dictionary<Net, Contestant>();
 
-        private Random _random;
+        private readonly Random _random;
 
         public AiGamePlayerFitnessEvaluator(Random random)
         {
             _random = random;
-        }
-
-        public int EvaluateGamePlayer(Contestant contestant)
-        {
-            int winScore = contestant.Wins * WinWeight;
-            int drawScore = contestant.Draws * DrawWeight;
-            int generationWeight = contestant.GamePlayer.Generation * GenerationWeight;
-
-            var randomGamePlayer = new RandomGamePlayer(_random);
-            int randomWins = 0;
-
-            foreach (var i in Enumerable.Range(0, RandomGamesToPlay))
-            {
-                var gameMatch = new GameMatch(
-                    GameStateFactory.StandardStartGameState(),
-                    contestant.GamePlayer,
-                    randomGamePlayer);
-                var outcome = gameMatch.CompleteMatch();
-                if (outcome == GameMatchOutcome.WhiteWin)
-                {
-                    randomWins++;
-                }
-            }
-
-            int randomScore = randomWins * RandomWinWeight;
-
-            int score = winScore + drawScore + generationWeight + randomScore;
-            return score;
         }
 
         public int EvaluateNet(IReadOnlyList<Net> competingNets, Net evaluatingNet, TrainingStatus trainingStatus)
@@ -77,20 +54,23 @@ namespace Draughts.Ai.Trainer
 
                 Interlocked.Increment(ref _gamesPlayed);
                 currentPlayer.IncrementMatch();
+                opponent.IncrementMatch();
                 int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
                 currentPlayer.AddUniqueGameStates(uniqueGameStateCount);
 
                 if (matchResult == GameMatchOutcome.WhiteWin)
                 {
                     currentPlayer.IncrementWin();
+                    Interlocked.Increment(ref _whiteWins);
                 }
                 else if (matchResult == GameMatchOutcome.BlackWin)
                 {
-
+                    Interlocked.Increment(ref _blackWins);
                 }
                 else if (matchResult == GameMatchOutcome.Draw)
                 {
                     currentPlayer.IncrementDraw();
+                    opponent.IncrementDraw();
                     Interlocked.Increment(ref _gamesDrawn);
                 }
             }
@@ -98,22 +78,34 @@ namespace Draughts.Ai.Trainer
 
             int winScore = currentPlayer.Wins * WinWeight;
             int drawScore = currentPlayer.Draws * DrawWeight;
-            //int generationWeight = contestant.GamePlayer.Generation * GenerationWeight;
 
             var randomGamePlayer = new RandomGamePlayer(_random);
             int randomWins = 0;
 
             foreach (var i in Enumerable.Range(0, RandomGamesToPlay))
             {
-                var gameMatch = new GameMatch(
-                    GameStateFactory.StandardStartGameState(),
-                    currentPlayer.GamePlayer,
-                    randomGamePlayer);
+                GameMatch gameMatch;
+                GameMatchOutcome winOutcome;
+                if (i % 2 == 0)
+                {
+                    gameMatch = new GameMatch(
+                                        GameStateFactory.StandardStartGameState(),
+                                        currentPlayer.GamePlayer,
+                                        randomGamePlayer);
+                    winOutcome = GameMatchOutcome.WhiteWin;
+                }
+                else
+                {
+                    gameMatch = new GameMatch(
+                                        GameStateFactory.StandardStartGameState(),
+                                        randomGamePlayer,
+                                        currentPlayer.GamePlayer);
+                    winOutcome = GameMatchOutcome.BlackWin;
+                }
                 var outcome = gameMatch.CompleteMatch();
-                if (outcome == GameMatchOutcome.WhiteWin)
+                if (outcome == winOutcome)
                 {
                     randomWins++;
-                    currentPlayer.IncrementRandomWin();
                 }
             }
 
@@ -137,6 +129,8 @@ namespace Draughts.Ai.Trainer
         {
             _gamesDrawn = 0;
             _gamesPlayed = 0;
+            _whiteWins = 0;
+            _blackWins = 0;
         }
     }
 }

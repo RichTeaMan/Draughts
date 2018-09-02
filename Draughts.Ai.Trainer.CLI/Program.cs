@@ -67,7 +67,7 @@ namespace Draughts.Ai.Trainer
             [ClArgs("iteration-count", "ic")]
             int iterationCount = 100,
             [ClArgs("ai-type")]
-            string aiTypeStr = "weighted",
+            string aiTypeStr = "neuralnet",
             [ClArgs("threads")]
             int? threads = null,
             [ClArgs("seed")]
@@ -80,162 +80,12 @@ namespace Draughts.Ai.Trainer
         {
             switch (aiTypeStr.ToLower())
             {
-                case "weighted":
-                    TrainWeightedAi(generationCount, iterationCount, threads, seed);
-                    break;
                 case "neuralnet":
                     TrainNeuralNet(generationCount, iterationCount, threads, seed, contestantFile, outputPath);
                     break;
                 default:
                     throw new Exception($"Unsupported AI type '{aiTypeStr}'.");
             }
-        }
-
-        public static void TrainWeightedAi(
-            int generationCount,
-            int iterationCount,
-            int? threads,
-            int? seed
-            )
-        {
-            Console.WriteLine("Training draughts AI.");
-            Console.WriteLine($"Generation count: {generationCount}");
-            Console.WriteLine($"Iteration count: {iterationCount}");
-            if (!threads.HasValue)
-            {
-                threads = Environment.ProcessorCount;
-            }
-            Console.WriteLine($"Thread count: {threads}");
-            Random random;
-            if (seed.HasValue)
-            {
-                Console.WriteLine($"Random seed: {seed}");
-                random = new Random(seed.Value);
-            }
-            else
-            {
-                random = new Random();
-            }
-
-
-            Console.CancelKeyPress += Console_CancelKeyPress;
-
-            IAiGamePlayerSpawner spawner = null;
-            var contestants = new List<Contestant>();
-
-            AiGamePlayerFitnessEvaluator aiGamePlayerFitnessEvaluator = new AiGamePlayerFitnessEvaluator(random);
-
-            contestants.AddRange(Enumerable.Range(0, generationCount)
-                .Select(i => new Contestant(
-                    spawner.SpawnAiGamePlayer())
-                ));
-
-            foreach (var i in Enumerable.Range(0, iterationCount).Where(g => !shouldClose && !shouldClose))
-            {
-                int gamesPlayed = 0;
-                int gamesDrawn = 0;
-
-                Console.WriteLine($"Iteration {i} underway.");
-
-                Stopwatch stopwatch = new Stopwatch();
-                stopwatch.Start();
-
-                ParallelOptions parallelOptions = new ParallelOptions
-                {
-                    MaxDegreeOfParallelism = threads.Value
-                };
-                Parallel.ForEach(contestants, parallelOptions, (contestant, loopState) =>
-                 {
-                     foreach (var opponent in contestants.Where(c => c != contestant && !shouldClose).ToList())
-                     {
-                         if (shouldClose)
-                         {
-                             loopState.Stop();
-                             break;
-                         }
-                         var gameMatch = new GameMatch(
-                             GameStateFactory.StandardStartGameState(),
-                             contestant.GamePlayer,
-                             opponent.GamePlayer);
-
-                         var matchResult = gameMatch.CompleteMatch();
-
-                         var _count = Interlocked.Increment(ref gamesPlayed);
-                         if (_count % 100 == 0)
-                         {
-                             PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, _count);
-                         }
-
-                         int uniqueGameStateCount = gameMatch.GameStateList.Distinct().Count();
-
-                         contestant.IncrementMatch();
-                         contestant.AddUniqueGameStates(uniqueGameStateCount);
-                         opponent.IncrementMatch();
-                         opponent.AddUniqueGameStates(uniqueGameStateCount);
-                         if (matchResult == GameMatchOutcome.WhiteWin)
-                         {
-                             contestant.IncrementWin();
-                         }
-                         else if (matchResult == GameMatchOutcome.BlackWin)
-                         {
-                             opponent.IncrementWin();
-                         }
-                         else if (matchResult == GameMatchOutcome.Draw)
-                         {
-                             contestant.IncrementDraw();
-                             opponent.IncrementDraw();
-                             Interlocked.Increment(ref gamesDrawn);
-                         }
-                     }
-                 });
-                stopwatch.Stop();
-                PrintStatus(gamesDrawn, stopwatch.Elapsed.TotalSeconds, gamesPlayed);
-
-                if (shouldClose)
-                {
-                    return;
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("Matches complete.");
-
-                var orderedContestants = contestants.OrderByDescending(c => aiGamePlayerFitnessEvaluator.EvaluateGamePlayer(c)).ToList();
-                var json = new ContestantSerialiser().SerialiseContestants(orderedContestants);
-                System.IO.Directory.CreateDirectory("AiOutput");
-                System.IO.File.WriteAllText($"AiOutput/Iteration{i}.json", json);
-
-                Console.WriteLine("Contestants saved.");
-
-                var winningContestant = orderedContestants.First();
-
-                for (int topContestantIndex = 0; topContestantIndex < orderedContestants.Count(); topContestantIndex++)
-                {
-                    var contestant = orderedContestants[topContestantIndex];
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Name: {contestant.GamePlayer.Name}. Wins: {contestant.Wins}. Losses: {contestant.Matches - contestant.Wins}. Draws: {contestant.Draws}. States: {contestant.UniqueGameStates}.");
-                }
-
-                int testGameCount = 50;
-                int randomWins = PlayGames(winningContestant.GamePlayer, new RandomGamePlayer(), testGameCount);
-                if (shouldClose)
-                {
-                    return;
-                }
-                Console.WriteLine($"Best contestant beat random AI {randomWins} out {testGameCount} games.");
-
-                var nextContestants = new List<Contestant>();
-                foreach (var contestantI in orderedContestants.Take(generationCount / 2))
-                {
-                    IAiGamePlayer aiGamePlayer = spawner.SpawnDerivedAiGamePlayer(contestantI.GamePlayer);
-                    var spawnContestant = new Contestant(aiGamePlayer);
-                    nextContestants.Add(spawnContestant);
-                    nextContestants.Add(contestantI);
-                    contestantI.ResetStats();
-                }
-                contestants = nextContestants;
-            }
-
-            Console.WriteLine($"Training complete.");
-            return;
         }
 
         public static void TrainNeuralNet(
@@ -308,9 +158,9 @@ namespace Draughts.Ai.Trainer
                 {
                     var scoredContestant = orderedContestants[topContestantIndex];
                     var contestant = scoredContestant.Contestant;
-                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.Name} Hash: {contestant.GamePlayer.GetHashCode()}. Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
+                    Console.WriteLine($"Rank: {topContestantIndex + 1}. Score: {scoredContestant.Score}. Name: {contestant.GamePlayer.Name} Wins: {contestant.Wins}. Losses: {contestant.Matches - (contestant.Wins + contestant.Draws)}. Draws: {contestant.Draws}. Random wins: {contestant.RandomWins}. States: {contestant.UniqueGameStates}.");
                 }
-                Console.WriteLine($"Distincts: {orderedContestants.Distinct().Count()}");
+                Console.WriteLine($"Distincts: {orderedContestants.Distinct().Count()} White wins: {sender.FitnessEvaluator.WhiteWins} Black wins: {sender.FitnessEvaluator.BlackWins}");
 
                 sender.FitnessEvaluator.ResetStats();
             };
@@ -342,7 +192,7 @@ namespace Draughts.Ai.Trainer
 
                     var netList = ais.Select(ai => ai.Net).ToList();
                     Console.WriteLine($"Loading {ais.Count()} unique contestants from {contestantFile}.");
-                    ais.ForEach(ai => Console.WriteLine($"Loading {ai.Name}. Player hash: {ai.GetHashCode()} Net hash: {ai.Net.CreateSerialisedNet().GetHashCode()}"));
+                    ais.ForEach(ai => Console.WriteLine($"Loading {ai.Name}."));
 
                     contestants.AddRange(netList);
 
