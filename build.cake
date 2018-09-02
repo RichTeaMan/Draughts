@@ -121,7 +121,7 @@ Task("Train")
         command += $" -output-path {outputFile}";
     }
 
-    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp2.0/Draughts.Ai.Trainer.CLI.dll",
+    DotNetCoreExecute($"./Draughts.Ai.Trainer.CLI/bin/{buildDir}/netcoreapp2.1/Draughts.Ai.Trainer.CLI.dll",
          command
     );
 });
