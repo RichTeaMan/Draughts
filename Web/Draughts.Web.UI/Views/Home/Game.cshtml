@@ -2,10 +2,12 @@
     ViewData["Title"] = "Home Page";
 }
 
-Creating game...
+<div class="row">
+    <div id="game-grid"></div>
+</div>
 
 <script>
     $(document).ready(function () {
-        createGame();
+        setupGame("@ViewBag.PlayerId");
     });
 </script>

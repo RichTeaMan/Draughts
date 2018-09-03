@@ -1,8 +1,90 @@
 ﻿var currentGameBoard;
 var selectedPiece = false;
+var playerId = false;
 
-function updateGame() {
-    $.get("/api/game").done(function (data) {
+function createGame() {
+    $.get("/api/game/create").done(function (data) {
+        console.log(data);
+        window.location.href = `/Home/game?playerId=${data}`;
+    });
+}
+
+function setupGame(_playerId) {
+    playerId = _playerId;
+    reloadGame();
+
+    $(document).on('click', ".piece-square", function (event) {
+        var gameSquare = $(event.currentTarget);
+        var x = gameSquare.data("x");
+        var y = gameSquare.data("y");
+
+        console.log(`${x}, ${y} clicked.`);
+
+        var newSelectedPiece = false;
+        currentGameBoard.gamePieces.forEach(function (piece) {
+            if (x == piece.xcoord && y == piece.ycoord) {
+                newSelectedPiece = piece;
+            }
+        });
+
+        if (newSelectedPiece) {
+            // unselect other pieces
+            $("td").removeClass("selected");
+
+            if (selectedPiece == newSelectedPiece) {
+                selectedPiece = false;
+            }
+            else {
+                selectedPiece = newSelectedPiece
+                gameSquare.addClass("selected");
+            }
+        }
+        else if (selectedPiece && !newSelectedPiece) {
+            // an empty square has been selected, attempy to send move
+
+            sendMove(selectedPiece, x, y);
+        }
+    });
+
+    setInterval(reloadGame, 2000);
+}
+
+function sendMove(startPiece, endX, endY) {
+    var moveRequest = {
+        playerId: playerId,
+
+        startX: startPiece.xcoord,
+        startY: startPiece.ycoord,
+
+        endX: endX,
+        endY: endY
+    };
+
+    console.log("Sending move...");
+    console.log(moveRequest);
+
+
+    $.ajax({
+        type: "POST",
+        contentType: "application/json",
+        url: '/api/game',
+        data: JSON.stringify(moveRequest),
+        dataType: "json"
+    }).done(function (data) {
+
+        console.log(data);
+        renderBoard("game-grid", data);
+        currentGameBoard = data;
+
+        $("td").removeClass("selected");
+
+    }).fail(function (error) {
+        console.log(error);
+    });
+}
+
+function reloadGame() {
+    $.get(`/api/game?playerId=${playerId}`).done(function (data) {
         console.log(data);
         renderBoard("game-grid", data);
         currentGameBoard = data;
@@ -33,35 +115,3 @@ function renderBoard(destinationElementId, gameBoard) {
         $(id).addClass(piece.pieceColour);
     }
 }
-
-$(document).ready(function () {
-    updateGame();
-
-    $(document).on('click', ".piece-square", function (event) {
-        var gameSquare = $(event.currentTarget);
-        var x = gameSquare.data("x");
-        var y = gameSquare.data("y");
-
-        console.log(`${x}, ${y} clicked.`);
-
-        var newSelectedPiece = false;
-        currentGameBoard.gamePieces.forEach(function (piece) {
-            if (x == piece.xcoord && y == piece.ycoord) {
-                newSelectedPiece = piece;
-            }
-        });
-
-        if (newSelectedPiece) {
-            // unselect other pieces
-            $("td").removeClass("selected");
-
-            if (selectedPiece == newSelectedPiece) {
-                selectedPiece = false;
-            }
-            else {
-                selectedPiece = newSelectedPiece
-                gameSquare.addClass("selected");
-            }
-        }
-    });
-});

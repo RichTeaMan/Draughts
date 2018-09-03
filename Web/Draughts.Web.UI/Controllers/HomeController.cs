@@ -15,6 +15,12 @@ namespace Draughts.Web.UI.Controllers
             return View();
         }
 
+        public IActionResult Game([FromQuery]string playerId)
+        {
+            ViewBag.PlayerId = playerId;
+            return View();
+        }
+
         public IActionResult About()
         {
             ViewData["Message"] = "Your application description page.";
