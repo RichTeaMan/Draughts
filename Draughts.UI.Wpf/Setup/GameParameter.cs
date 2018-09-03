@@ -38,7 +38,7 @@ namespace Draughts.UI.Wpf.Setup
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<GameParameter>(this)
+            return new HashCodeBuilder()
                 .Append(PieceColour)
                 .Append(PlayerType)
                 .Append(FilePath)

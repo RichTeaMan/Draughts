@@ -115,7 +115,7 @@ namespace Draughts.Ai.Trainer
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<WeightedAiGamePlayer>(this)
+            return new HashCodeBuilder()
                 .Append(NextAvailableMoveCountWeight)
                 .Append(NextMovePiecesAtRiskWeight)
                 .Append(NextMovePiecesToTakeWeight)

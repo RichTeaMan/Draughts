@@ -125,7 +125,7 @@ namespace Draughts.Ai.Trainer
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<NeuralNetAiGamePlayer>(this)
+            return new HashCodeBuilder()
                 .Append(Net.CreateSerialisedNet())
                 .Append(Generation)
                 .HashCode;
