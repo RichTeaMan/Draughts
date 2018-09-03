@@ -5,12 +5,12 @@
         /// <summary>
         /// Gets or sets the colour of the piece.
         /// </summary>
-        public PieceColour PieceColour { get; set; }
+        public string PieceColour { get; set; }
 
         /// <summary>
         /// Gets or sets the rank of the piece.
         /// </summary>
-        public PieceRank PieceRank { get; set; }
+        public string PieceRank { get; set; }
 
         /// <summary>
         /// Gets or sets the X position of this piece, where 0 is the most left column.

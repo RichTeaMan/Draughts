@@ -17,28 +17,10 @@ namespace Draughts.Web.UI.Mapper
                 var controllerPiece = new Domain.GamePiece()
                 {
                     Xcoord = piece.Xcoord,
-                    Ycoord = piece.Ycoord
+                    Ycoord = piece.Ycoord,
+                    PieceColour = piece.PieceColour.ToString(),
+                    PieceRank = piece.PieceRank.ToString()
                 };
-
-                switch (piece.PieceColour)
-                {
-                    case Service.PieceColour.Black:
-                        controllerPiece.PieceColour = Domain.PieceColour.Black;
-                        break;
-                    case Service.PieceColour.White:
-                        controllerPiece.PieceColour = Domain.PieceColour.White;
-                        break;
-                }
-
-                switch (piece.PieceRank)
-                {
-                    case Service.PieceRank.Minion:
-                        controllerPiece.PieceRank = Domain.PieceRank.Man;
-                        break;
-                    case Service.PieceRank.King:
-                        controllerPiece.PieceRank = Domain.PieceRank.King;
-                        break;
-                }
 
                 pieces.Add(controllerPiece);
             }

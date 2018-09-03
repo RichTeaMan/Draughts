@@ -1,0 +1,84 @@
+﻿h1 a, h1 a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+table.game-grid {
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: separate;
+}
+
+table.game-grid th {
+    text-align: center;
+}
+
+td.piece-square {
+    border: 2px solid black;
+    border-radius: 40px;
+    width: 40px;
+    height: 40px;
+}
+
+@media (min-width: 1064px) {
+    td.piece-square {
+        border: 2px solid black;
+        border-radius: 80px;
+        width: 80px;
+        height: 80px;
+    }
+}
+
+td.Black {
+    background: black;
+}
+
+td.White {
+    background: beige;
+}
+
+#vs {
+    font-size: 1.4em;
+}
+
+#vs .RED {
+    color: red;
+}
+
+#vs .YELLOW {
+    color: darkgoldenrod;
+}
+
+#colour {
+    font-size: 1.4em;
+}
+
+#colour.RED {
+    color: red;
+}
+
+#colour.YELLOW {
+    color: darkgoldenrod;
+}
+
+.hidden {
+    display: none;
+}
+
+#pagefooter {
+    position: absolute;
+    bottom: 1em;
+    width: 50%;
+}
+
+.source_message {
+    width: 100%;
+    text-align: center;
+    font-size: 0.8em;
+    height: 1em;
+    font-size: 0.8em;
+}
+
+.source_message img {
+    height: 100%;
+}
