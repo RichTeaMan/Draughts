@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Draughts.Service\Draughts.Service.csproj" />
+    <ProjectReference Include="..\Draughts.Web.UI.Domain\Draughts.Web.UI.Domain.csproj" />
+  </ItemGroup>
+
+</Project>
