@@ -12,6 +12,7 @@ This project uses [Cake](https://cakebuild.net)!
 * cake -target=Train
 * cake -target=Show-Names
 * cake -target=Game
+* cake -target=Web-UI
 
 ## CI
 Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/apt6gir9l7wxun49?svg=true)](https://ci.appveyor.com/project/RichTeaMan/draughts)
