@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Draughts.Service;
 using Draughts.Web.UI.Domain;
 using Draughts.Web.UI.Mapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Draughts.Web.UI.Controllers
@@ -45,9 +43,8 @@ namespace Draughts.Web.UI.Controllers
         public GameBoard Game([FromQuery]string playerId)
         {
             var player = humanPlayers[playerId];
-            var gameState = player.GameMatch.GameState;
 
-            var gameBoard = new GameBoardMapper().Map(gameState);
+            var gameBoard = new GameBoardMapper().Map(player.GameMatch);
 
             return gameBoard;
         }
@@ -78,12 +75,25 @@ namespace Draughts.Web.UI.Controllers
                     match.CompleteTurn();
 
                     gameState = match.GameState;
-
-                    match.CompleteTurn();
                 }
             }
 
-            var gameBoard = new GameBoardMapper().Map(gameState);
+            var gameBoard = new GameBoardMapper().Map(match);
+
+            // find if opponent is ai and decide whether to play turn.
+            IGamePlayer opponent;
+            if (player.PieceColour == Service.PieceColour.White)
+            {
+                opponent = match.BlackGamePlayer;
+            } else
+            {
+                opponent = match.WhiteGamePlayer;
+            }
+
+            if (!(opponent is HumanPlayer))
+            {
+                match.CompleteTurn();
+            }
 
             return gameBoard;
         }

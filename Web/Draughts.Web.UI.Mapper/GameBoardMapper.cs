@@ -8,10 +8,10 @@ namespace Draughts.Web.UI.Mapper
     public class GameBoardMapper
     {
 
-        public GameBoard Map(GameState gameState)
+        public GameBoard Map(GameMatch gameMatch)
         {
             List<Domain.GamePiece> pieces = new List<Domain.GamePiece>();
-            foreach(var piece in gameState.GamePieceList)
+            foreach(var piece in gameMatch.GameState.GamePieceList)
             {
 
                 var controllerPiece = new Domain.GamePiece()
@@ -27,9 +27,10 @@ namespace Draughts.Web.UI.Mapper
 
             var gameBoard = new GameBoard()
             {
-                Width = gameState.XLength,
-                Height = gameState.YLength,
-                GamePieces = pieces.ToArray()
+                Width = gameMatch.GameState.XLength,
+                Height = gameMatch.GameState.YLength,
+                GamePieces = pieces.ToArray(),
+                CurrentTurnColour = gameMatch.CurrentTurn.ToString()
             };
 
             return gameBoard;

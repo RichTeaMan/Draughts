@@ -19,5 +19,10 @@
         /// Gets or sets the height of the game board.
         /// </summary>
         public int Height { get; set; }
+
+        /// <summary>
+        /// Gets the colour of the current turn.
+        /// </summary>
+        public string CurrentTurnColour { get; set; }
     }
 }
