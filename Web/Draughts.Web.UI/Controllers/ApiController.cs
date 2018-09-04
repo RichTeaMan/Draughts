@@ -28,7 +28,7 @@ namespace Draughts.Web.UI.Controllers
         {
             var playerId = Guid.NewGuid().ToString();
             var humanPlayer = new HumanPlayer();
-            var match = new GameMatch(GameStateFactory.StandardStartGameState(), humanPlayer, new RandomGamePlayer());
+            var match = new GameMatch(GameStateFactory.StandardStartGameState(), humanPlayer, Program.AiOpponent);
 
             humanPlayer.GameMatch = match;
             humanPlayer.PieceColour = Service.PieceColour.White;
