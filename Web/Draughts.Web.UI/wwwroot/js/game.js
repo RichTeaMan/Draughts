@@ -2,6 +2,7 @@
 var selectedPiece = false;
 var playerId = false;
 var gameStopped = false;
+var gameUpateInterval = false;
 
 function createGame() {
     $.get("/api/game/create").done(function (data) {
@@ -51,7 +52,7 @@ function setupGame(_playerId) {
         }
     });
 
-    setInterval(reloadGame, 2000);
+    gameUpateInterval = setInterval(reloadGame, 2000);
 }
 
 function sendMove(startPiece, endX, endY) {
@@ -96,7 +97,9 @@ function reloadGame() {
 
         renderBoard("game-grid", data);
         if (data.gameStatus != "inProgress") {
-            clearInterval(reloadGame);
+            if (gameUpateInterval) {
+                clearInterval(gameUpateInterval);
+            }
             alert(`Game Over! ${data.gameStatus}`);
         }
     });
