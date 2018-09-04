@@ -100,6 +100,7 @@ function reloadGame() {
             if (gameUpateInterval) {
                 clearInterval(gameUpateInterval);
             }
+            $("#status").html(`${data.gameStatus}`);
             alert(`Game Over! ${data.gameStatus}`);
         }
     });
