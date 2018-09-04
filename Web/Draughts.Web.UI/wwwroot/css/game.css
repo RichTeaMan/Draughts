@@ -20,6 +20,14 @@ td.piece-square {
     background: lightgray;
 }
 
+td.piece-square.dark {
+    background: saddlebrown;
+}
+
+td.piece-square.light {
+    background: lightyellow;
+}
+
 @media (min-width: 1064px) {
     td.piece-square {
         border: 2px solid black;
@@ -34,7 +42,7 @@ td.piece-square {
 }
 
 td.selected {
-    background: red;
+    background: red !important;
 }
 
 td.black.man div {

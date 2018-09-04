@@ -114,13 +114,17 @@ function renderBoard(destinationElementId, gameBoard) {
 
         var html = '<table class="game-grid">';
 
+        var squareCount = 0;
         for (var y = 0; y < gameBoard.height; y++) {
             html += "<tr>";
             for (var x = 0; x < gameBoard.width; x++) {
 
                 var transformedY = gameBoard.height - (y + 1);
-                html += `<td id="square-${x}-${transformedY}" data-x="${x}" data-y="${transformedY}" class="piece-square"><div></div></td>`;
+                var squareClass = squareCount % 2 == 0 ? "light" : "dark";
+                html += `<td id="square-${x}-${transformedY}" data-x="${x}" data-y="${transformedY}" class="piece-square ${squareClass}"><div></div></td>`;
+                squareCount++;
             }
+            squareCount++;
             html += "</tr>";
         }
         html += "</table>";
