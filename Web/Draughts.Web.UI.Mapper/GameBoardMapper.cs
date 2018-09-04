@@ -30,13 +30,24 @@ namespace Draughts.Web.UI.Mapper
                         break;
                 }
 
+                string pieceRank = null;
+                switch (piece.PieceRank)
+                {
+                    case Service.PieceRank.Minion:
+                        pieceRank = "man";
+                        break;
+                    case Service.PieceRank.King:
+                        pieceRank = "king";
+                        break;
+                }
+
                 var controllerPiece = new Domain.GamePiece()
                 {
 
                     Xcoord = piece.Xcoord,
                     Ycoord = piece.Ycoord,
                     PieceColour = pieceColour,
-                    PieceRank = piece.PieceRank.ToString()
+                    PieceRank = pieceRank
                 };
 
                 pieces.Add(controllerPiece);

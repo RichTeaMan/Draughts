@@ -37,16 +37,34 @@ td.selected {
     background: red;
 }
 
-td.black div {
-    background: black;
-    border-radius: 40px;
+td.black.man div {
+    background-image: url("/images/black.png");
+    background-size: contain;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
 }
 
-td.white div {
-    background: burlywood;
-    border-radius: 40px;
+td.white.man div {
+    background-image: url("/images/white.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+td.black.king div {
+    background-image: url("/images/kingblack.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+td.white.king div {
+    background-image: url("/images/kingwhite.png");
+    background-size: contain;
+    background-repeat: no-repeat;
     width: 100%;
     height: 100%;
 }
