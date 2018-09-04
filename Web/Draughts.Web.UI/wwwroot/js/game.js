@@ -1,6 +1,7 @@
 ﻿var currentGameBoard;
 var selectedPiece = false;
 var playerId = false;
+var gameStopped = false;
 
 function createGame() {
     $.get("/api/game/create").done(function (data) {
@@ -14,6 +15,10 @@ function setupGame(_playerId) {
     reloadGame();
 
     $(document).on('click', ".piece-square", function (event) {
+
+        if (gameStopped) {
+            return;
+        }
         var gameSquare = $(event.currentTarget);
         var x = gameSquare.data("x");
         var y = gameSquare.data("y");
@@ -85,7 +90,12 @@ function sendMove(startPiece, endX, endY) {
 function reloadGame() {
     $.get(`/api/game?playerId=${playerId}`).done(function (data) {
         console.log(data);
+
         renderBoard("game-grid", data);
+        if (data.gameStatus != "inProgress") {
+            clearInterval(reloadGame);
+            alert(`Game Over! ${data.gameStatus}`);
+        }
     });
 }
 
@@ -116,8 +126,8 @@ function renderBoard(destinationElementId, gameBoard) {
             var id = `#square-${piece.xcoord}-${piece.ycoord}`;
 
             $(id).addClass(piece.pieceColour);
+            $(id).addClass(piece.pieceRank);
         }
-
 
         currentGameBoard = gameBoard;
     }

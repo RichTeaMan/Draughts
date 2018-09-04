@@ -28,18 +28,23 @@ td.piece-square {
     }
 }
 
+.info {
+    text-align: center;
+    font-size: 1.4em;
+}
+
 td.selected {
     background: red;
 }
 
-td.Black div {
+td.black div {
     background: black;
     border-radius: 40px;
     width: 100%;
     height: 100%;
 }
 
-td.White div {
+td.white div {
     background: burlywood;
     border-radius: 40px;
     width: 100%;

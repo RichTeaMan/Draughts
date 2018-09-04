@@ -21,8 +21,13 @@
         public int Height { get; set; }
 
         /// <summary>
-        /// Gets the colour of the current turn.
+        /// Gets the colour of the current turn. Allowed values: 'white', 'black'.
         /// </summary>
         public string CurrentTurnColour { get; set; }
+
+        /// <summary>
+        /// Gets or sets the status of the game. Allowed values: 'inProgress', 'draw', 'whiteWin', 'blackWin'.
+        /// </summary>
+        public string GameStatus { get; set; }
     }
 }
