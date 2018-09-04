@@ -29,5 +29,15 @@
         /// Gets or sets the status of the game. Allowed values: 'inProgress', 'draw', 'whiteWin', 'blackWin'.
         /// </summary>
         public string GameStatus { get; set; }
+
+        /// <summary>
+        /// Gets or sets player name.
+        /// </summary>
+        public string PlayerName { get; set; }
+
+        /// <summary>
+        /// Gets or sets opponent name.
+        /// </summary>
+        public string OpponentName { get; set; }
     }
 }

@@ -7,7 +7,13 @@ namespace Draughts.Web.UI.Mapper
     public class GameBoardMapper
     {
 
-        public GameBoard Map(GameMatch gameMatch)
+        /// <summary>
+        /// Maps game match to game board for serialisation.
+        /// </summary>
+        /// <param name="gameMatch">Game match.</param>
+        /// <param name="friendlyPieceColour">The player colour that should be considered friendly for name mapping.</param>
+        /// <returns></returns>
+        public GameBoard Map(GameMatch gameMatch, Service.PieceColour friendlyPieceColour)
         {
             List<Domain.GamePiece> pieces = new List<Domain.GamePiece>();
             foreach (var piece in gameMatch.GameState.GamePieceList)
@@ -63,13 +69,31 @@ namespace Draughts.Web.UI.Mapper
                     gameStatus = "inProgress";
                     break;
             }
+
+            string friendlyName = string.Empty;
+            string opponentName = string.Empty;
+
+            switch (friendlyPieceColour)
+            {
+                case Service.PieceColour.Black:
+                    friendlyName = gameMatch.BlackGamePlayer.Name;
+                    opponentName = gameMatch.WhiteGamePlayer.Name;
+                    break;
+                case Service.PieceColour.White:
+                    opponentName = gameMatch.BlackGamePlayer.Name;
+                    friendlyName = gameMatch.WhiteGamePlayer.Name;
+                    break;
+            }
+
             var gameBoard = new GameBoard()
             {
                 Width = gameMatch.GameState.XLength,
                 Height = gameMatch.GameState.YLength,
                 GamePieces = pieces.ToArray(),
                 CurrentTurnColour = currentTurnColour,
-                GameStatus = gameStatus
+                GameStatus = gameStatus,
+                PlayerName= friendlyName,
+                OpponentName = opponentName
             };
 
             return gameBoard;

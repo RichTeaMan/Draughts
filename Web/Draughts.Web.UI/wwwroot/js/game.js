@@ -109,6 +109,7 @@ function renderBoard(destinationElementId, gameBoard) {
 
     if (JSON.stringify(currentGameBoard) != JSON.stringify(gameBoard)) {
 
+        $("#vs").html(`${gameBoard.playerName} VS ${gameBoard.opponentName}`);
         $("#status").html(`It is ${gameBoard.currentTurnColour}'s turn.`);
 
         var html = '<table class="game-grid">';

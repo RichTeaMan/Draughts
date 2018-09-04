@@ -46,8 +46,7 @@ namespace Draughts.Web.UI.Controllers
             {
                 var player = humanPlayers[playerId];
 
-
-                var gameBoard = new GameBoardMapper().Map(player.GameMatch);
+                var gameBoard = new GameBoardMapper().Map(player.GameMatch, player.PieceColour);
 
                 return gameBoard;
             }
@@ -92,7 +91,7 @@ namespace Draughts.Web.UI.Controllers
                     }
                 }
 
-                var gameBoard = new GameBoardMapper().Map(match);
+                var gameBoard = new GameBoardMapper().Map(match, player.PieceColour);
 
                 // find if opponent is ai and decide whether to play turn.
                 IGamePlayer opponent;
