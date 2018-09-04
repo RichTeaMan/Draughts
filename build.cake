@@ -140,7 +140,7 @@ Task("Web-UI")
         WorkingDirectory = publishDirectory
     };
     DotNetCorePublish("./Web/Draughts.Web.UI/Draughts.Web.UI.csproj", publishSettings);
-    DotNetCoreExecute($"{publishDirectory}/Draughts.Web.UI.dll", string.Empty, executeSettings);
+    DotNetCoreExecute($"{publishDirectory}/Draughts.Web.UI.dll", $"-- {contestantFile}", executeSettings);
 });
 
 Task("Show-Names")
