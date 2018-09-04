@@ -19,7 +19,7 @@ namespace Draughts.Web.UI
 
         public GameMove SelectedMove { get; set; }
 
-        public string Name { get; set; } = "Human player.";
+        public string Name { get; set; } = "Human player";
 
         public GamePlayerMoveResult MakeMove(PieceColour pieceColour, GameState gameState)
         {
