@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Draughts.Service;
+﻿using Draughts.Service;
 using Draughts.Web.UI.Domain;
 using Draughts.Web.UI.Mapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Concurrent;
+using System.Linq;
 
 namespace Draughts.Web.UI.Controllers
 {
@@ -12,7 +12,7 @@ namespace Draughts.Web.UI.Controllers
     public class ApiController : ControllerBase
     {
 
-        private static Dictionary<string, HumanPlayer> humanPlayers = new Dictionary<string, HumanPlayer>();
+        private static ConcurrentDictionary<string, HumanPlayer> humanPlayers = new ConcurrentDictionary<string, HumanPlayer>();
 
         [HttpPost]
         [HttpGet]
@@ -33,7 +33,7 @@ namespace Draughts.Web.UI.Controllers
             humanPlayer.GameMatch = match;
             humanPlayer.PieceColour = Service.PieceColour.White;
 
-            humanPlayers.Add(playerId, humanPlayer);
+            humanPlayers.TryAdd(playerId, humanPlayer);
 
             return playerId;
         }
@@ -42,60 +42,80 @@ namespace Draughts.Web.UI.Controllers
         [Route("api/game")]
         public GameBoard Game([FromQuery]string playerId)
         {
-            var player = humanPlayers[playerId];
+            try
+            {
+                var player = humanPlayers[playerId];
 
-            var gameBoard = new GameBoardMapper().Map(player.GameMatch);
 
-            return gameBoard;
+                var gameBoard = new GameBoardMapper().Map(player.GameMatch);
+
+                return gameBoard;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         [HttpPost]
         [Route("api/game")]
         public GameBoard PlayTurn([FromBody]MoveRequest moveRequest)
         {
-            var player = humanPlayers[moveRequest.PlayerId];
-
-            var match = player.GameMatch;
-
-            GameState gameState = match.GameState;
-
-            if (match.CurrentTurn == player.PieceColour)
+            try
             {
+                var player = humanPlayers[moveRequest.PlayerId];
 
-                var moves = match.GameState.CalculateAvailableMoves(player.PieceColour);
-                var moveToPlay = moves.FirstOrDefault(m =>
-                    m.StartGamePiece.Xcoord == moveRequest.StartX &&
-                    m.StartGamePiece.Ycoord == moveRequest.StartY &&
-                    m.EndGamePiece.Xcoord == moveRequest.EndX &&
-                    m.EndGamePiece.Ycoord == moveRequest.EndY);
+                var match = player.GameMatch;
 
-                if (moveToPlay != null)
+                GameState gameState = match.GameState;
+
+                if (match.CurrentTurn == player.PieceColour)
                 {
-                    player.SelectedMove = moveToPlay;
-                    match.CompleteTurn();
 
-                    gameState = match.GameState;
+                    var moves = match.GameState.CalculateAvailableMoves(player.PieceColour);
+                    var moveToPlay = moves.FirstOrDefault(m =>
+                        m.StartGamePiece.Xcoord == moveRequest.StartX &&
+                        m.StartGamePiece.Ycoord == moveRequest.StartY &&
+                        m.EndGamePiece.Xcoord == moveRequest.EndX &&
+                        m.EndGamePiece.Ycoord == moveRequest.EndY);
+
+                    if (moveToPlay != null)
+                    {
+                        player.SelectedMove = moveToPlay;
+                        match.CompleteTurn();
+
+                        gameState = match.GameState;
+                    }
+                    else
+                    {
+                        throw new Exception("No moves found");
+                    }
                 }
+
+                var gameBoard = new GameBoardMapper().Map(match);
+
+                // find if opponent is ai and decide whether to play turn.
+                IGamePlayer opponent;
+                if (player.PieceColour == Service.PieceColour.White)
+                {
+                    opponent = match.BlackGamePlayer;
+                }
+                else
+                {
+                    opponent = match.WhiteGamePlayer;
+                }
+
+                if (!(opponent is HumanPlayer))
+                {
+                    match.CompleteTurn();
+                }
+
+                return gameBoard;
             }
-
-            var gameBoard = new GameBoardMapper().Map(match);
-
-            // find if opponent is ai and decide whether to play turn.
-            IGamePlayer opponent;
-            if (player.PieceColour == Service.PieceColour.White)
+            catch (Exception ex)
             {
-                opponent = match.BlackGamePlayer;
-            } else
-            {
-                opponent = match.WhiteGamePlayer;
+                throw ex;
             }
-
-            if (!(opponent is HumanPlayer))
-            {
-                match.CompleteTurn();
-            }
-
-            return gameBoard;
         }
     }
 }

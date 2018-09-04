@@ -77,12 +77,15 @@ function sendMove(startPiece, endX, endY) {
         dataType: "json"
     }).done(function (data) {
 
+        console.log("Sending move successful");
         console.log(data);
         renderBoard("game-grid", data);
 
         $("td").removeClass("selected");
 
     }).fail(function (error) {
+
+        console.log("Sending move failed");
         console.log(error);
     });
 }
