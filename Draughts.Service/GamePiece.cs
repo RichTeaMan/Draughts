@@ -52,7 +52,7 @@ namespace Draughts.Service
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<GamePiece>(this)
+            return new HashCodeBuilder()
                 .Append(PieceColour)
                 .Append(PieceRank)
                 .Append(Xcoord)

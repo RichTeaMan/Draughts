@@ -213,7 +213,7 @@ namespace Draughts.Service
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<GameState>(this)
+            return new HashCodeBuilder()
                 .Append(GamePieceList)
                 .Append(XLength)
                 .Append(YLength)

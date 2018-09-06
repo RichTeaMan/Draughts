@@ -144,7 +144,7 @@ namespace Draughts.Service
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<GameMoveMetrics>(this)
+            return new HashCodeBuilder()
                 .Append(CreatedFriendlyKings)
                 .Append(FriendlyMovesAvailable)
                 .Append(OpponentMovesAvailable)

@@ -152,7 +152,7 @@ namespace Draughts.Service
 
         public override int GetHashCode()
         {
-            return new HashCodeBuilder<GameMove>(this)
+            return new HashCodeBuilder()
                 .Append(StartGamePiece)
                 .Append(EndGamePiece)
                 .Append(TakenGamePieces)
