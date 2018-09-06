@@ -36,6 +36,7 @@ function setupGame(_playerId) {
         if (newSelectedPiece) {
             // unselect other pieces
             $("td").removeClass("selected");
+            $("td").removeClass("destination");
 
             if (selectedPiece == newSelectedPiece) {
                 selectedPiece = false;
@@ -43,12 +44,28 @@ function setupGame(_playerId) {
             else {
                 selectedPiece = newSelectedPiece
                 gameSquare.addClass("selected");
+
+                // look for move end location
+                currentGameBoard.gameMoves.forEach(function (move) {
+                    if (move.startX == newSelectedPiece.xcoord && move.startY == newSelectedPiece.ycoord) {
+
+                        var endSquare = $(`#square-${move.endX}-${move.endY}`);
+                        if (endSquare) {
+                            endSquare.addClass('destination');
+                        }
+                    }
+                });
             }
         }
         else if (selectedPiece && !newSelectedPiece) {
-            // an empty square has been selected, attempy to send move
-
-            sendMove(selectedPiece, x, y);
+            // an empty square has been selected, attempt to send move
+            // look for move end location
+            currentGameBoard.gameMoves.some(function (move) {
+                if (move.endX == x && move.endY == y) {
+                    sendMove(selectedPiece, x, y);
+                    return true;
+                }
+            });
         }
     });
 
@@ -83,6 +100,7 @@ function sendMove(startPiece, endX, endY) {
         renderBoard("game-grid", data);
 
         $("td").removeClass("selected");
+        $("td").removeClass("destination");
 
     }).fail(function (error) {
 

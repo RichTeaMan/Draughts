@@ -39,5 +39,10 @@
         /// Gets or sets opponent name.
         /// </summary>
         public string OpponentName { get; set; }
+
+        /// <summary>
+        /// Gets or sets allowed game moves.
+        /// </summary>
+        public GameMove[] GameMoves { get; set; }
     }
 }

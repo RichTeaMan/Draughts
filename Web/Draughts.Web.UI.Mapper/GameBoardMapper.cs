@@ -53,6 +53,19 @@ namespace Draughts.Web.UI.Mapper
                 pieces.Add(controllerPiece);
             }
 
+            List<Domain.GameMove> gameMoves = new List<Domain.GameMove>();
+            foreach(var move in gameMatch.GameState.CalculateAvailableMoves(friendlyPieceColour))
+            {
+                var gameMove = new Domain.GameMove()
+                {
+                    StartX = move.StartGamePiece.Xcoord,
+                    StartY = move.StartGamePiece.Ycoord,
+                    EndX = move.EndGamePiece.Xcoord,
+                    EndY = move.EndGamePiece.Ycoord
+                };
+                gameMoves.Add(gameMove);
+            }
+
             string currentTurnColour = null;
             switch (gameMatch.CurrentTurn)
             {
@@ -104,7 +117,8 @@ namespace Draughts.Web.UI.Mapper
                 CurrentTurnColour = currentTurnColour,
                 GameStatus = gameStatus,
                 PlayerName= friendlyName,
-                OpponentName = opponentName
+                OpponentName = opponentName,
+                GameMoves = gameMoves.ToArray()
             };
 
             return gameBoard;

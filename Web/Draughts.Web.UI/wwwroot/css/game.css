@@ -45,6 +45,10 @@ td.selected {
     background: red !important;
 }
 
+td.destination {
+    background: blue !important;
+}
+
 td.black.man div {
     background-image: url("/images/black.png");
     background-size: contain;
