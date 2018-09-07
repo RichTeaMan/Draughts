@@ -4,6 +4,8 @@ This project attempts to train an AI Draughts player.
 The AI make decisions based on weights for board metrics.
 These weights are honed with a genetic algorithm.
 
+A playable version can be found at https://draughts.richteaman.com.
+
 ## Cake Tasks
 This project uses [Cake](https://cakebuild.net)!
 * cake -target=Clean
