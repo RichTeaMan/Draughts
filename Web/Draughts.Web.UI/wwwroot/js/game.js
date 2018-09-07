@@ -109,6 +109,16 @@ function sendMove(startPiece, endX, endY) {
     });
 }
 
+function gameStatusTranslate(gameStatus) {
+    var result = "";
+    if (gameStatus == "whiteWin") {
+        result = "White wins";
+    } else if (gameStatus == "blackWin") {
+        result = "Black wins";
+    }
+    return result;
+}
+
 function reloadGame() {
     $.get(`/api/game?playerId=${playerId}`).done(function (data) {
         console.log(data);
@@ -118,8 +128,8 @@ function reloadGame() {
             if (gameUpateInterval) {
                 clearInterval(gameUpateInterval);
             }
-            $("#status").html(`${data.gameStatus}`);
-            alert(`Game Over! ${data.gameStatus}`);
+            $("#status").html(gameStatusTranslate(data.gameStatus));
+            alert(`Game Over! ${gameStatusTranslate(data.gameStatus)}`);
         }
     });
 }
