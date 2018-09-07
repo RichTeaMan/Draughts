@@ -28,9 +28,9 @@ namespace Draughts.Web.UI
             // check if human has lost
             if (gameState.CalculateAvailableMoves(pieceColour).Count > 0)
             {
-                while (null == SelectedMove)
+                if (null == SelectedMove)
                 {
-                    Thread.Sleep(10);
+                    throw new ArgumentException("SelectedMove is null.");
                 }
                 gamePlayerMoveResult = new GamePlayerMoveResult(SelectedMove.PerformMove(), MoveStatus.SuccessfulMove);
             }

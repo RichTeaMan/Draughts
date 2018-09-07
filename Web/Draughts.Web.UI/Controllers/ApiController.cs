@@ -46,6 +46,12 @@ namespace Draughts.Web.UI.Controllers
             {
                 var player = humanPlayers[playerId];
 
+                var hasMoves = player.GameMatch.GameState.CalculateAvailableMoves(player.PieceColour).Any();
+                if (!hasMoves)
+                {
+                    player.GameMatch.CompleteTurn();
+                }
+
                 var gameBoard = new GameBoardMapper().Map(player.GameMatch, player.PieceColour);
 
                 return gameBoard;
