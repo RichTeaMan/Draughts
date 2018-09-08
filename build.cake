@@ -81,6 +81,12 @@ Task("Build")
             Configuration = configuration
         });
     }
+
+    var publishSettings = new DotNetCorePublishSettings
+    {
+        Configuration = configuration
+    };
+    DotNetCorePublish("./Web/Draughts.Web.UI/Draughts.Web.UI.csproj", publishSettings);
 });
 
 Task("Test")
@@ -130,16 +136,11 @@ Task("Web-UI")
     .IsDependentOn("Build")
     .Does(() =>
 {
-    var publishSettings = new DotNetCorePublishSettings
-    {
-        Configuration = configuration
-    };
     var publishDirectory = $"./Web/Draughts.Web.UI/bin/{buildDir}/netcoreapp2.1/publish";
     var executeSettings = new DotNetCoreExecuteSettings
     {
         WorkingDirectory = publishDirectory
     };
-    DotNetCorePublish("./Web/Draughts.Web.UI/Draughts.Web.UI.csproj", publishSettings);
     DotNetCoreExecute($"{publishDirectory}/Draughts.Web.UI.dll", $"-- {contestantFile}", executeSettings);
 });
 
