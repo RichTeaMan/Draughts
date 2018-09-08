@@ -17,7 +17,9 @@ This project uses [Cake](https://cakebuild.net)!
 * cake -target=Web-UI
 
 ## CI
-Build Status: [![Build status](https://ci.appveyor.com/api/projects/status/apt6gir9l7wxun49?svg=true)](https://ci.appveyor.com/project/RichTeaMan/draughts)
+|        | Windows | Linux |
+| ------ | --------|-------|
+| Master | [![Build status](https://ci.appveyor.com/api/projects/status/apt6gir9l7wxun49?svg=true)](https://ci.appveyor.com/project/RichTeaMan/draughts) | [![Build status](https://travis-ci.org/RichTeaMan/Draughts.svg?branch=master)](https://travis-ci.org/RichTeaMan/Draughts) |
 
 ## UI
 
