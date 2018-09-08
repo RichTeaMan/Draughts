@@ -39,13 +39,14 @@ namespace Draughts.Web.UI.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(200, Type = typeof(GameBoard))]
+        [ProducesResponseType(404)]
         [Route("api/game")]
-        public GameBoard Game([FromQuery]string playerId)
+        public IActionResult Game([FromQuery]string playerId)
         {
-            try
+            HumanPlayer player;
+            if (humanPlayers.TryGetValue(playerId, out player))
             {
-                var player = humanPlayers[playerId];
-
                 var hasMoves = player.GameMatch.GameState.CalculateAvailableMoves(player.PieceColour).Any();
                 if (!hasMoves)
                 {
@@ -54,11 +55,11 @@ namespace Draughts.Web.UI.Controllers
 
                 var gameBoard = new GameBoardMapper().Map(player.GameMatch, player.PieceColour);
 
-                return gameBoard;
+                return Ok(gameBoard);
             }
-            catch (Exception ex)
+            else
             {
-                throw ex;
+                return NotFound($"Player with ID {playerId} not found.");
             }
         }
 

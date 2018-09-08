@@ -116,3 +116,13 @@ td.white.king div {
     color: white;
     text-align: center;
 }
+
+.error a, .error a:visited, .error a:active {
+    color: white;
+    text-decoration: underline;
+}
+
+.error a:hover {
+    color: white;
+    text-decoration: solid
+}

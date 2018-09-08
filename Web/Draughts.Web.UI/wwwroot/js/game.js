@@ -13,6 +13,10 @@ function handleError(error) {
             $("#error_connection_lost").removeClass("hidden");
             break;
 
+        case 404:
+            $("#error_bad_player_id").removeClass("hidden");
+            break;
+
         default:
             $("#error_unknown").removeClass("hidden");
             $("#error_unknown_detail").text(error.statusText);
