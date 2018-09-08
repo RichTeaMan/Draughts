@@ -4,6 +4,26 @@
 
 <div class="row"></div>
 <div class="row">
+    <div id="error_connection_lost" class="col error hidden">
+        <div>
+            <h3>Connection Lost</h3>
+            <p>The game should be available soon.</p>
+        </div>
+    </div>
+    <div id="error_bad_player_id" class="col error hidden">
+        <div>
+            <h3>Game Not Found</h3>
+            <p>The requested game is not available. <a href="/">Press to restart</a></p>
+        </div>
+    </div>
+    <div id="error_unknown" class="col error hidden">
+        <div>
+            <h3>An Error Occurred</h3>
+            <p id="error_unknown_detail"></p>
+        </div>
+    </div>
+</div>
+<div class="row">
     <div class="col">
         <div id="vs" class="info"></div>
         <div id="status" class="info"></div>

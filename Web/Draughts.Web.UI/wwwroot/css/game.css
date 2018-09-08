@@ -110,3 +110,9 @@ td.white.king div {
 .source_message img {
     height: 100%;
 }
+
+.error {
+    background-color: indianred;
+    color: white;
+    text-align: center;
+}

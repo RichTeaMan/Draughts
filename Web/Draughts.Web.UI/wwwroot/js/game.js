@@ -4,11 +4,28 @@ var playerId = false;
 var gameStopped = false;
 var gameUpateInterval = false;
 
+function handleError(error) {
+
+    $(".error").addClass("hidden");
+
+    switch (error.status) {
+        case 0:
+            $("#error_connection_lost").removeClass("hidden");
+            break;
+
+        default:
+            $("#error_unknown").removeClass("hidden");
+            $("#error_unknown_detail").text(error.statusText);
+            break;
+    }
+}
+
 function createGame() {
     $.get("/api/game/create").done(function (data) {
         console.log(data);
         window.location.href = `/Home/game?playerId=${data}`;
-    });
+
+    }).fail(handleError);
 }
 
 function setupGame(_playerId) {
@@ -102,10 +119,12 @@ function sendMove(startPiece, endX, endY) {
         $("td").removeClass("selected");
         $("td").removeClass("destination");
 
+        $(".error").addClass("hidden");
+
     }).fail(function (error) {
 
         console.log("Sending move failed");
-        console.log(error);
+        handleError(error);
     });
 }
 
@@ -131,7 +150,7 @@ function reloadGame() {
             $("#status").html(gameStatusTranslate(data.gameStatus));
             alert(`Game Over! ${gameStatusTranslate(data.gameStatus)}`);
         }
-    });
+    }).fail(handleError);
 }
 
 function renderBoard(destinationElementId, gameBoard) {
