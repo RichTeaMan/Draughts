@@ -105,12 +105,18 @@ namespace Draughts.Web.UI.Controllers
             if (match.CurrentTurn == player.PieceColour)
             {
 
+                var transformedMoveRequest = moveRequest;
+                if (player.PieceColour == Service.PieceColour.Black)
+                {
+                    transformedMoveRequest = new BoardRotaterMapper().Rotate(moveRequest, gameState.XLength, gameState.YLength);
+                }
+
                 var moves = match.GameState.CalculateAvailableMoves(player.PieceColour);
                 var moveToPlay = moves.FirstOrDefault(m =>
-                    m.StartGamePiece.Xcoord == moveRequest.StartX &&
-                    m.StartGamePiece.Ycoord == moveRequest.StartY &&
-                    m.EndGamePiece.Xcoord == moveRequest.EndX &&
-                    m.EndGamePiece.Ycoord == moveRequest.EndY);
+                    m.StartGamePiece.Xcoord == transformedMoveRequest.StartX &&
+                    m.StartGamePiece.Ycoord == transformedMoveRequest.StartY &&
+                    m.EndGamePiece.Xcoord == transformedMoveRequest.EndX &&
+                    m.EndGamePiece.Ycoord == transformedMoveRequest.EndY);
 
                 if (moveToPlay != null)
                 {
