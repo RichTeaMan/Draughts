@@ -96,16 +96,22 @@ namespace Draughts.Web.UI.Mapper
 
             string friendlyName = string.Empty;
             string opponentName = string.Empty;
+            string friendlyColour = string.Empty;
+            string opponentColour = string.Empty;
 
             switch (friendlyPieceColour)
             {
                 case Service.PieceColour.Black:
                     friendlyName = gameMatch.BlackGamePlayer.Name;
                     opponentName = gameMatch.WhiteGamePlayer.Name;
+                    friendlyColour = "black";
+                    opponentColour = "white";
                     break;
                 case Service.PieceColour.White:
                     opponentName = gameMatch.BlackGamePlayer.Name;
                     friendlyName = gameMatch.WhiteGamePlayer.Name;
+                    friendlyColour = "white";
+                    opponentColour = "black";
                     break;
             }
 
@@ -116,9 +122,11 @@ namespace Draughts.Web.UI.Mapper
                 GamePieces = pieces.ToArray(),
                 CurrentTurnColour = currentTurnColour,
                 GameStatus = gameStatus,
-                PlayerName= friendlyName,
+                PlayerName = friendlyName,
                 OpponentName = opponentName,
-                GameMoves = gameMoves.ToArray()
+                GameMoves = gameMoves.ToArray(),
+                PlayerColour = friendlyColour,
+                OpponentColour = opponentColour
             };
 
             return gameBoard;

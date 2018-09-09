@@ -41,6 +41,16 @@
         public string OpponentName { get; set; }
 
         /// <summary>
+        /// Gets or sets player colour.
+        /// </summary>
+        public string PlayerColour { get; set; }
+
+        /// <summary>
+        /// Gets or sets opponent colour.
+        /// </summary>
+        public string OpponentColour { get; set; }
+
+        /// <summary>
         /// Gets or sets allowed game moves.
         /// </summary>
         public GameMove[] GameMoves { get; set; }
