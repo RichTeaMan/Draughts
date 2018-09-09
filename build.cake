@@ -101,6 +101,7 @@ Task("Test")
 {
 
     DotNetCoreTest("./Draughts.Service.Tests/Draughts.Service.Tests.csproj");
+    DotNetCoreTest("./NameUtility.Tests/NameUtility.Tests.csproj");
     DotNetCoreTest("./Web/Draughts.Web.UI.Mapper.Tests/Draughts.Web.UI.Mapper.Tests.csproj");
 
     if (IsRunningOnWindows()) {
