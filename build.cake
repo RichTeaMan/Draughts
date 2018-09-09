@@ -69,6 +69,11 @@ Task("Build")
             PlatformTarget = PlatformTarget.MSIL,
             ToolPath = msBuildPathX64
         });
+
+        // Zip WPF
+        var dllFiles = GetFiles("./Draughts.UI.Wpf/bin/Release/*.dll");
+        var exeFiles = GetFiles("./Draughts.UI.Wpf/bin/Release/*.exe");
+        Zip("./Draughts.UI.Wpf/bin/Release", "./Draughts.UI.Wpf/bin/Release/DraughtsUI.zip", dllFiles.Concat(exeFiles));
     }
     else {
         DotNetCoreBuild("./Draughts.Ai.Trainer.CLI/Draughts.Ai.Trainer.CLI.csproj", new DotNetCoreBuildSettings {
