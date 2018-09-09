@@ -30,7 +30,7 @@ It can be built and run on (only) Windows computers with:
 ./cake.ps1 -target=Game
 ```
 
-The latest build is available from [Appveyor](https://github.com/RichTeaMan/Draughts/tree/master/Draughts.UI.Wpf).
+The latest build is available from [Appveyor](https://ci.appveyor.com/api/projects/RichTeaMan/Draughts/artifacts/Draughts.UI.Wpf%2Fbin%2FRelease%2FDraughtsUI.zip).
 
 Draughts.UI.Wpf can be configured with command line flags:
 
