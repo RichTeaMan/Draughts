@@ -14,6 +14,8 @@ namespace Draughts.Web.UI.Controllers
 
         private static ConcurrentDictionary<string, HumanPlayer> humanPlayers = new ConcurrentDictionary<string, HumanPlayer>();
 
+        private static Random random = new Random();
+
         [HttpPost]
         [HttpGet]
         [Route("api/hello")]
@@ -29,10 +31,26 @@ namespace Draughts.Web.UI.Controllers
         {
             var playerId = Guid.NewGuid().ToString();
             var humanPlayer = new HumanPlayer();
-            var match = new GameMatch(GameStateFactory.StandardStartGameState(), humanPlayer, Program.AiOpponent);
+
+            IGamePlayer white;
+            IGamePlayer black;
+
+            if (random.Next() % 2 == 0)
+            {
+                white = humanPlayer;
+                black = Program.AiOpponent;
+                humanPlayer.PieceColour = Service.PieceColour.White;
+            }
+            else
+            {
+                white = Program.AiOpponent;
+                black = humanPlayer;
+                humanPlayer.PieceColour = Service.PieceColour.Black;
+            }
+
+            var match = new GameMatch(GameStateFactory.StandardStartGameState(), white, black);
 
             humanPlayer.GameMatch = match;
-            humanPlayer.PieceColour = Service.PieceColour.White;
 
             humanPlayers.TryAdd(playerId, humanPlayer);
 
@@ -50,6 +68,10 @@ namespace Draughts.Web.UI.Controllers
             {
                 var hasMoves = player.GameMatch.GameState.CalculateAvailableMoves(player.PieceColour).Any();
                 if (!hasMoves)
+                {
+                    player.GameMatch.CompleteTurn();
+                }
+                else if(player.GameMatch.CurrentTurn != player.PieceColour)
                 {
                     player.GameMatch.CompleteTurn();
                 }
