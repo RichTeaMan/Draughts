@@ -7,6 +7,8 @@ namespace Draughts.Web.UI.Mapper
     public class GameBoardMapper
     {
 
+        private BoardRotaterMapper boardRotaterMapper = new BoardRotaterMapper();
+
         /// <summary>
         /// Maps game match to game board for serialisation.
         /// </summary>
@@ -128,6 +130,12 @@ namespace Draughts.Web.UI.Mapper
                 PlayerColour = friendlyColour,
                 OpponentColour = opponentColour
             };
+
+            // rotate if black
+            if (friendlyPieceColour == Service.PieceColour.Black)
+            {
+                gameBoard = boardRotaterMapper.Rotate(gameBoard);
+            }
 
             return gameBoard;
         }

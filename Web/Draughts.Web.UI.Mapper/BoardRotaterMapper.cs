@@ -1,8 +1,6 @@
 ﻿using Draughts.Web.UI.Domain;
-using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Text;
 
 namespace Draughts.Web.UI.Mapper
 {
@@ -90,6 +88,34 @@ namespace Draughts.Web.UI.Mapper
             int transformedY = (height - 1) - y;
 
             return new Point(transformedX, transformedY);
+        }
+
+        /// <summary>
+        /// Creates a new rotated move request.
+        /// </summary>
+        /// <param name="moveRequest">Move request to rotate.</param>
+        /// <param name="gameWidth">Game width.</param>
+        /// <param name="gameHeight">Game height.</param>
+        /// <returns>MoveRequest</returns>
+        public MoveRequest Rotate(MoveRequest moveRequest, int gameWidth, int gameHeight)
+        {
+            if (moveRequest == null)
+            {
+                return null;
+            }
+
+            var rotatedStartPoint = Rotate(moveRequest.StartX, moveRequest.StartY, gameWidth, gameHeight);
+            var rotatedEndPoint = Rotate(moveRequest.EndX, moveRequest.EndY, gameWidth, gameHeight);
+            var rotatedMoveRequest = new MoveRequest()
+            {
+                StartX = rotatedStartPoint.X,
+                StartY = rotatedStartPoint.Y,
+                EndX = rotatedEndPoint.X,
+                EndY = rotatedEndPoint.Y,
+                PlayerId = moveRequest.PlayerId
+            };
+
+            return rotatedMoveRequest;
         }
     }
 }

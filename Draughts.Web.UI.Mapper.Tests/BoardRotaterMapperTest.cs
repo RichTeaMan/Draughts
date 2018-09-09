@@ -1,5 +1,6 @@
 using Draughts.Web.UI.Domain;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +18,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotateNullTest()
+        public void RotateNullGameBoardTest()
         {
             var result = boardRotaterMapper.Rotate(null);
 
@@ -25,7 +26,15 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotatePoint00()
+        public void RotateNullMoveRequestTest()
+        {
+            var result = boardRotaterMapper.Rotate(null, 0, 0);
+
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public void RotatePoint00Test()
         {
             var point = boardRotaterMapper.Rotate(0, 0, 8, 8);
 
@@ -34,7 +43,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotatePoint23()
+        public void RotatePoint23Test()
         {
             var point = boardRotaterMapper.Rotate(2, 3, 8, 8);
 
@@ -43,7 +52,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotatePoint77()
+        public void RotatePoint77Test()
         {
             var point = boardRotaterMapper.Rotate(7, 7, 8, 8);
 
@@ -52,7 +61,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotateSinglePiece00()
+        public void RotateSinglePiece00Test()
         {
             var gamePiece = new GamePiece()
             {
@@ -81,7 +90,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotateSinglePiece01()
+        public void RotateSinglePiece01Test()
         {
             var gamePiece = new GamePiece()
             {
@@ -110,7 +119,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotateSinglePiece10()
+        public void RotateSinglePiece10Test()
         {
             var gamePiece = new GamePiece()
             {
@@ -139,7 +148,7 @@ namespace Draughts.Web.UI.Mapper.Tests
         }
 
         [TestMethod]
-        public void RotateSinglePieceWithMoves()
+        public void RotateSinglePieceWithMovesTest()
         {
             var gamePiece = new GamePiece()
             {
@@ -180,6 +189,27 @@ namespace Draughts.Web.UI.Mapper.Tests
             Assert.AreEqual(4, rotatedGameBoard.GameMoves.First().StartY);
             Assert.AreEqual(2, rotatedGameBoard.GameMoves.First().EndX);
             Assert.AreEqual(3, rotatedGameBoard.GameMoves.First().EndY);
+        }
+
+        [TestMethod]
+        public void RotateMoveRequestTest()
+        {
+            var moveRequest = new MoveRequest()
+            {
+                StartX = 2,
+                StartY = 3,
+                EndX = 5,
+                EndY = 4,
+                PlayerId = Guid.NewGuid().ToString()
+            };
+
+            var rotatedMoveRequest = boardRotaterMapper.Rotate(moveRequest, 8, 8);
+
+            Assert.AreEqual(5, rotatedMoveRequest.StartX);
+            Assert.AreEqual(4, rotatedMoveRequest.StartY);
+            Assert.AreEqual(2, rotatedMoveRequest.EndX);
+            Assert.AreEqual(3, rotatedMoveRequest.EndY);
+            Assert.AreEqual(moveRequest.PlayerId, rotatedMoveRequest.PlayerId);
         }
     }
 }

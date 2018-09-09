@@ -127,7 +127,6 @@ namespace Draughts.Web.UI.Controllers
 
             var gameBoard = new GameBoardMapper().Map(match, player.PieceColour);
 
-            // find if opponent is ai and decide whether to play turn.
             IGamePlayer opponent;
             if (player.PieceColour == Service.PieceColour.White)
             {
