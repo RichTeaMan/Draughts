@@ -7,16 +7,38 @@ using System.Threading.Tasks;
 
 namespace Draughts.Service
 {
+    /// <summary>
+    /// An immutable representation of the game.
+    /// </summary>
     public class GameState
     {
+        /// <summary>
+        /// Gets the game state before the move played that created this game state. This could be null.
+        /// </summary>
         public GameState PreviousGameState { get; }
 
+        /// <summary>
+        /// Gets a list of game pieces.
+        /// </summary>
         public IReadOnlyList<GamePiece> GamePieceList { get; }
 
+        /// <summary>
+        /// Gets the width of the board.
+        /// </summary>
         public int XLength { get; }
 
+        /// <summary>
+        /// Gets the height of the board.
+        /// </summary>
         public int YLength { get; }
 
+        /// <summary>
+        /// Initialises an instance game state.
+        /// </summary>
+        /// <param name="previousGameState"></param>
+        /// <param name="gamePieceList"></param>
+        /// <param name="xLength"></param>
+        /// <param name="yLength"></param>
         public GameState(GameState previousGameState, IEnumerable<GamePiece> gamePieceList, int xLength, int yLength)
         {
             PreviousGameState = previousGameState;
@@ -53,18 +75,32 @@ namespace Draughts.Service
             return resultPieceRank;
         }
 
+        /// <summary>
+        /// Calculates all available moves for both players that can be played with this state.
+        /// </summary>
+        /// <returns></returns>
         public IList<GameMove> CalculateAvailableMoves()
         {
             var moves = CalculateAvailableMoves(GamePieceList);
             return moves;
         }
 
+        /// <summary>
+        /// Calculates all available moves for the specified player that can be played with this state.
+        /// </summary>
+        /// <param name="pieceColour">Piece colour of the player.</param>
+        /// <returns></returns>
         public IList<GameMove> CalculateAvailableMoves(PieceColour pieceColour)
         {
             var moves = CalculateAvailableMoves(GamePieceList.Where(p => p.PieceColour == pieceColour));
             return moves;
         }
 
+        /// <summary>
+        /// Calculates all available moves for the given pieces that can be played with this state.
+        /// </summary>
+        /// <param name="gamePieces">Pieces to find moves for.</param>
+        /// <returns></returns>
         public IList<GameMove> CalculateAvailableMoves(IEnumerable<GamePiece> gamePieces)
         {
             var gameMoves = new List<GameMove>();

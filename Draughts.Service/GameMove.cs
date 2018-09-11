@@ -2,21 +2,41 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Draughts.Service
 {
+    /// <summary>
+    /// An immutable representation of a game move.
+    /// </summary>
     public class GameMove
     {
+        /// <summary>
+        /// Gets the moving game piece before it has moved.
+        /// </summary>
         public GamePiece StartGamePiece { get; }
 
+        /// <summary>
+        /// Gets the moving game piece after it has moved.
+        /// </summary>
         public GamePiece EndGamePiece { get; }
 
+        /// <summary>
+        /// Gets a list of pieces that will be taken during this move. This might be an empty list, but not null.
+        /// </summary>
         public IReadOnlyCollection<GamePiece> TakenGamePieces { get; }
 
+        /// <summary>
+        /// Gets that game state before the move has occurred.
+        /// </summary>
         public GameState GameState { get; }
 
+        /// <summary>
+        /// Initialises an instance of game move.
+        /// </summary>
+        /// <param name="startGamePiece"></param>
+        /// <param name="endGamePiece"></param>
+        /// <param name="takenGamePieces"></param>
+        /// <param name="gameState"></param>
         public GameMove(
             GamePiece startGamePiece,
             GamePiece endGamePiece,
@@ -29,6 +49,11 @@ namespace Draughts.Service
             GameState = gameState;
         }
 
+        /// <summary>
+        /// Calculates metrics for a move with respect to a player.
+        /// </summary>
+        /// <param name="pieceColour">The player colour to calculate metrics for.</param>
+        /// <returns></returns>
         public GameMoveMetrics CalculateGameMoveMetrics(PieceColour pieceColour)
         {
             int createdFriendlyKings = 0;
@@ -120,6 +145,10 @@ namespace Draughts.Service
             return gameMoveMetrics;
         }
 
+        /// <summary>
+        /// Creates a game state of the completed move.
+        /// </summary>
+        /// <returns></returns>
         public GameState PerformMove()
         {
             var previousPieces = GameState.GamePieceList;
