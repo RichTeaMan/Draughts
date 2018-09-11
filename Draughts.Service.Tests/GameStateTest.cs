@@ -322,6 +322,35 @@ namespace Draughts.Service.Tests
             Assert.AreEqual(expectedPiece, afterState.GamePieceList[0]);
         }
 
+        /// <summary>
+        /// Tests if a king is created after jumping to the last row, but cannot jump another piece in the same turn.
+        /// </summary>
+        [TestMethod]
+        public void SinglePieceWhiteKingOnLastRowAfterJumpCantJumpInSameTurn()
+        {
+            var pieceColour = PieceColour.White;
+            var pieceRank = PieceRank.Minion;
+            int x = 0;
+            int y = 5;
+
+            var gamePiece = new GamePiece(pieceColour, pieceRank, x, y);
+            var blockingGamePiece1 = new GamePiece(PieceColour.Black, pieceRank, 1, 6);
+            var blockingGamePiece2 = new GamePiece(PieceColour.Black, pieceRank, 3, 6);
+            var gameState = GameStateFactory.SeveralPieceGameState(gamePiece, blockingGamePiece1, blockingGamePiece2);
+
+            var moves = gameState.CalculateAvailableMoves().Where(m => m.StartGamePiece.PieceColour == PieceColour.White).ToList();
+
+            var afterState = moves.First().PerformMove();
+
+            var expectedPiece = new GamePiece(PieceColour.White, PieceRank.King, 2, 7);
+
+            var actualPiece = afterState.GamePieceList.Single(p => p.PieceColour == PieceColour.White);
+
+            Assert.AreEqual(2, afterState.GamePieceList.Count);
+
+            Assert.AreEqual(expectedPiece, actualPiece);
+        }
+
         [TestMethod]
         public void SinglePieceWhiteKingOnLastRowAfterDoubleJump()
         {

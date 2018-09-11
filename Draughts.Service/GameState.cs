@@ -126,7 +126,7 @@ namespace Draughts.Service
                 }
             }
 
-            return resultGameMoves;//.Where(gm => )
+            return resultGameMoves;
         }
 
         private static List<GameMove> FindMovesForPiece(GameState gameState, GamePiece piece)
@@ -204,7 +204,9 @@ namespace Draughts.Service
                                 var endPiece = new GamePiece(piece.PieceColour, newRank, jumpedX, jumpedY);
                                 var foundMove = new GameMove(piece, endPiece, new List<GamePiece>() { occupiedPiece }, gameState);
                                 var chainedMoves = FindMovesForPiece(foundMove.PerformMove(), endPiece).Where(m => m.StartGamePiece == endPiece && m.TakenGamePieces.Any());
-                                if (chainedMoves.Any()) {
+
+                                // Check rank doesn't change. Pieces should not move immediately after being promoted.
+                                if (chainedMoves.Any() && newRank == piece.PieceRank) {
                                     // combine chain moves
                                     foreach (var chainMove in chainedMoves)
                                     {
