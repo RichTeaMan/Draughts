@@ -77,6 +77,8 @@ namespace Draughts.Service
                 m => m.StartGamePiece.PieceRank == PieceRank.Minion &&
                 m.EndGamePiece.PieceRank == PieceRank.King);
 
+            int opponentPiecesTaken = TakenGamePieces.Count(p => p.PieceColour != pieceColour);
+
             int totalPieces = GameState.GamePieceList.Count;
             int totalFriendlyPieces = GameState.GamePieceList.Count(p => p.PieceColour == pieceColour);
             int totalOpponentPieces = GameState.GamePieceList.Count(p => p.PieceColour != pieceColour);
@@ -128,6 +130,7 @@ namespace Draughts.Service
                 nextMoveOpponentPiecesAtRisk,
                 nextMoveFriendlyKingsCreated,
                 nextMoveOpponentKingsCreated,
+                opponentPiecesTaken,
                 totalPieces,
                 totalFriendlyPieces,
                 totalOpponentPieces,

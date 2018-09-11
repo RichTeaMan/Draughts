@@ -1,7 +1,4 @@
 ﻿using RichTea.Common;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Draughts.Service
 {
@@ -9,17 +6,40 @@ namespace Draughts.Service
     {
         public int CreatedFriendlyKings { get; }
 
+        /// <summary>
+        /// Gets the number of different moves this player will have when this move is complete.
+        /// </summary>
         public int FriendlyMovesAvailable { get; }
 
+        /// <summary>
+        /// Gets the number of different moves the opponent will have when this move is complete.
+        /// </summary>
         public int OpponentMovesAvailable { get; }
 
+        /// <summary>
+        /// Gets the number of friendly pieces that are liable to be taken when this move is complete.
+        /// </summary>
         public int NextMoveFriendlyPiecesAtRisk { get; }
 
+        /// <summary>
+        /// Gets the number of opponent pieces that are liable to be taken when this move is complete.
+        /// </summary>
         public int NextMoveOpponentPiecesAtRisk { get; }
 
+        /// <summary>
+        /// Gets the number of friendly kings that are liable to be taken when this move is complete.
+        /// </summary>
         public int NextMoveFriendlyKingsCreated { get; }
 
+        /// <summary>
+        /// Gets the number of opponent kings that are liable to be taken when this move is complete.
+        /// </summary>
         public int NextMoveOpponentKingsCreated { get; }
+
+        /// <summary>
+        /// Gets the number of opponent pieces taken with this move.
+        /// </summary>
+        public int OpponentPiecesTaken { get; }
 
         public int TotalPieces { get; }
 
@@ -39,12 +59,24 @@ namespace Draughts.Service
 
         public int TotalOpponentKingPieces { get; }
 
+        /// <summary>
+        /// Gets the number of friendly men on the starting side of the board.
+        /// </summary>
         public int FriendlyMinionsHome { get; }
 
+        /// <summary>
+        /// Gets the number of opponent men on the friendly starting side of the board.
+        /// </summary>
         public int OpponentMinionsHome { get; }
 
+        /// <summary>
+        /// Gets the number of friendly men not on the starting side of the board.
+        /// </summary>
         public int FriendlyMinionsAway { get; }
 
+        /// <summary>
+        /// Gets the number of opponent men on their starting side of the board.
+        /// </summary>
         public int OpponentMinionsAway { get; }
 
         public GameMoveMetrics(int createdFriendlyKings,
@@ -54,6 +86,7 @@ namespace Draughts.Service
             int nextMoveOpponentPiecesAtRisk,
             int nextMoveFriendlyKingsCreated,
             int nextMoveOpponentKingsCreated,
+            int opponentPiecesTaken,
             int totalPieces,
             int totalFriendlyPieces,
             int totalOpponentPieces,
@@ -75,6 +108,7 @@ namespace Draughts.Service
             NextMoveOpponentPiecesAtRisk = nextMoveOpponentPiecesAtRisk;
             NextMoveFriendlyKingsCreated = nextMoveFriendlyKingsCreated;
             NextMoveOpponentKingsCreated = nextMoveOpponentKingsCreated;
+            OpponentPiecesTaken = opponentPiecesTaken;
             TotalPieces = totalPieces;
             TotalFriendlyPieces = totalFriendlyPieces;
             TotalOpponentPieces = totalOpponentPieces;
