@@ -11,7 +11,7 @@ namespace Draughts.Ai.Trainer
 {
     public class NeuralNetAiGamePlayer : IAiGamePlayer
     {
-        public const int NetInputs = 20;
+        public const int NetInputs = 21;
 
         public Net Net { get; }
 
@@ -78,7 +78,8 @@ namespace Draughts.Ai.Trainer
                     moveMetric.FriendlyMinionsHome / 100.0,
                     moveMetric.OpponentMinionsHome / 100.0,
                     moveMetric.FriendlyMinionsAway / 100.0,
-                    moveMetric.OpponentMinionsAway / 100.0
+                    moveMetric.OpponentMinionsAway / 100.0,
+                    moveMetric.OpponentPiecesTaken / 100.0
                 };
 
                 double weightedResult = Net.Calculate(inputs).Single();

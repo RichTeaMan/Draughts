@@ -194,7 +194,12 @@ namespace Draughts.Ai.Trainer
                     Console.WriteLine($"Loading {ais.Count()} unique contestants from {contestantFile}.");
                     ais.ForEach(ai => Console.WriteLine($"Loading {ai.Name}."));
 
-                    contestants.AddRange(netList);
+                    // resize nets for contestants
+                    var resizer = new RichTea.NeuralNetLib.Resizers.RandomInputResizer();
+
+                    var resizedNets = netList.Select(n => resizer.ResizeInputs(n, NeuralNetAiGamePlayer.NetInputs)).ToList();
+
+                    contestants.AddRange(resizedNets);
 
                 }
                 else
