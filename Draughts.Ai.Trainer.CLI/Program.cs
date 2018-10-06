@@ -212,7 +212,7 @@ namespace Draughts.Ai.Trainer
             {
                 var contestantsToGenerate = generationCount - contestants.Count;
                 Console.WriteLine($"Generating {contestantsToGenerate} contestants.");
-                contestants.AddRange(new NetFactory().GenerateRandomNetList(NeuralNetAiGamePlayer.NetInputs, 1, 3, random, generationCount - contestants.Count));
+                contestants.AddRange(new NetFactory().GenerateRandomNetList(NeuralNetAiGamePlayer.NetInputs, 1, 10, random, generationCount - contestants.Count));
             }
 
             trainer.TrainAi(contestants, generationCount, iterationCount);
