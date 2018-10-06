@@ -65,6 +65,7 @@ namespace Draughts.Ai.Trainer
                 }
                 else if (matchResult == GameMatchOutcome.BlackWin)
                 {
+                    opponent.IncrementWin();
                     Interlocked.Increment(ref _blackWins);
                 }
                 else if (matchResult == GameMatchOutcome.Draw)
