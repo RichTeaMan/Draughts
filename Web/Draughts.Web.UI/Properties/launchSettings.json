@@ -10,7 +10,6 @@
   "profiles": {
     "IIS Express": {
       "commandName": "Project",
-      "commandLineArgs": "-- C:/Users/thoma/Desktop/ai.json",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
