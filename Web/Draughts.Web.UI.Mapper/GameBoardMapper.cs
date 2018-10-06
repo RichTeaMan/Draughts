@@ -1,6 +1,7 @@
 ﻿using Draughts.Service;
 using Draughts.Web.UI.Domain;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Draughts.Web.UI.Mapper
 {
@@ -54,6 +55,54 @@ namespace Draughts.Web.UI.Mapper
 
                 pieces.Add(controllerPiece);
             }
+
+            // get moved pieces
+            var previousState = gameMatch.GameStateList?.Take(gameMatch.GameStateList.Count() - 1).LastOrDefault();
+            var movedControllerPieces = new List<Domain.GamePiece>();
+            if (previousState != null)
+            {
+                var currentPieceSet = new HashSet<Service.GamePiece>(gameMatch.GameState.GamePieceList);
+
+                var movedPieces = previousState.GamePieceList.Where(p => !currentPieceSet.Contains(p)).ToArray();
+
+                foreach (var movedPiece in movedPieces)
+                {
+
+                    string pieceColour = null;
+                    switch (movedPiece.PieceColour)
+                    {
+                        case Service.PieceColour.Black:
+                            pieceColour = "black";
+                            break;
+                        case Service.PieceColour.White:
+                            pieceColour = "white";
+                            break;
+                    }
+
+                    string pieceRank = null;
+                    switch (movedPiece.PieceRank)
+                    {
+                        case Service.PieceRank.Minion:
+                            pieceRank = "man";
+                            break;
+                        case Service.PieceRank.King:
+                            pieceRank = "king";
+                            break;
+                    }
+
+                    var controllerPiece = new Domain.GamePiece()
+                    {
+
+                        Xcoord = movedPiece.Xcoord,
+                        Ycoord = movedPiece.Ycoord,
+                        PieceColour = pieceColour,
+                        PieceRank = pieceRank
+                    };
+
+                    movedControllerPieces.Add(controllerPiece);
+                }
+            }
+
 
             List<Domain.GameMove> gameMoves = new List<Domain.GameMove>();
             foreach(var move in gameMatch.GameState.CalculateAvailableMoves(friendlyPieceColour))
@@ -122,6 +171,7 @@ namespace Draughts.Web.UI.Mapper
                 Width = gameMatch.GameState.XLength,
                 Height = gameMatch.GameState.YLength,
                 GamePieces = pieces.ToArray(),
+                MovedPieces = movedControllerPieces.ToArray(),
                 CurrentTurnColour = currentTurnColour,
                 GameStatus = gameStatus,
                 PlayerName = friendlyName,

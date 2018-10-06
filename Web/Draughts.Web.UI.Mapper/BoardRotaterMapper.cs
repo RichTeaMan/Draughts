@@ -38,6 +38,23 @@ namespace Draughts.Web.UI.Mapper
                 }
             }
 
+            var rotatedMovedPieces = new List<GamePiece>();
+            if (gameBoard.MovedPieces != null)
+            {
+                foreach (var piece in gameBoard.MovedPieces)
+                {
+                    var rotatedPoint = Rotate(piece.Xcoord, piece.Ycoord, gameBoard.Width, gameBoard.Height);
+                    var rotatedPiece = new GamePiece()
+                    {
+                        PieceColour = piece.PieceColour,
+                        PieceRank = piece.PieceRank,
+                        Xcoord = rotatedPoint.X,
+                        Ycoord = rotatedPoint.Y
+                    };
+                    rotatedMovedPieces.Add(rotatedPiece);
+                }
+            }
+
             var rotatedMoves = new List<GameMove>();
             if (gameBoard.GameMoves != null)
             {
@@ -61,6 +78,7 @@ namespace Draughts.Web.UI.Mapper
                 CurrentTurnColour = gameBoard.CurrentTurnColour,
                 GameMoves = rotatedMoves.ToArray(),
                 GamePieces = rotatedPieces.ToArray(),
+                MovedPieces = rotatedMovedPieces.ToArray(),
                 GameStatus = gameBoard.GameStatus,
                 Height = gameBoard.Height,
                 OpponentColour = gameBoard.OpponentColour,

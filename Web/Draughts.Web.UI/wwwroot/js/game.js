@@ -185,14 +185,25 @@ function renderBoard(destinationElementId, gameBoard) {
 
         $(`#${destinationElementId}`).html(html);
 
-        for (var i = 0; i < gameBoard.gamePieces.length; i++) {
+        gameBoard.gamePieces.forEach(function (piece) {
 
-            var piece = gameBoard.gamePieces[i];
             var id = `#square-${piece.xcoord}-${piece.ycoord}`;
 
             $(id).addClass(piece.pieceColour);
             $(id).addClass(piece.pieceRank);
-        }
+            $(id).addClass('current-piece');
+        });
+
+        gameBoard.movedPieces.forEach(function (piece) {
+
+            var id = `#square-${piece.xcoord}-${piece.ycoord}`;
+
+            if (!$(id).hasClass('current-piece')) {
+                $(id).addClass(piece.pieceColour);
+                $(id).addClass(piece.pieceRank);
+                $(id).addClass('ghost');
+            }
+        });
 
         currentGameBoard = gameBoard;
     }

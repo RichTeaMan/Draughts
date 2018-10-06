@@ -11,6 +11,11 @@
         public GamePiece[] GamePieces { get; set; }
 
         /// <summary>
+        /// Gets or sets the piece that just moved or was taken in their positions before the move.
+        /// </summary>
+        public GamePiece[] MovedPieces { get; set; }
+
+        /// <summary>
         /// Gets or sets the width of the game board.
         /// </summary>
         public int Width { get; set; }
