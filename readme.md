@@ -1,4 +1,7 @@
 # Draughts AI Trainer
+
+[![Build](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yml/badge.svg)](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yml)
+
 This project attempts to train an AI Draughts player.
 
 The AI make decisions based on weights for board metrics.
@@ -15,11 +18,6 @@ This project uses [Cake](https://cakebuild.net)!
 * cake -target=Show-Names
 * cake -target=Game
 * cake -target=Web-UI
-
-## CI
-|        | Windows | Linux |
-| ------ | --------|-------|
-| Master | [![Build status](https://ci.appveyor.com/api/projects/status/apt6gir9l7wxun49/branch/master?svg=true)](https://ci.appveyor.com/project/RichTeaMan/draughts/branch/master) | [![Build status](https://travis-ci.org/RichTeaMan/Draughts.svg?branch=master)](https://travis-ci.org/RichTeaMan/Draughts) |
 
 ## Desktop UI
 

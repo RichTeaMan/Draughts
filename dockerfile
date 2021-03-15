@@ -1,5 +1,7 @@
 FROM microsoft/dotnet:2.1-sdk
 
+LABEL org.opencontainers.image.source https://github.com/RichTeaMan/Draughts
+
 ARG branch=master
 ARG generationCount=20
 ARG iterationCount=100
