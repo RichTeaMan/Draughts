@@ -1,6 +1,6 @@
 # Draughts AI Trainer
 
-[![Build](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yml/badge.svg)](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yml)
+[![Draughts build](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yaml/badge.svg)](https://github.com/RichTeaMan/Draughts/actions/workflows/build.yaml)
 
 This project attempts to train an AI Draughts player.
 
