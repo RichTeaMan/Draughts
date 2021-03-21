@@ -16,7 +16,7 @@ namespace Draughts.Web.UI
 
         public static void Main(string[] args)
         {
-            if (args.Length > 1)
+            if (args.Length > 1 && !string.IsNullOrWhiteSpace(args[1]))
             {
                 Console.WriteLine($"Building nets from {args[1]}.");
                 try
