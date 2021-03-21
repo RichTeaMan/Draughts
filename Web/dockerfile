@@ -1,18 +1,7 @@
-FROM microsoft/dotnet:2.1.6-runtime-stretch-slim
+FROM mcr.microsoft.com/dotnet/aspnet:3.1
 
 LABEL org.opencontainers.image.source https://github.com/RichTeaMan/Draughts
 
-ARG branch=master
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        unzip \
-        libunwind8 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir Draughts
-ADD https://github.com/RichTeaMan/Draughts/archive/$branch.tar.gz draughts.tar.gz
-RUN tar -xzf draughts.tar.gz --strip-components=1 -C Draughts
+COPY Draughts.Web.UI/bin/Release/netcoreapp3.1/publish/ /Draughts/
 WORKDIR /Draughts
-RUN ./cake.sh -target=build
-ENTRYPOINT ./cake.sh -target=Web-UI -contestant-file=/ai/ai.json
+ENTRYPOINT dotnet Draughts.Web.UI.dll -- /ai/ai.json

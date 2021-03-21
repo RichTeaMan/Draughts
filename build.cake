@@ -92,6 +92,7 @@ Task("Build")
         Configuration = configuration
     };
     DotNetCorePublish("./Web/Draughts.Web.UI/Draughts.Web.UI.csproj", publishSettings);
+    DotNetCorePublish("./Draughts.Ai.Trainer.CLI/Draughts.Ai.Trainer.CLI.csproj", publishSettings);
 });
 
 Task("Test")
